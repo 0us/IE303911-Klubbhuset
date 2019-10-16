@@ -51,7 +51,7 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                textView.setText("Nå har noe gått ille gærent");
             }
         });
         return root;
