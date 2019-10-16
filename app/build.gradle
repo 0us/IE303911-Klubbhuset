@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.ie303911_medlemsapp"
+        applicationId 'no.ntnu.klubbhus'
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
