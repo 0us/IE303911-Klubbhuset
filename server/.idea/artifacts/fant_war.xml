@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="fant:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>fant</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="fant.war">
+      <element id="artifact" artifact-name="fant:war exploded" />
+    </root>
+  </artifact>
+</component>
