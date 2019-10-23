@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ie303911_medlemsapp.ui.userviews.memberships.MyMemberhipsFragment">
+    tools:context="com.ntnu.klubbhuset.no.ntnu.klubbhuset.ui.userviews.memberships.MyMemberhipsFragment">
 
     <ImageView
         android:id="@+id/imageView4"
@@ -72,7 +72,7 @@
 
         <fragment
             android:id="@+id/my_memberships_list"
-            android:name="com.example.ie303911_medlemsapp.ui.userviews.memberships.list.ClubMembershipFragment"
+            android:name="no.ntnu.klubbhuset.ui.userviews.memberships.list.ClubMembershipFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
