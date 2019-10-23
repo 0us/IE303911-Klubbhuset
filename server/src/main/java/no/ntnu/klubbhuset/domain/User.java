@@ -1,8 +1,7 @@
 package no.ntnu.klubbhuset.domain;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 
@@ -22,7 +21,8 @@ public class User implements Serializable {
     }
 
     @Id
-    private String uid;
+    @GeneratedValue
+    private Long uid;
 
     @JsonbTransient
     private String password;
@@ -49,23 +49,23 @@ public class User implements Serializable {
     @JoinColumn(name = "iid", referencedColumnName = "uid")
     private Image avatar;
 
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "uid"))
-//    @MapKeyColumn(name = "key")
-//    @Column(name = "value")
-//    private Map<String, String> properties = new HashMap<String, String>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "uid"))
+    @MapKeyColumn(name = "key_column")
+    @Column(name = "value_column")
+    private Map<String, String> properties = new HashMap<String, String>();
 
 
-    //    @ManyToMany
-//    @JoinTable(name="AUSERGROUP",
-//            joinColumns = @JoinColumn(name="userid", referencedColumnName = "userid"),
-//            inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
-//    private List<Group> groups;
+    @ManyToMany
+    @JoinTable(name="AUSERGROUP",
+            joinColumns = @JoinColumn(name="uid", referencedColumnName = "uid"),
+            inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
+    private List<Group> groups;
 
-//    public List<Group> getGroups() {
-//        if(groups == null) {
-//            groups = new ArrayList<>();
-//        }
-//        return groups;
-//    }
+    public List<Group> getGroups() {
+        if(groups == null) {
+            groups = new ArrayList<>();
+        }
+        return groups;
+    }
 }
