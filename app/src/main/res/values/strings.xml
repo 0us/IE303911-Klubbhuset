@@ -20,4 +20,9 @@
     <string name="phone_number">Phone number</string>
     <string name="create_user">Create User</string>
     <string name="cancel">Cancel</string>
+    <string name="your_organizations">Your organizations</string>
+    <string name="organization_name">Organization name</string>
+    <string name="membership_price">Membership price</string>
+    <string name="organization_description">Organization description</string>
+    <string name="register_organization">Register organization</string>
 </resources>
