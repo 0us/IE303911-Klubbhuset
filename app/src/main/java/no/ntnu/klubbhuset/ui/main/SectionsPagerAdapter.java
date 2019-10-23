@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import no.ntnu.klubbhuset.ui.userviews.home.HomeFragment;
-import com.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.ui.userviews.memberships.MyMemberhipsFragment;
 import no.ntnu.klubbhuset.ui.userviews.profile.ProfileFragment;
 

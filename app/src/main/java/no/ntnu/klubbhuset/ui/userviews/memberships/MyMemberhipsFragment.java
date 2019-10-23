@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.R;
 
 
 public class MyMemberhipsFragment extends Fragment {

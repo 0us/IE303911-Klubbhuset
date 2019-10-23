@@ -22,7 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.R;
+
 
 public class LoginActivity extends AppCompatActivity {
 

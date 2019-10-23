@@ -2,7 +2,7 @@ package no.ntnu.klubbhuset;
 
 import android.os.Bundle;
 
-import com.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.R;
 
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
