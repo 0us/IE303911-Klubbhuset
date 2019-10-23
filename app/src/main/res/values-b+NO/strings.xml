@@ -13,4 +13,6 @@
     <string name="invalid_username">Ikke et gyldig brukernavn</string>
     <string name="invalid_password">Passord må være >5 characters</string>
     <string name="login_failed">"Innlogging mislykkest"</string>
+    <string name="filter">"Filtrer"</string>
+
 </resources>
