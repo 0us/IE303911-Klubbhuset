@@ -1,4 +1,4 @@
-package com.example.ie303911_medlemsapp.ui.userviews.home;
+package com.example.ie303911_medlemsapp.ui.userviews.memberships.list;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 
 import com.example.ie303911_medlemsapp.R;
 import com.example.ie303911_medlemsapp.data.model.Club;
+import com.example.ie303911_medlemsapp.ui.ClubsViewModel;
+import com.example.ie303911_medlemsapp.ui.userviews.home.list.ClubFragment;
 
 /**
  * A fragment representing a list of Items.
@@ -24,7 +26,7 @@ import com.example.ie303911_medlemsapp.data.model.Club;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ClubFragment extends Fragment {
+public class ClubMembershipFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -37,7 +39,7 @@ public class ClubFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ClubFragment() {
+    public ClubMembershipFragment() {
     }
 
     // TODO: Customize parameter initialization
@@ -74,7 +76,7 @@ public class ClubFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getSellables().observe(this, clubs -> {
-                recyclerView.setAdapter(new MyClubRecyclerViewAdapter(clubs, mListener));
+                recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs, mListener));
             });
         }
         return view;
