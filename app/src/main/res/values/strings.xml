@@ -13,4 +13,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="filter">"Filter"</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
 </resources>
