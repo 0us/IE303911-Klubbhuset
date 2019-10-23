@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Klubbhus</string>
+    <string name="tab_text_home">Hjem</string>
+    <string name="tab_text_memberships">Mine medlemsskap</string>
+    <string name="tab_text_profile">Profil</string>
+    <string name="title_activity_login">Logg Inn</string>
+    <string name="prompt_email">Epost</string>
+    <string name="prompt_password">Passord</string>
+    <string name="action_sign_in">Logg inn eller Registrer</string>
+    <string name="action_sign_in_short">Logg Inn</string>
+    <string name="welcome">"Velkommen !"</string>
+    <string name="invalid_username">Ikke et gyldig brukernavn</string>
+    <string name="invalid_password">Passord må være >5 characters</string>
+    <string name="login_failed">"Innlogging mislykkest"</string>
+</resources>
