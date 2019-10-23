@@ -1,4 +1,4 @@
-package com.example.ie303911_medlemsapp.ui.userviews.home;
+package com.example.ie303911_medlemsapp.ui;
 
 import android.app.Application;
 

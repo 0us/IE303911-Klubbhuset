@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:name="com.example.ie303911_medlemsapp.ui.userviews.home.ClubFragment"
+    android:name="com.example.ie303911_medlemsapp.ui.userviews.memberships.ClubMembershipFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.ie303911_medlemsapp.ui.userviews.home.list.ClubFragment"
-    tools:listitem="@layout/fragment_club" />
+    tools:context="com.example.ie303911_medlemsapp.ui.userviews.memberships.list.ClubMembershipFragment"
+    tools:listitem="@layout/fragment_club_membership" />

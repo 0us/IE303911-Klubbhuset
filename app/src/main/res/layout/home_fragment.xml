@@ -59,7 +59,7 @@
 
         <fragment
             android:id="@+id/clubs_recycler_view"
-            android:name="com.example.ie303911_medlemsapp.ui.userviews.home.ClubFragment"
+            android:name="com.example.ie303911_medlemsapp.ui.userviews.home.list.ClubFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

@@ -26,4 +26,6 @@
     <string name="organization_description">Organization description</string>
     <string name="register_organization">Register organization</string>
     <string name="description">Description</string>
+    <string name="my_memberships">"My Memberships"</string>
+    <string name="qr_description">"Your personal QR for all your memberships"</string>
 </resources>
