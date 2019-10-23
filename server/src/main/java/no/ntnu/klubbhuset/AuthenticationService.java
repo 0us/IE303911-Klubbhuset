@@ -158,7 +158,8 @@ public class AuthenticationService {
             user.setFirstName(firstname);
             user.setLastName(lastname);
             user.setEmail(email);
-            Group userGroup = em.find(Group.class, 1L);
+            long gid = (long) em.createNativeQuery("select gid from agroup where agroup.NAME ='" + Group.USER + "'").getResultList().get(0);
+            Group userGroup = em.find(Group.class, gid);
             user.getGroups().add(userGroup);
             Response.status(Response.Status.OK).build();
             return Response.ok(em.merge(user)).build();
