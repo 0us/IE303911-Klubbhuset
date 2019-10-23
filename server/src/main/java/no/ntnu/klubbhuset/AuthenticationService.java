@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
@@ -141,16 +142,17 @@ public class AuthenticationService {
             @FormDataParam("lastname") String lastname,
             @FormDataParam("email") String email
     ) {
-            User user;
-//        // Checks if the user exists in the database
-//        User user = em.find(User.class, uid);
-//        if (user != null) {
-//            log.log(Level.INFO, "User already exists {0}", uid);
-//
-//            return Response.status(Response.Status.BAD_REQUEST)
-//                    .entity("User already exists")
-//                    .build();
-//        } else {
+        // Checks if the user exists in the database
+        Query query = em.createNativeQuery("select uid from auser where email = #email");
+        query.setParameter("email", email);
+        User user;
+        if (!query.getResultList().isEmpty()) {
+            log.log(Level.INFO, "User already exists {0}", email);
+
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("User already exists")
+                    .build();
+        } else {
             user = new User();
             user.setPassword(hasher.generate(pwd.toCharArray()));
             user.setFirstName(firstname);
@@ -160,6 +162,7 @@ public class AuthenticationService {
             user.getGroups().add(userGroup);
             Response.status(Response.Status.OK).build();
             return Response.ok(em.merge(user)).build();
+        }
     }
 
     /**
