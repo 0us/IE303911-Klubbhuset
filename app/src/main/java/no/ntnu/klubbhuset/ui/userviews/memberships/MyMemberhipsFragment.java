@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.ntnu.klubbhuset.R;
 
@@ -18,6 +19,7 @@ import com.ntnu.klubbhuset.R;
 public class MyMemberhipsFragment extends Fragment {
 
     private MyMemberhipsViewModel mViewModel;
+    private ImageView qrView;
 
     public static MyMemberhipsFragment newInstance() {
         return new MyMemberhipsFragment();
@@ -33,7 +35,10 @@ public class MyMemberhipsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MyMemberhipsViewModel.class);
-        // TODO: Use the ViewModel
+        mViewModel.getQRCode().observe(this, response -> {
+            qrView = getView().findViewById(R.id.qrView);
+            qrView.setImageBitmap(response);
+        });
     }
 
 }

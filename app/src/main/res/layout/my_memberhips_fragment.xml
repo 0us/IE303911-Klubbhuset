@@ -7,7 +7,7 @@
     tools:context="com.ntnu.klubbhuset.no.ntnu.klubbhuset.ui.userviews.memberships.MyMemberhipsFragment">
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/qrView"
         android:layout_width="100pt"
         android:layout_height="100pt"
         android:layout_marginStart="24dp"
@@ -28,7 +28,7 @@
         android:text="@string/qr_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/qrView" />
 
     <View
         android:id="@+id/divider2"
