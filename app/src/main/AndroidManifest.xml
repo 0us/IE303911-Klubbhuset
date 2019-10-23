@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ntnu.klubbhuset">
+    package="no.ntnu.klubbhuset">
 
     <application
         android:allowBackup="true"
@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.ntnu.klubbhuset.no.ntnu.klubbhuset.ui.login.LoginActivity"
+            android:name="no.ntnu.klubbhuset.ui.login.LoginActivity"
             android:label="@string/title_activity_login"></activity>
         <activity
-            android:name="com.ntnu.klubbhuset.no.ntnu.klubbhuset.MainActivity"
+            android:name="no.ntnu.klubbhuset.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
