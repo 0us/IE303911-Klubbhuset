@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ie303911_medlemsapp.ui.userviews.home.HomeFragment">
+    tools:context="com.ntnu.klubbhuset.no.ntnu.klubbhuset.ui.userviews.home.HomeFragment">
 
     <SearchView
         android:id="@+id/searchView"
@@ -59,7 +59,7 @@
 
         <fragment
             android:id="@+id/clubs_recycler_view"
-            android:name="com.example.ie303911_medlemsapp.ui.userviews.home.list.ClubFragment"
+            android:name="no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
