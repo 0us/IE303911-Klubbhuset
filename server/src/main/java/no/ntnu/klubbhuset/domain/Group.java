@@ -1,4 +1,4 @@
-package no.ntnu.randa.domain;
+package no.ntnu.klubbhuset.domain;
 
 import java.io.Serializable;
 import java.util.List;

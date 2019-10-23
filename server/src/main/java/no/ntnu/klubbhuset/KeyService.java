@@ -1,4 +1,4 @@
-package no.ntnu.randa;
+package no.ntnu.klubbhuset;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

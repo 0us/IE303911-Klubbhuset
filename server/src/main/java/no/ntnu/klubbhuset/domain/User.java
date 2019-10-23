@@ -1,9 +1,7 @@
-package no.ntnu.randa.domain;
+package no.ntnu.klubbhuset.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;

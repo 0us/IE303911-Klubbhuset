@@ -1,4 +1,4 @@
-package no.ntnu.randa;
+package no.ntnu.klubbhuset;
 
 import javax.enterprise.context.ApplicationScoped;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;

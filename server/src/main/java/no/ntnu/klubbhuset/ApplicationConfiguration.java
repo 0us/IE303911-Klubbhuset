@@ -1,4 +1,4 @@
-package no.ntnu.randa;
+package no.ntnu.klubbhuset;
 
 import javax.annotation.security.DeclareRoles;
 import javax.enterprise.context.ApplicationScoped;
@@ -7,10 +7,8 @@ import javax.security.enterprise.identitystore.PasswordHash;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-import no.ntnu.randa.domain.Group;
+import no.ntnu.klubbhuset.domain.Group;
 import org.eclipse.microprofile.auth.LoginConfig;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 
 import java.util.HashMap;
 import java.util.Map;

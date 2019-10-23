@@ -1,4 +1,4 @@
-package no.ntnu.randa;
+package no.ntnu.klubbhuset;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -6,11 +6,7 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import no.ntnu.randa.domain.Group;
-
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import no.ntnu.klubbhuset.domain.Group;
 
 /**
  *
