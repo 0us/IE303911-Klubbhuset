@@ -1,4 +1,4 @@
-package com.example.ie303911_medlemsapp.ui.userviews.home;
+package com.example.ie303911_medlemsapp.ui.userviews.home.list;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.ie303911_medlemsapp.R;
 import com.example.ie303911_medlemsapp.data.model.Club;
-import com.example.ie303911_medlemsapp.ui.userviews.home.ClubFragment.OnListFragmentInteractionListener;
+import com.example.ie303911_medlemsapp.ui.userviews.home.list.ClubFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 
