@@ -19,6 +19,7 @@ public class Group implements Serializable {
     public static final String[] GROUPS = {USER, ADMIN};
 
     @Id
+    @GeneratedValue
     private Long gid;
 
     private String name;

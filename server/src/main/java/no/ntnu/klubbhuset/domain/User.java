@@ -51,8 +51,8 @@ public class User implements Serializable {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "uid"))
-    @MapKeyColumn(name = "key")
-    @Column(name = "value")
+    @MapKeyColumn(name = "key_column")
+    @Column(name = "value_column")
     private Map<String, String> properties = new HashMap<String, String>();
 
 
