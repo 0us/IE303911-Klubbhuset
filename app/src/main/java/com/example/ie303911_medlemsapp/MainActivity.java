@@ -2,6 +2,8 @@ package com.example.ie303911_medlemsapp;
 
 import android.os.Bundle;
 
+import com.example.ie303911_medlemsapp.data.model.Club;
+import com.example.ie303911_medlemsapp.ui.userviews.home.ClubFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -15,7 +17,7 @@ import android.view.View;
 
 import com.example.ie303911_medlemsapp.ui.main.SectionsPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ClubFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +37,11 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
+    }
+
+
+    @Override
+    public void onListFragmentInteraction(Club item) {
+
     }
 }
