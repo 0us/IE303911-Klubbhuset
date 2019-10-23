@@ -25,4 +25,5 @@
     <string name="membership_price">Membership price</string>
     <string name="organization_description">Organization description</string>
     <string name="register_organization">Register organization</string>
+    <string name="description">Description</string>
 </resources>
