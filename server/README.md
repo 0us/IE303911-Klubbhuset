@@ -1,6 +1,6 @@
 DEPENDENCIES
 
-- OpenJDK 8
+- OpenJDK 11
 - Payara 5.193
 - MySQL 5.7.28
 - mysql-connector-java-5.1.48
