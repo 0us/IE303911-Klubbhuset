@@ -25,10 +25,6 @@ import javax.ws.rs.core.Response;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-/**
- *
- * @author mikael
- */
 @ApplicationScoped
 @Path("publickey.pem")
 public class KeyService {

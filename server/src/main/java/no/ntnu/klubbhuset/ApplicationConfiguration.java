@@ -23,7 +23,7 @@ import java.util.Map;
     hashAlgorithm = PasswordHash.class,
     priority = 80)
 @DeclareRoles({Group.ADMIN,Group.USER})
-@LoginConfig(authMethod = "MP-JWT",realmName = "template")
+@LoginConfig(authMethod = "MP-JWT",realmName = "klubbhuset")
 public class ApplicationConfiguration extends Application {
 
     @Override

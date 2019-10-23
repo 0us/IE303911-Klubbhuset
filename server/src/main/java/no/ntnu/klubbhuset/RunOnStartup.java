@@ -8,10 +8,6 @@ import javax.persistence.PersistenceContext;
 
 import no.ntnu.klubbhuset.domain.Group;
 
-/**
- *
- * @author mikael
- */
 @Singleton
 @Startup
 public class RunOnStartup {

@@ -11,10 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- *
- * @author mikael
- */
 @Entity @Table(name = "AGROUP")
 @Data @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode(exclude="users")
 public class Group implements Serializable {
