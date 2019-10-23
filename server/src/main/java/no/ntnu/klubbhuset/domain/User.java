@@ -21,7 +21,8 @@ public class User implements Serializable {
     }
 
     @Id
-    private String uid;
+    @GeneratedValue
+    private Long uid;
 
     @JsonbTransient
     private String password;
@@ -55,9 +56,9 @@ public class User implements Serializable {
     private Map<String, String> properties = new HashMap<String, String>();
 
 
-        @ManyToMany
+    @ManyToMany
     @JoinTable(name="AUSERGROUP",
-            joinColumns = @JoinColumn(name="userid", referencedColumnName = "userid"),
+            joinColumns = @JoinColumn(name="uid", referencedColumnName = "uid"),
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
     private List<Group> groups;
 

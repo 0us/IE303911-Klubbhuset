@@ -40,8 +40,8 @@ import java.util.logging.Level;
 @Log
 public class AuthenticationService {
 
-    private static final String INSERT_USERGROUP = "INSERT INTO AUSERGROUP(NAME,USERID) VALUES (?,?)";
-    private static final String DELETE_USERGROUP = "DELETE FROM AUSERGROUP WHERE NAME = ? AND USERID = ?";
+    private static final String INSERT_USERGROUP = "INSERT INTO AUSERGROUP(NAME,uid) VALUES (?,?)";
+    private static final String DELETE_USERGROUP = "DELETE FROM AUSERGROUP WHERE NAME = ? AND uid = ?";
 
     @Inject
     KeyService keyService;
@@ -66,7 +66,7 @@ public class AuthenticationService {
     DataSource dataSource;
 
     /**
-     * @param uid
+     * @param email
      * @param pwd
      * @param request
      * @return
@@ -74,11 +74,11 @@ public class AuthenticationService {
     @GET
     @Path("login")
     public Response login(
-            @QueryParam("uid") @NotBlank String uid,
+            @QueryParam("email") @NotBlank String email,
             @QueryParam("pwd") @NotBlank String pwd,
             @Context HttpServletRequest request) {
         CredentialValidationResult result = identityStoreHandler.validate(
-                new UsernamePasswordCredential(uid, pwd));
+                new UsernamePasswordCredential(email, pwd));
 
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
             String token = issueToken(result.getCallerPrincipal().getName(),
@@ -136,32 +136,22 @@ public class AuthenticationService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response createUser(
-            @FormDataParam("uid") String uid,
             @FormDataParam("pwd") String pwd,
             @FormDataParam("firstname") String firstname,
             @FormDataParam("lastname") String lastname,
             @FormDataParam("email") String email
     ) {
-
-        // Checks if uid was provided
-        if (uid == null) {
-            log.log(Level.INFO, "No uid was not provided {0}", uid);
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("No uid was not provided")
-                    .build();
-        }
-
-        // Checks if the user exists in the database
-        User user = em.find(User.class, uid);
-        if (user != null) {
-            log.log(Level.INFO, "User already exists {0}", uid);
-
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("User already exists")
-                    .build();
-        } else {
+            User user;
+//        // Checks if the user exists in the database
+//        User user = em.find(User.class, uid);
+//        if (user != null) {
+//            log.log(Level.INFO, "User already exists {0}", uid);
+//
+//            return Response.status(Response.Status.BAD_REQUEST)
+//                    .entity("User already exists")
+//                    .build();
+//        } else {
             user = new User();
-            user.setUid(uid);
             user.setPassword(hasher.generate(pwd.toCharArray()));
             user.setFirstName(firstname);
             user.setLastName(lastname);
@@ -170,7 +160,6 @@ public class AuthenticationService {
             user.getGroups().add(userGroup);
             Response.status(Response.Status.OK).build();
             return Response.ok(em.merge(user)).build();
-        }
     }
 
     /**

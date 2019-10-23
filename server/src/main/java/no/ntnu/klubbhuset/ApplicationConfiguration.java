@@ -18,8 +18,8 @@ import java.util.Map;
 @ApplicationPath("api")
 @DatabaseIdentityStoreDefinition(
     dataSourceLookup=DatasourceProducer.JNDI_NAME,
-    callerQuery="select password from auser where userid = ?",
-    groupsQuery="select name from ausergroup where userid  = ?",
+    callerQuery="select password from auser where email = ?",
+    groupsQuery="select name from ausergroup where uid  = ?",
     hashAlgorithm = PasswordHash.class,
     priority = 80)
 @DeclareRoles({Group.ADMIN,Group.USER})
