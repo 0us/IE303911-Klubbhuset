@@ -30,7 +30,7 @@ import io.jsonwebtoken.security.Keys;
 public class KeyService {
     private static final String KEYPAIR_FILENAME = "jwtkeys.ser";
     
-    KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.RS256);
+    private KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.RS256);
 
 
     private boolean hasKeyFile() {

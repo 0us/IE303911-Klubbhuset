@@ -32,6 +32,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -82,8 +83,16 @@ public class AuthenticationService {
                 new UsernamePasswordCredential(email, pwd));
 
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
+            long uid = (long) em.createNativeQuery(
+                    "select uid from auser where EMAIL = #email").
+                    setParameter("email", result.getCallerPrincipal().getName()).
+                    getResultList().get(0);
+            List resultList = em.createNativeQuery(
+                    "select name from ausergroup where uid = #uid").
+                    setParameter("uid", uid).getResultList();
+            Set<String> group = new HashSet<>(resultList);
             String token = issueToken(result.getCallerPrincipal().getName(),
-                    result.getCallerGroups(), request);
+                    group, request);
             return Response
                     .ok(token)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
@@ -175,18 +184,6 @@ public class AuthenticationService {
     @Produces(MediaType.APPLICATION_JSON)
     public User getCurrentUser() {
         return em.find(User.class, principal.getName());
-    }
-
-
-    // TODO: 23.09.2019 DELETE THIS METHOD
-    @GET
-    @Path("getusers")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsers() {
-        List resultList = em.createNativeQuery("SELECT * FROM AUSER").getResultList();
-        return Response.ok()
-                .entity(resultList)
-                .build();
     }
 
 
