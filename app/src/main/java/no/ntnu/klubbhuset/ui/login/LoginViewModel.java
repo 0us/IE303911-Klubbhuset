@@ -9,7 +9,7 @@ import android.util.Patterns;
 import no.ntnu.klubbhuset.data.LoginRepository;
 import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
-import com.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.R;
 
 public class LoginViewModel extends ViewModel {
 

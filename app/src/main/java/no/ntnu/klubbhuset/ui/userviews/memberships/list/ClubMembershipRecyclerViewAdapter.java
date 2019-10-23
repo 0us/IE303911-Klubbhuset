@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 
 import java.util.List;
