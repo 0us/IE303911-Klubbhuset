@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -31,6 +32,8 @@ public class Organization {
     private String name;
     private String url;
     private String emailContact;
+    private BigDecimal priceOfMembership;
+    private String description;
 
     @OneToMany(mappedBy = "organization")
     Set<Member> members;
