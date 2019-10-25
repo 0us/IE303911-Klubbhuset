@@ -38,11 +38,11 @@ public class OrganizationResource {
         return organizationService.createNewOrganization(name, price, description, multiPart);
     }
 
-    @PUT
-    @Path("/{organizationId}")
-    public Response updateOrganization(@PathParam("organizationId") int id, Organization organization) {
-        return organizationService.updateOrganization(id, organization);
-    }
+//    @PUT
+//    @Path("/{organizationId}")
+//    public Response updateOrganization(@PathParam("organizationId") int id, Organization organization) {
+//        return organizationService.updateOrganization(id, organization);
+//    }
 
     @DELETE
     @Path("/{organizationId}")
