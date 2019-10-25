@@ -1,21 +1,21 @@
 package no.ntnu.klubbhuset.resource;
 
-import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.service.OrganizationService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Stateless
 @Path("organization")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -27,6 +27,12 @@ public class OrganizationResource {
     @GET
     public Response getAllOrganizations() {
         return organizationService.getAllOrganizations();
+    }
+
+    @GET
+    @Path("/{organizationId}")
+    public Response getOrganizationById(@PathParam("organizationId") int organizationId) {
+        return organizationService.getOrganizationById(organizationId);
     }
 
     @POST
@@ -52,7 +58,7 @@ public class OrganizationResource {
 
     @GET
     @Path("/{organizationId}/join")
-    public Response joinOrganization(@PathParam("organizationId") int id) {
-        return organizationService.joinOrganization(id);
+    public Response joinOrganization(@PathParam("organizationId") int id, String userId) {
+        return organizationService.joinOrganization(id, userId);
     }
 }
