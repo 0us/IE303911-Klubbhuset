@@ -24,7 +24,7 @@ public class OrganizationService {
         System.out.println("Fetching all organizations");
         List<Organization> organizations = entityManager.createQuery("Select org From Organization o", Organization.class).getResultList();
 
-        if ( organizations.isEmpty() ) {
+        if (organizations.isEmpty()) {
             return Response.noContent().entity("No organizations registered").build();
         }
 
@@ -42,10 +42,22 @@ public class OrganizationService {
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
 
         //todo save image
-        saveImage(multiPart);
+        //saveImage(multiPart);
 
         entityManager.persist(organization);
 
         return Response.status(Response.Status.CREATED).entity("Organization was created").build();
+    }
+
+    public Response deleteOrganization(int organizationId) {
+        Organization organization = entityManager.find(Organization.class, organizationId);
+
+
+        if (organization == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("No organization with id: " + organizationId).build();
+        }
+
+        entityManager.remove(organization);
+        return Response.ok("Organization removed from system").build();
     }
 }
