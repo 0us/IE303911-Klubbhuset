@@ -87,8 +87,6 @@
                 android:id="@+id/divider5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"
                 android:background="?android:attr/listDivider" />
 
             <Button
@@ -103,6 +101,14 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        tools:layout_editor_absoluteX="-55dp"
+        tools:layout_editor_absoluteY="359dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
