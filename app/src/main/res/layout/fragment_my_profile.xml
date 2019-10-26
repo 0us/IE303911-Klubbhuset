@@ -87,28 +87,23 @@
                 android:id="@+id/divider5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
                 android:background="?android:attr/listDivider" />
 
             <Button
                 android:id="@+id/btn_sign_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@null"
                 android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
-                android:drawablePadding="24dp"
+                android:drawablePadding="32dp"
                 android:gravity="start|center_vertical"
                 android:paddingStart="16dp"
-                android:text="@string/sign_out"/>
+                android:text="@string/sign_out" />
 
         </LinearLayout>
     </ScrollView>
-
-    <View
-        android:id="@+id/divider6"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"
-        tools:layout_editor_absoluteX="-55dp"
-        tools:layout_editor_absoluteY="359dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
