@@ -4,6 +4,7 @@ import no.ntnu.klubbhuset.service.OrganizationService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -22,7 +23,8 @@ import javax.ws.rs.core.Response;
 public class OrganizationResource {
     public static final String ORGANIZATION = "organization";
 
-    OrganizationService organizationService = new OrganizationService();
+    @EJB
+    OrganizationService organizationService;
 
     @GET
     public Response getAllOrganizations() {
