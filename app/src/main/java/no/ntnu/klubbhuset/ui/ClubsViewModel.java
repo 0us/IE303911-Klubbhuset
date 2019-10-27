@@ -10,6 +10,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+
+import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
 
 import org.json.JSONException;
@@ -38,7 +40,7 @@ public class ClubsViewModel extends AndroidViewModel {
     }
 
     protected void loadClubs() {
-        String url = "0.0.0.0"; // TODO: get real url
+        String url = CommunicationConfig.API_URL;
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     List<Club> clubs = new ArrayList<>();
