@@ -32,12 +32,12 @@ public class OrganizationService {
         List<Organization> organizations = entityManager.createQuery("Select org From Organization o", Organization.class).getResultList();
 
         if (organizations.isEmpty()) {
-            return Response.noContent().entity("No organizations registered").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
 
-        Jsonb jsonObject = JsonbBuilder.create();
-        jsonObject.toJson(organizations);
-        return Response.ok(jsonObject).build();
+        Jsonb jsonb = JsonbBuilder.create();
+        jsonb.toJson(organizations);
+        return Response.ok(jsonb).build();
     }
 
 
