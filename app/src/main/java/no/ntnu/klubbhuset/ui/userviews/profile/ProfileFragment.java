@@ -1,7 +1,12 @@
 package no.ntnu.klubbhuset.ui.userviews.profile;
 
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +23,8 @@ import android.widget.TextView;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.User;
+import no.ntnu.klubbhuset.ui.login.LoginActivity;
+import no.ntnu.klubbhuset.ui.login.LoginViewModel;
 
 
 public class ProfileFragment extends Fragment {
@@ -45,11 +52,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initBtns();
+        initButtons();
 
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         mViewModel.getUser().observe(this, this::fillUserInfo);
-        signout.setOnClickListener(l -> signOut());
 
     }
 
@@ -71,13 +77,16 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void initBtns() {
+    private void initButtons() {
         signout = getView().findViewById(R.id.btn_sign_out);
+        signout.setOnClickListener(l -> signOut());
+
     }
 
     private void signOut() {
-        // TODO: implement
-        throw new UnsupportedOperationException();
+        Intent result = new Intent("logout");
+        getActivity().setResult(Activity.RESULT_OK, result);
+        getActivity().finish();
     }
 
 }
