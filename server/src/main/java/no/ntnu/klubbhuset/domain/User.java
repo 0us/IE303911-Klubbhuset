@@ -44,6 +44,7 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
+    String phonenumber;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "iid", referencedColumnName = "uid")
