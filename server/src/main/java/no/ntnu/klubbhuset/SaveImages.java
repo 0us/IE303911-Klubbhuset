@@ -5,6 +5,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.io.OutputStream;
 //Todo check that all files is valide file types
 public class SaveImages {
 
-    @Inject
+    @PersistenceContext
     EntityManager entityManager;
 
     @Inject
@@ -31,12 +32,14 @@ public class SaveImages {
     private final String LOCAL_STORAGE_DIR = System.getProperty("user.home") + File.separator + "files";
 
 
-    public Image saveImage(InputStream inputStream, String path) {
+    public Image saveImage(InputStream inputStream, String path, String filename) {
         final String END_PATH = LOCAL_STORAGE_DIR + File.separator + path;
+        final String FULL_PATH = END_PATH + File.separator + filename;
         Image image = null;
 
         try {
-            saveImageToDisk(inputStream, END_PATH); // todo should this be END_PATH or path?
+            createFolderIfNotExists(END_PATH);
+            saveImageToDisk(inputStream, FULL_PATH); // todo should this be END_PATH or path?
             image = new Image();
             image.setUrl(path); // todo should this be END_PATH or path?
             entityManager.persist(image);
@@ -48,9 +51,8 @@ public class SaveImages {
 
 
     private void saveImageToDisk(InputStream inputStream, String target) throws IOException {
-
-        createFolderIfNotExists(target);
-
+        System.out.println("SaveImages.saveImageToDisk");
+        System.out.println("target = " + target);
         OutputStream out = null;
         int read = 0;
         byte[] bytes = new byte[1024];
@@ -64,9 +66,13 @@ public class SaveImages {
     }
 
     private void createFolderIfNotExists(String dirName) throws SecurityException {
+        System.out.println("SaveImages.createFolderIfNotExists");
+        System.out.println("dirName = " + dirName);
         File theDir = new File(dirName);
         if (!theDir.exists()) {
-            theDir.mkdir();
+            System.out.println("SaveImages.createFolderIfNotExists: File path does not exist. Trying to create");
+            boolean created = theDir.mkdirs();
+            System.out.println("created = " + created);
         }
     }
 }

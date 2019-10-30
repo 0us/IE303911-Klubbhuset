@@ -1,17 +1,21 @@
 package no.ntnu.klubbhuset.service;
 
+import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPart;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.InputStream;
@@ -19,8 +23,12 @@ import java.io.InputStream;
 public class UserService {
 
     public static final String PROFILE_PICTURE = "profilePicture";
-    @Inject
+
+    @PersistenceContext
     EntityManager entityManager;
+
+    @Resource(lookup = DatasourceProducer.JNDI_NAME)
+    DataSource dataSource;
 
     @Inject
     SaveImages saveImages;
@@ -44,11 +52,13 @@ public class UserService {
     }
 
     public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
+        System.out.println("UserService.createNewUser: was called");
+
 
         // Check if user with same email exist
-        if (!entityManager.createQuery("select u from User u where u.email = :email").getResultList().isEmpty()) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User with same email address allready exist").build();
-        }
+//        if (!entityManager.createQuery("select u from User u where u.email = :email").getResultList().isEmpty()) {
+//            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User with same email address allready exist").build();
+//        }
 
         User user = new User();
         user.setFirstName(firstname);
@@ -56,20 +66,23 @@ public class UserService {
         user.setEmail(email);
         user.setPassword(password);
         user.setPhonenumber(phonenumber);
+        entityManager.persist(user);
 
         // todo save image
         InputStream inputStream = multiPart.getField(PROFILE_PICTURE).getValueAs(InputStream.class);
-        FormDataContentDisposition fileDetails = multiPart.getField(PROFILE_PICTURE).getValueAs(FormDataContentDisposition.class);
-        String filename = fileDetails.getFileName();
-        String target = user.getUid() + File.separator + PROFILE_PICTURE + File.separator + filename; // todo save location directory uid?
+        if (inputStream != null) {
+            System.out.println("UserService.createNewUser: saving image");
 
-        Image avatar = saveImages.saveImage(inputStream, target);
+            ContentDisposition fileDetails = multiPart.getField(PROFILE_PICTURE).getContentDisposition();
+            String filename = fileDetails.getFileName();
+            String target = user.getUid() + File.separator + PROFILE_PICTURE; // todo save location directory uid?
 
-        user.setAvatar(avatar);
+            Image avatar = saveImages.saveImage(inputStream, target, filename);
 
-        entityManager.persist(user);
+            user.setAvatar(avatar);
+        }
 
-        return Response.status(Response.Status.CREATED).build();
+        return Response.status(Response.Status.CREATED).entity(user).build();
 
 
     }
