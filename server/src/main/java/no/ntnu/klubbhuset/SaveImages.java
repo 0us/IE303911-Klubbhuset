@@ -27,22 +27,23 @@ public class SaveImages {
     @Inject
     JsonWebToken principal;
 
+
     private final String LOCAL_STORAGE_DIR = System.getProperty("user.home") + File.separator + "files";
-    private Image image;
 
 
-    public void saveImage(InputStream inputStream, String path) {
+    public Image saveImage(InputStream inputStream, String path) {
         final String END_PATH = LOCAL_STORAGE_DIR + File.separator + path;
-
+        Image image = null;
 
         try {
-            saveImageToDisk(inputStream, path);
-            Image image = new Image();
-            image.setUrl(path);
+            saveImageToDisk(inputStream, END_PATH); // todo should this be END_PATH or path?
+            image = new Image();
+            image.setUrl(path); // todo should this be END_PATH or path?
             entityManager.persist(image);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return image;
     }
 
 

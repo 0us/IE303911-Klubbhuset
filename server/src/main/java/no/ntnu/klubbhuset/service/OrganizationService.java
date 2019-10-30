@@ -1,10 +1,12 @@
 package no.ntnu.klubbhuset.service;
 
+import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.annotation.security.RolesAllowed;
@@ -15,6 +17,8 @@ import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -23,6 +27,9 @@ public class OrganizationService {
 
     @Inject
     JsonWebToken principal;
+
+    @Inject
+    SaveImages saveImages;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -50,8 +57,12 @@ public class OrganizationService {
         organization.setDescription(description);
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
 
-        //todo save image
-        //saveImage(multiPart);
+        InputStream inputStream = multiPart.getField("image").getValueAs(InputStream.class);
+        FormDataContentDisposition fileDetails = multiPart.getField("image").getValueAs(FormDataContentDisposition.class);
+        String filename = fileDetails.getFileName();
+        String target = organization.getName() + File.separator + "images" + File.separator + filename; // todo directory should be organization name or id?
+
+        saveImages.saveImage(inputStream, target);
 
         entityManager.persist(organization);
 

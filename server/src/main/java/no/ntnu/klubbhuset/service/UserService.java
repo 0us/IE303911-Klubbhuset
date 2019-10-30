@@ -1,8 +1,11 @@
 package no.ntnu.klubbhuset.service;
 
+import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.inject.Inject;
@@ -10,11 +13,17 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.InputStream;
 
 public class UserService {
 
+    public static final String PROFILE_PICTURE = "profilePicture";
     @Inject
     EntityManager entityManager;
+
+    @Inject
+    SaveImages saveImages;
 
     @Inject
     JsonWebToken principal;
@@ -34,7 +43,7 @@ public class UserService {
         return Response.ok(user).build();
     }
 
-    public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, MultiPart images) {
+    public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
 
         // Check if user with same email exist
         if (!entityManager.createQuery("select u from User u where u.email = :email").getResultList().isEmpty()) {
@@ -49,12 +58,14 @@ public class UserService {
         user.setPhonenumber(phonenumber);
 
         // todo save image
+        InputStream inputStream = multiPart.getField(PROFILE_PICTURE).getValueAs(InputStream.class);
+        FormDataContentDisposition fileDetails = multiPart.getField(PROFILE_PICTURE).getValueAs(FormDataContentDisposition.class);
+        String filename = fileDetails.getFileName();
+        String target = user.getUid() + File.separator + PROFILE_PICTURE + File.separator + filename; // todo save location directory uid?
 
-        Image image = new Image();
-        // todo fill out details
-        image.setUrl();
+        Image avatar = saveImages.saveImage(inputStream, target);
 
-        user.setAvatar(image);
+        user.setAvatar(avatar);
 
         entityManager.persist(user);
 
