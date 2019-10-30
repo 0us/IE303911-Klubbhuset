@@ -155,7 +155,7 @@ public class AuthenticationService {
         Query query = em.createNativeQuery("select uid from auser where email = #email");
         query.setParameter("email", email);
         User user;
-        if (!query.getResultList().isEmpty()) {
+         if (!query.getResultList().isEmpty()) {
             log.log(Level.INFO, "User already exists {0}", email);
 
             return Response.status(Response.Status.BAD_REQUEST)

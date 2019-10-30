@@ -74,7 +74,7 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/club_detailed_joinbtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -92,7 +92,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button">
+        app:layout_constraintTop_toBottomOf="@+id/club_detailed_joinbtn">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
