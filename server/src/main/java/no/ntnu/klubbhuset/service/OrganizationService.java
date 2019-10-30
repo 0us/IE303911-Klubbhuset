@@ -1,5 +1,6 @@
 package no.ntnu.klubbhuset.service;
 
+import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Member;
@@ -9,6 +10,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,6 +18,7 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.InputStream;
@@ -34,9 +37,12 @@ public class OrganizationService {
     @PersistenceContext
     EntityManager entityManager;
 
+    @Resource(lookup = DatasourceProducer.JNDI_NAME)
+    DataSource dataSource;
+
     public Response getAllOrganizations() {
         System.out.println("Fetching all organizations");
-        List<Organization> organizations = entityManager.createQuery("Select org From Organization o", Organization.class).getResultList();
+        List<Organization> organizations = entityManager.createQuery("Select org From Organization org", Organization.class).getResultList();
 
         if (organizations.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
@@ -62,7 +68,7 @@ public class OrganizationService {
         String filename = fileDetails.getFileName();
         String target = organization.getName() + File.separator + "images" + File.separator + filename; // todo directory should be organization name or id?
 
-        saveImages.saveImage(inputStream, target);
+        saveImages.saveImage(inputStream, target, filename);
 
         entityManager.persist(organization);
 
