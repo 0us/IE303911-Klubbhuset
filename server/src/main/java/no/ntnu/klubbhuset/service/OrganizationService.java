@@ -77,7 +77,7 @@ public class OrganizationService {
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
         entityManager.persist(organization);
 
-        if ( multiPart != null ) {
+        if ( multiPart.getField(IMAGE) != null ) {
             InputStream inputStream = multiPart.getField(IMAGE).getValueAs(InputStream.class);
             ContentDisposition fileDetails = multiPart.getField(IMAGE).getContentDisposition();
             String filename = fileDetails.getFileName();

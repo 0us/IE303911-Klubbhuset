@@ -41,7 +41,7 @@ public class UserService {
 
         User user = entityManager.find(User.class, uid);
 
-        if (user == null) {
+        if ( user == null ) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -69,8 +69,8 @@ public class UserService {
         entityManager.persist(user);
 
         // todo save image
-        InputStream inputStream = multiPart.getField(PROFILE_PICTURE).getValueAs(InputStream.class);
-        if (inputStream != null) {
+        if ( multiPart.getField(PROFILE_PICTURE) != null ) {
+            InputStream inputStream = multiPart.getField(PROFILE_PICTURE).getValueAs(InputStream.class);
             System.out.println("UserService.createNewUser: saving image");
 
             ContentDisposition fileDetails = multiPart.getField(PROFILE_PICTURE).getContentDisposition();
@@ -92,7 +92,7 @@ public class UserService {
     public Response deleteUser() {
         User user = entityManager.find(User.class, principal.getName());
 
-        if (user == null) {
+        if ( user == null ) {
             return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
         }
 
