@@ -7,6 +7,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,7 +26,8 @@ import java.io.InputStream;
 public class OrganizationResource {
     public static final String ORGANIZATION = "organization";
 
-    OrganizationService organizationService = new OrganizationService();
+    @Inject
+    OrganizationService organizationService;
 
     @GET
     public Response getAllOrganizations() {
