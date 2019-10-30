@@ -1,8 +1,9 @@
-package no.ntnu.klubbhuset;
+package no.ntnu.klubbhuset.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.login.LoginActivity;
 import no.ntnu.klubbhuset.ui.login.LoginViewModel;

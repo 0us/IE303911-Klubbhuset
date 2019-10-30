@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.ui.userviews;
+package no.ntnu.klubbhuset.ui.userviews.club;
 
 import androidx.lifecycle.ViewModel;
 

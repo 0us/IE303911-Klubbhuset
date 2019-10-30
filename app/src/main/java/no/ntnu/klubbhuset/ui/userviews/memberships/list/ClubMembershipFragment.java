@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.ui.ClubsViewModel;
+import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
 import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
 
 /**
