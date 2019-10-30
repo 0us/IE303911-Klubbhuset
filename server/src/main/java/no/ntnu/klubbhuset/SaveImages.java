@@ -15,9 +15,8 @@ import java.nio.file.Path;
 
 
 /**
- * Saves an image to the system. The image is first uploaded to the disk, then it is saved to the database.
- * If any of the processes fails, the image is deleted from the disk again.
- * Images should be saved under specific destinations like /organizations/images or /user/images
+ * Saves an image to the filesystem.
+ * Creates paths for the destination if they don't exist
  */
 
 //Todo check that all files is valide file types
@@ -33,6 +32,14 @@ public class SaveImages {
     private final String LOCAL_STORAGE_DIR = System.getProperty("user.home") + File.separator + "files";
 
 
+    /**
+     * Save an image to the filesystem
+     *
+     * @param inputStream the input stream
+     * @param path        the path The path where you want the file saved to. Eg. {userid}/profilePicture/
+     * @param filename    the filename The name of the file you want to save.
+     * @return the image The image that was saved.
+     */
     public Image saveImage(InputStream inputStream, String path, String filename) {
         final String END_PATH = LOCAL_STORAGE_DIR + File.separator + path;
         final String FULL_PATH = END_PATH + File.separator + filename;
