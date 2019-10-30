@@ -6,13 +6,16 @@ import java.util.Set;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
-@Entity @Table(name = "AGROUP")
-@Data @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode(exclude="users")
+@Entity
+@Table(name = "AGROUP")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+//@EqualsAndHashCode(exclude = "users")
 public class Group implements Serializable {
     public static final String USER = "user";
     public static final String ADMIN = "admin";
@@ -26,17 +29,16 @@ public class Group implements Serializable {
 
     private String project;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "group")
     Set<Member> members;
 
-    @JsonbTransient
-    @ManyToMany
-    @JoinTable(name="AUSERGROUP",
-            joinColumns = @JoinColumn(name="name", referencedColumnName = "name"),
-            inverseJoinColumns = @JoinColumn(name="uid",referencedColumnName = "uid"))
-    private List<User> users;
-
     public Group(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }

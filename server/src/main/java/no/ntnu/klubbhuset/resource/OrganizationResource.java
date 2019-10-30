@@ -69,4 +69,11 @@ public class OrganizationResource {
     public Response joinOrganization(@PathParam("organizationId") int id, String userId) {
         return organizationService.joinOrganization(id, userId);
     }
+
+    @GET
+    @Path("/{organizationId}/members")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMembers(@PathParam("organizationId") String organizationId) {
+        return organizationService.getMembers(organizationId);
+    }
 }

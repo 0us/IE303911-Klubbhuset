@@ -6,6 +6,9 @@ import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.domain.User;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -24,6 +27,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Stateless
 public class OrganizationService {
@@ -42,15 +46,21 @@ public class OrganizationService {
 
     public Response getAllOrganizations() {
         System.out.println("Fetching all organizations");
-        List<Organization> organizations = entityManager.createQuery("Select org From Organization org", Organization.class).getResultList();
+        List<Organization> organizations = entityManager.createQuery("Select o From Organization o", Organization.class).getResultList();
 
         if (organizations.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
 
-        Jsonb jsonb = JsonbBuilder.create();
-        jsonb.toJson(organizations);
-        return Response.ok(jsonb).build();
+        String json = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+            json = objectMapper.writeValueAsString(organizations);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Response.ok(json).build();
     }
 
 
@@ -109,5 +119,25 @@ public class OrganizationService {
         jsonb.toJson(organization);
 
         return Response.ok(jsonb).build();
+    }
+
+    public Response getMembers(String organizationId) {
+        Long oid;
+        try {
+            oid = Long.parseLong(organizationId);
+        } catch (NumberFormatException ne) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Please only use numbers for id.").build();
+        }
+        Organization org = entityManager.find(Organization.class, oid);
+        Set<Member> members = org.getMembers();
+        String json = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+            json = objectMapper.writeValueAsString(members);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Response.ok(json).build();
     }
 }
