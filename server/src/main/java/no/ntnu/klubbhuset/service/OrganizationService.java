@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
