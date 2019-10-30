@@ -78,8 +78,10 @@ public class UserService {
             String target = user.getUid() + File.separator + PROFILE_PICTURE; // todo save location directory uid?
 
             Image avatar = saveImages.saveImage(inputStream, target, filename);
-
-            user.setAvatar(avatar);
+            avatar.setUser(user);
+//            user.setAvatar(avatar);
+//            entityManager.merge(user);
+            entityManager.persist(avatar);
         }
 
         return Response.status(Response.Status.CREATED).entity(user).build();
