@@ -73,12 +73,11 @@ public class AuthenticationService {
      * @param request
      * @return
      */
-    @GET
-    @Path("login")
     public Response login(
             @QueryParam("email") @NotBlank String email,
-            @QueryParam("pwd") @NotBlank String pwd,
-            @Context HttpServletRequest request) {
+            @QueryParam("pwd") @NotBlank String pwd
+//            @Context HttpServletRequest request // todo what is this used for?
+    ) {
         CredentialValidationResult result = identityStoreHandler.validate(
                 new UsernamePasswordCredential(email, pwd));
 
@@ -111,19 +110,16 @@ public class AuthenticationService {
     private String issueToken(String name, Set<String> groups, HttpServletRequest request) {
         try {
             Date now = new Date();
-            Date expiration = Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant());
+            Date expiration = Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant()); // the token is valid for one day
             JwtBuilder jb = Jwts.builder()
+                    .setId(name)
                     .setHeaderParam("typ", "JWT")
-                    .setHeaderParam("kid", "abc-1234567890")
-                    .setSubject(name)
-                    .setId("a-123")
                     //.setIssuer(issuer)
                     .claim("iss", issuer)
                     .setIssuedAt(now)
                     .setExpiration(expiration)
                     .claim("upn", name)
                     .claim("groups", groups)
-                    .claim("aud", "aud")
                     .claim("auth_time", now)
                     .signWith(keyService.getPrivate());
             return jb.compact();
@@ -134,49 +130,9 @@ public class AuthenticationService {
     }
 
     /**
-     * Does an insert into the AUSER and AUSERGROUP tables. It creates a SHA-256
-     * hash of the password and Base64 encodes it before the user is created in
-     * the database. The authentication system will read the AUSER table when
-     * doing an authentication.
-     *
-     * @return
-     */
-    @POST
-    @Path("create")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response createUser(
-            @FormDataParam("pwd") String pwd,
-            @FormDataParam("firstname") String firstname,
-            @FormDataParam("lastname") String lastname,
-            @FormDataParam("email") String email
-    ) {
-        // Checks if the user exists in the database
-        Query query = em.createNativeQuery("select uid from auser where email = #email");
-        query.setParameter("email", email);
-        User user;
-        if (!query.getResultList().isEmpty()) {
-            log.log(Level.INFO, "User already exists {0}", email);
-
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("User already exists")
-                    .build();
-        } else {
-            user = new User();
-            user.setPassword(hasher.generate(pwd.toCharArray()));
-            user.setFirstName(firstname);
-            user.setLastName(lastname);
-            user.setEmail(email);
-            Response.status(Response.Status.OK).build();
-            return Response.ok(em.merge(user)).build();
-        }
-    }
-
-    /**
      * @return
      */
     @GET
-    @Path("currentuser")
     @RolesAllowed(value = {Group.USER})
     @Produces(MediaType.APPLICATION_JSON)
     public User getCurrentUser() {
@@ -284,5 +240,9 @@ public class AuthenticationService {
             em.merge(user);
             return Response.ok().build();
         }
+    }
+
+    public Response logout() {
+
     }
 }
