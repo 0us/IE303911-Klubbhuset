@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.service;
 
 import no.ntnu.klubbhuset.DatasourceProducer;
+import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.Organization;
@@ -9,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.annotation.Resource;
@@ -20,13 +22,9 @@ import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
+import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +35,14 @@ public class OrganizationService {
     @Inject
     JsonWebToken principal;
 
+    @Inject
+    SaveImages saveImages;
+
     @PersistenceContext
     EntityManager entityManager;
+
+    @Resource(lookup = DatasourceProducer.JNDI_NAME)
+    DataSource dataSource;
 
     public Response getAllOrganizations() {
         System.out.println("Fetching all organizations");
@@ -69,8 +73,12 @@ public class OrganizationService {
         organization.setDescription(description);
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
 
-        //todo save image
-        //saveImage(multiPart);
+        InputStream inputStream = multiPart.getField("image").getValueAs(InputStream.class);
+        FormDataContentDisposition fileDetails = multiPart.getField("image").getValueAs(FormDataContentDisposition.class);
+        String filename = fileDetails.getFileName();
+        String target = organization.getName() + File.separator + "images" + File.separator + filename; // todo directory should be organization name or id?
+
+        saveImages.saveImage(inputStream, target, filename);
 
         entityManager.persist(organization);
 

@@ -1,14 +1,23 @@
 package no.ntnu.klubbhuset.resource;
 
 import no.ntnu.klubbhuset.service.OrganizationService;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.InputStream;
 
 @Stateless
 @Path("organization")
@@ -36,7 +45,10 @@ public class OrganizationResource {
     public Response createNewOrganization(@FormDataParam("name") String name,
                                           @FormDataParam("priceOfMembership") String price,
                                           @FormDataParam("description") String description,
-                                          FormDataMultiPart multiPart) {
+                                          FormDataMultiPart multiPart
+//                                          @FormDataParam("image") InputStream uploadedInputStream,
+//                                          @FormDataParam("image")FormDataContentDisposition fileDetails
+    ) {
         return organizationService.createNewOrganization(name, price, description, multiPart);
     }
 
