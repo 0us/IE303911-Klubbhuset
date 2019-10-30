@@ -2,9 +2,8 @@ package no.ntnu.klubbhuset.resource;
 
 import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.service.UserService;
-import org.eclipse.microprofile.openapi.models.headers.Header;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -12,13 +11,11 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.*;
 
 @Stateless
 @Path("user")
@@ -36,12 +33,13 @@ public class UserResource {
     }
 
     @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response createNewUserProfile(@FormDataParam("firstname") String firstname,
                                          @FormDataParam("lastname") String lastname,
                                          @FormDataParam("email") String email,
                                          @FormDataParam("password") String password,
                                          @FormDataParam("phonenumber") String phonenumber,
-                                         MultiPart multiPart) {
+                                         FormDataMultiPart multiPart) {
         return userService.createNewUser(firstname, lastname, email, password, phonenumber, multiPart);
     }
 
