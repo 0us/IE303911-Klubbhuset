@@ -42,15 +42,21 @@ public class OrganizationService {
 
     public Response getAllOrganizations() {
         System.out.println("Fetching all organizations");
-        List<Organization> organizations = entityManager.createQuery("Select org From Organization o", Organization.class).getResultList();
+        List<Organization> organizations = entityManager.createQuery("Select o From Organization o", Organization.class).getResultList();
 
         if (organizations.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
 
-        Jsonb jsonb = JsonbBuilder.create();
-        jsonb.toJson(organizations);
-        return Response.ok(jsonb).build();
+        String json = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+            json = objectMapper.writeValueAsString(organizations);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Response.ok(json).build();
     }
 
 
