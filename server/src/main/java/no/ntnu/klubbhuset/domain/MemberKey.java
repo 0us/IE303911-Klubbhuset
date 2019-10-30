@@ -9,9 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 @Embeddable
 public class MemberKey implements Serializable {

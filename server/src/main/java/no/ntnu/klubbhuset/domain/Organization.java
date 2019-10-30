@@ -1,10 +1,12 @@
 package no.ntnu.klubbhuset.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
@@ -12,10 +14,11 @@ import java.util.Set;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Organization {
+public class Organization implements Serializable {
 
     @GeneratedValue
     @Id
@@ -35,6 +38,7 @@ public class Organization {
     private BigDecimal priceOfMembership;
     private String description;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "organization")
     Set<Member> members;
 
@@ -44,4 +48,9 @@ public class Organization {
             joinColumns = @JoinColumn(name = "oid"),
             inverseJoinColumns = @JoinColumn(name = "iid"))
     Set<Image> orgImages;
+
+    @Override
+    public String toString() {
+        return "";
+    }
 }

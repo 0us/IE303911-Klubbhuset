@@ -5,14 +5,14 @@ import java.util.*;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 
 @Entity
 @Table(name = "AUSER")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements Serializable {
@@ -24,7 +24,7 @@ public class User implements Serializable {
     @GeneratedValue
     private Long uid;
 
-    @JsonbTransient
+    @JsonIgnore
     private String password;
 
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -38,6 +38,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private State currentState = State.ACTIVE;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     Set<Member> members;
 
@@ -55,17 +56,8 @@ public class User implements Serializable {
     @Column(name = "value_column")
     private Map<String, String> properties = new HashMap<String, String>();
 
-
-    @ManyToMany
-    @JoinTable(name="AUSERGROUP",
-            joinColumns = @JoinColumn(name="uid", referencedColumnName = "uid"),
-            inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
-    private List<Group> groups;
-
-    public List<Group> getGroups() {
-        if(groups == null) {
-            groups = new ArrayList<>();
-        }
-        return groups;
+    @Override
+    public String toString() {
+        return "";
     }
 }

@@ -1,12 +1,17 @@
 package no.ntnu.klubbhuset.service;
 
+import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.domain.User;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -14,9 +19,17 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.sql.DataSource;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Stateless
 public class OrganizationService {
@@ -92,5 +105,25 @@ public class OrganizationService {
         jsonb.toJson(organization);
 
         return Response.ok(jsonb).build();
+    }
+
+    public Response getMembers(String organizationId) {
+        Long oid;
+        try {
+            oid = Long.parseLong(organizationId);
+        } catch (NumberFormatException ne) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Please only use numbers for id.").build();
+        }
+        Organization org = entityManager.find(Organization.class, oid);
+        Set<Member> members = org.getMembers();
+        String json = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+            json = objectMapper.writeValueAsString(members);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Response.ok(json).build();
     }
 }

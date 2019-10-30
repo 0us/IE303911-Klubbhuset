@@ -1,17 +1,20 @@
 package no.ntnu.klubbhuset.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Member {
+public class Member implements Serializable {
 
     @EmbeddedId
     MemberKey id;
@@ -41,4 +44,9 @@ public class Member {
 
     private boolean hasPaid;
     private boolean needsToPay;
+
+    @Override
+    public String toString(){
+        return null;
+    }
 }
