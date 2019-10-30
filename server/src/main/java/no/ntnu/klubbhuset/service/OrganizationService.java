@@ -3,6 +3,7 @@ package no.ntnu.klubbhuset.service;
 import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Group;
+import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.domain.User;
@@ -10,7 +11,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,6 +34,8 @@ import java.util.Set;
 @Stateless
 public class OrganizationService {
 
+    public static final String IMAGES = "images";
+    public static final String IMAGE = "image";
     @Inject
     JsonWebToken principal;
 
@@ -48,7 +52,7 @@ public class OrganizationService {
         System.out.println("Fetching all organizations");
         List<Organization> organizations = entityManager.createQuery("Select o From Organization o", Organization.class).getResultList();
 
-        if (organizations.isEmpty()) {
+        if ( organizations.isEmpty() ) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
 
@@ -65,22 +69,28 @@ public class OrganizationService {
 
 
     // todo implement security
-    @RolesAllowed(value = {Group.USER}
-    )
+    //@RolesAllowed(value = {Group.USER})
     public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
         Organization organization = new Organization();
         organization.setName(name);
         organization.setDescription(description);
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
-
-        InputStream inputStream = multiPart.getField("image").getValueAs(InputStream.class);
-        FormDataContentDisposition fileDetails = multiPart.getField("image").getValueAs(FormDataContentDisposition.class);
-        String filename = fileDetails.getFileName();
-        String target = organization.getName() + File.separator + "images" + File.separator + filename; // todo directory should be organization name or id?
-
-        saveImages.saveImage(inputStream, target, filename);
-
         entityManager.persist(organization);
+
+        if ( multiPart != null ) {
+            InputStream inputStream = multiPart.getField(IMAGE).getValueAs(InputStream.class);
+            ContentDisposition fileDetails = multiPart.getField(IMAGE).getContentDisposition();
+            String filename = fileDetails.getFileName();
+            String target = organization.getOid() + File.separator + IMAGES; // todo directory should be organization name or id?
+
+            Image organizationImage = saveImages.saveImage(inputStream, target, filename);
+            entityManager.persist(organizationImage);
+            long oid = organization.getOid();
+            long iid = organizationImage.getIid();
+            String query = "insert into orgimages (oid, iid) values (" + oid  + ", " + iid + ")";
+            System.out.println("query = " + query);
+            entityManager.createNativeQuery(query).executeUpdate();
+        }
 
         return Response.status(Response.Status.CREATED).entity("Organization was created").build();
     }
@@ -90,7 +100,7 @@ public class OrganizationService {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
 
-        if (organization == null) {
+        if ( organization == null ) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organization with id: " + organizationId).build();
         }
 
@@ -111,7 +121,7 @@ public class OrganizationService {
     public Response getOrganizationById(int organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
-        if (organization == null) {
+        if ( organization == null ) {
             return Response.status(Response.Status.NOT_FOUND).entity("Organization not found").build();
         }
 
