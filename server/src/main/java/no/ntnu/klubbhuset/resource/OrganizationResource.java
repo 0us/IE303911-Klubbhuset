@@ -64,10 +64,10 @@ public class OrganizationResource {
         return organizationService.deleteOrganization(id);
     }
 
-    @GET
+    @POST
     @Path("/{organizationId}/join")
-    public Response joinOrganization(@PathParam("organizationId") int id, String userId) {
-        return organizationService.joinOrganization(id, userId);
+    public Response joinOrganization(@PathParam("organizationId") int id) {
+        return organizationService.joinOrganization(id);
     }
 
     @GET

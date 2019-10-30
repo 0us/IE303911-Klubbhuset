@@ -77,7 +77,7 @@ public class OrganizationService {
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
         entityManager.persist(organization);
 
-        if ( multiPart != null ) {
+        if ( multiPart.getField(IMAGE) != null ) {
             InputStream inputStream = multiPart.getField(IMAGE).getValueAs(InputStream.class);
             ContentDisposition fileDetails = multiPart.getField(IMAGE).getContentDisposition();
             String filename = fileDetails.getFileName();
@@ -92,7 +92,7 @@ public class OrganizationService {
             entityManager.createNativeQuery(query).executeUpdate();
         }
 
-        return Response.status(Response.Status.CREATED).entity("Organization was created").build();
+        return Response.status(Response.Status.CREATED).entity(organization).build();
     }
 
     @RolesAllowed(value = {Group.USER})
@@ -109,11 +109,14 @@ public class OrganizationService {
     }
 
     @RolesAllowed(value = {Group.USER})
-    public Response joinOrganization(int organizationId, String userId) {
+    public Response joinOrganization(int organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
+        int userId = Integer.parseInt(principal.getName());
         User user = entityManager.find(User.class, userId);
         Member member = new Member(); // todo connect user to member
+        member.setUser(user);
         organization.getMembers().add(member); // todo is this even gonna work?
+        entityManager.persist(organization); // todo is this redundant
 
         return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
     }
