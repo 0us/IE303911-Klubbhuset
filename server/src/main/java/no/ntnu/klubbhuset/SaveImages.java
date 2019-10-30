@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
 
 
 /**
@@ -35,14 +36,14 @@ public class SaveImages {
     public Image saveImage(InputStream inputStream, String path, String filename) {
         final String END_PATH = LOCAL_STORAGE_DIR + File.separator + path;
         final String FULL_PATH = END_PATH + File.separator + filename;
+        final String RELATIVE_URL = path + File.separator + filename;
         Image image = null;
 
         try {
             createFolderIfNotExists(END_PATH);
             saveImageToDisk(inputStream, FULL_PATH); // todo should this be END_PATH or path?
             image = new Image();
-            image.setUrl(path); // todo should this be END_PATH or path?
-            entityManager.persist(image);
+            image.setUrl(RELATIVE_URL); // todo should this be END_PATH or path?
         } catch (IOException e) {
             e.printStackTrace();
         }
