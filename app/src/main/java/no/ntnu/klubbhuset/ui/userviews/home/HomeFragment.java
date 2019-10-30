@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.ui.ClubsViewModel;
+import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
 
 
 public class HomeFragment extends Fragment {

@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.ui.userviews;
+package no.ntnu.klubbhuset.ui.userviews.club;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

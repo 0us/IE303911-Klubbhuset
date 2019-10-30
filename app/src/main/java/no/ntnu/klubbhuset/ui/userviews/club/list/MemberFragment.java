@@ -1,11 +1,9 @@
-package no.ntnu.klubbhuset.ui.userviews.memberships.list;
+package no.ntnu.klubbhuset.ui.userviews.club.list;
 
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
-import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
+import no.ntnu.klubbhuset.ui.userviews.club.list.dummy.DummyContent;
+import no.ntnu.klubbhuset.ui.userviews.club.list.dummy.DummyContent.DummyItem;
+
 
 /**
  * A fragment representing a list of Items.
@@ -26,26 +23,25 @@ import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ClubMembershipFragment extends Fragment {
+public class MemberFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private ClubsViewModel mViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ClubMembershipFragment() {
+    public MemberFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ClubFragment newInstance(int columnCount) {
-        ClubFragment fragment = new ClubFragment();
+    public static MemberFragment newInstance(int columnCount) {
+        MemberFragment fragment = new MemberFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -64,8 +60,8 @@ public class ClubMembershipFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_club_list, container, false);
-        mViewModel = ViewModelProviders.of(this).get(ClubsViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_club_members_list, container, false);
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -75,9 +71,7 @@ public class ClubMembershipFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getSellables().observe(this, clubs -> {
-                recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs, mListener));
-            });
+            recyclerView.setAdapter(new MemberRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
         return view;
     }
@@ -100,11 +94,6 @@ public class ClubMembershipFragment extends Fragment {
         mListener = null;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -117,6 +106,6 @@ public class ClubMembershipFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Club item);
+        void onListFragmentInteraction(DummyItem item);
     }
 }

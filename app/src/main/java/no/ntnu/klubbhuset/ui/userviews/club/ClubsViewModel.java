@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.ui;
+package no.ntnu.klubbhuset.ui.userviews.club;
 
 import android.app.Application;
 
