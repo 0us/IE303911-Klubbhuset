@@ -41,21 +41,16 @@ public class OrganizationService {
     EntityManager entityManager;
 
     public Response getAllOrganizations() {
-        List<Organization> organizations = entityManager.createQuery("Select o From Organization o", Organization.class).getResultList();
+        System.out.println("Fetching all organizations");
+        List<Organization> organizations = entityManager.createQuery("Select org From Organization o", Organization.class).getResultList();
 
         if (organizations.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
-        String json = null;
-        try {
-            json = objectMapper.writeValueAsString(organizations);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Response.ok(json).build();
+        Jsonb jsonb = JsonbBuilder.create();
+        jsonb.toJson(organizations);
+        return Response.ok(jsonb).build();
     }
 
 
