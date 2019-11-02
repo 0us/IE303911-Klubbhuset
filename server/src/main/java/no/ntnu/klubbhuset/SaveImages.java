@@ -2,6 +2,7 @@ package no.ntnu.klubbhuset;
 
 import no.ntnu.klubbhuset.domain.Image;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.glassfish.jersey.media.multipart.BodyPart;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -11,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Path;
 
 
 /**
@@ -57,6 +57,23 @@ public class SaveImages {
         return image;
     }
 
+    /**
+     * Checks that file from inputstrem is acctually an image
+     *
+     * @param bodyPart
+     * @return true if mime matches "image/*" false if not.
+     */
+    public boolean checkBodyPartIsImage(BodyPart bodyPart) {
+        boolean result = false;
+        String mimeType = bodyPart.getMediaType().toString();
+        System.out.println("SaveImages.isImage");
+        System.out.println("mimeType = " + mimeType);
+        if ( mimeType.startsWith("image/") ) {
+            result = true;
+        }
+        return result;
+    }
+
 
     private void saveImageToDisk(InputStream inputStream, String target) throws IOException {
         System.out.println("SaveImages.saveImageToDisk");
@@ -77,7 +94,7 @@ public class SaveImages {
         System.out.println("SaveImages.createFolderIfNotExists");
         System.out.println("dirName = " + dirName);
         File theDir = new File(dirName);
-        if (!theDir.exists()) {
+        if ( !theDir.exists() ) {
             System.out.println("SaveImages.createFolderIfNotExists: File path does not exist. Trying to create");
             boolean created = theDir.mkdirs();
             System.out.println("created = " + created);
