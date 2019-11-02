@@ -57,6 +57,12 @@ public class User implements Serializable {
     @Column(name = "value_column")
     private Map<String, String> properties = new HashMap<String, String>();
 
+    @ManyToMany
+    @JoinTable(name="AUSERGROUP",
+            joinColumns = @JoinColumn(name="uid", referencedColumnName = "uid"),
+            inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
+    List<Group> groups;
+
     @Override
     public String toString() {
         return "";

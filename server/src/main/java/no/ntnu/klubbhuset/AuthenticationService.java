@@ -67,39 +67,39 @@ public class AuthenticationService {
     @Resource(lookup = DatasourceProducer.JNDI_NAME)
     DataSource dataSource;
 
-//    /**
-//     * @param email
-//     * @param pwd
-//     * @param request
-//     * @return
-//     */
-//    public Response login(
-//            @QueryParam("email") @NotBlank String email,
-//            @QueryParam("pwd") @NotBlank String pwd
-////            @Context HttpServletRequest request // todo what is this used for?
-//    ) {
-//        CredentialValidationResult result = identityStoreHandler.validate(
-//                new UsernamePasswordCredential(email, pwd));
-//
-//        if (result.getStatus() == CredentialValidationResult.Status.VALID) {
-//            long uid = (long) em.createNativeQuery(
-//                    "select uid from auser where EMAIL = #email").
-//                    setParameter("email", result.getCallerPrincipal().getName()).
-//                    getResultList().get(0);
-//            List resultList = em.createNativeQuery(
-//                    "select name from ausergroup where uid = #uid").
-//                    setParameter("uid", uid).getResultList();
-//            Set<String> group = new HashSet<>(resultList);
-//            String token = issueToken(result.getCallerPrincipal().getName(),
-//                    group, request);
-//            return Response
-//                    .ok(token)
-//                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-//                    .build();
-//        } else {
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
-//        }
-//    }
+    /**
+     * @param email
+     * @param pwd
+     * @param request
+     * @return
+     */
+    public Response login(
+            @QueryParam("email") @NotBlank String email,
+            @QueryParam("pwd") @NotBlank String pwd,
+            @Context HttpServletRequest request // todo what is this used for?
+    ) {
+        CredentialValidationResult result = identityStoreHandler.validate(
+                new UsernamePasswordCredential(email, pwd));
+
+        if (result.getStatus() == CredentialValidationResult.Status.VALID) {
+            long uid = (long) em.createNativeQuery(
+                    "select uid from auser where EMAIL = #email").
+                    setParameter("email", result.getCallerPrincipal().getName()).
+                    getResultList().get(0);
+            List resultList = em.createNativeQuery(
+                    "select name from ausergroup where uid = #uid").
+                    setParameter("uid", uid).getResultList();
+            Set<String> group = new HashSet<>(resultList);
+            String token = issueToken(result.getCallerPrincipal().getName(),
+                    group, request);
+            return Response
+                    .ok(token)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .build();
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
 
     /**
      * @param name
@@ -257,8 +257,8 @@ public class AuthenticationService {
     @PUT
     @Path("changepassword")
     @RolesAllowed(value = {Group.USER})
-    public Response changePassword(@QueryParam("uid") String uid,
-                                   @QueryParam("pwd") String password,
+    public Response changePassword(@FormDataParam("uid") String uid,
+                                   @FormDataParam("pwd") String password,
                                    @Context SecurityContext sc) {
         String authuser = sc.getUserPrincipal() != null ? sc.getUserPrincipal().getName() : null;
         if (authuser == null || uid == null || (password == null || password.length() < 3)) {
@@ -279,7 +279,7 @@ public class AuthenticationService {
         }
     }
 
-//    public Response logout() {
-//
-//    }
+    public Response logout() {
+        return null; //todo implement
+    }
 }

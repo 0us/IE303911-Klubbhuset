@@ -4,6 +4,7 @@ import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.User;
+import no.ntnu.klubbhuset.resource.UserResource;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -19,6 +20,8 @@ import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserService {
 
@@ -52,7 +55,7 @@ public class UserService {
     }
 
     public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
-        System.out.println("UserService.createNewUser: was called");
+        Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, "UserService.createNewUser: was called");
 
 
         // Check if user with same email exist
