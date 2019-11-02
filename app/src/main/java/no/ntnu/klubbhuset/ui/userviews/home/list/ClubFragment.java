@@ -74,7 +74,7 @@ public class ClubFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getSellables().observe(this, clubs -> {
+            mViewModel.getClubs().observe(this, clubs -> {
                 recyclerView.setAdapter(new MyClubRecyclerViewAdapter(clubs, mListener));
             });
         }
