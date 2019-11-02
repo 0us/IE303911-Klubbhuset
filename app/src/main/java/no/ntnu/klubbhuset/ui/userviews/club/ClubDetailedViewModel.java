@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 
-
 import no.ntnu.klubbhuset.data.CommunicationConfig;
 
 
@@ -43,7 +42,6 @@ public class ClubDetailedViewModel extends AndroidViewModel {
 
 
     private void tryJoinClub(int oid) {
-
         String url = CommunicationConfig.joinClub(oid);
         boolean returnValue = false;
         final int[] statusCode = new int[1]; // make variable effectively final to use it inside lambda

@@ -39,7 +39,7 @@ public class ClubMembershipRecyclerViewAdapter extends RecyclerView.Adapter<Club
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
-        holder.mMembercountView.setText(0); // TODO
+        holder.mMembercountView.setText("0"); // TODO
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

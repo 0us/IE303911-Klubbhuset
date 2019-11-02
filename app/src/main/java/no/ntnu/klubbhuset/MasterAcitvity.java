@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.ui.login.LoginActivity;
 import no.ntnu.klubbhuset.ui.main.MainActivity;
 
@@ -20,6 +21,7 @@ public class MasterAcitvity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CommunicationConfig.getInstance(this.getApplicationContext());
         this.pref = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
         boolean loggedin = pref.getBoolean("loggedin", false);
 

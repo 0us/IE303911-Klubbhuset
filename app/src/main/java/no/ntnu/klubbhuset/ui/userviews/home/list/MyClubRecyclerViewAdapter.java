@@ -1,5 +1,7 @@
 package no.ntnu.klubbhuset.ui.userviews.home.list;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
 
 import java.util.List;
 
@@ -22,8 +25,10 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
 
     private final List<Club> mValues;
     private final ClubFragment.OnListFragmentInteractionListener mListener;
+    private ClubsViewModel model;
 
-    public MyClubRecyclerViewAdapter(List<Club> items, ClubFragment.OnListFragmentInteractionListener listener) {
+    public MyClubRecyclerViewAdapter(List<Club> items,
+                                     ClubFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -32,6 +37,8 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_club, parent, false);
+        model = ViewModelProviders.of(
+                (FragmentActivity) parent.getContext()).get(ClubsViewModel.class);
         return new ViewHolder(view);
     }
 
@@ -39,7 +46,7 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
-        holder.mMembercountView.setText(0); // TODO
+        holder.mMembercountView.setText("0"); // TODO
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
