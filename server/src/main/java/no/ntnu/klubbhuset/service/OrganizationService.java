@@ -96,12 +96,8 @@ public class OrganizationService {
 
             Image organizationImage = saveImages.saveImage(inputStream, target, filename);
 
-            entityManager.persist(organizationImage);
-            long oid = organization.getOid();
-            long iid = organizationImage.getIid();
-            String query = "insert into orgimages (oid, iid) values (" + oid + ", " + iid + ")";
-            System.out.println("query = " + query);
-            entityManager.createNativeQuery(query).executeUpdate();
+            //entityManager.persist(organizationImage);
+            coupleImageAndOrganization(organization, organizationImage);
         }
 
         return Response.status(Response.Status.CREATED).entity(organization).build();
@@ -164,5 +160,14 @@ public class OrganizationService {
             e.printStackTrace();
         }
         return Response.ok(json).build();
+    }
+
+    // --- Private methods below --- //
+    private void coupleImageAndOrganization(Organization organization, Image organizationImage) {
+        long oid = organization.getOid();
+        long iid = organizationImage.getIid();
+        String query = "insert into orgimages (oid, iid) values (" + oid + ", " + iid + ")";
+        System.out.println("query = " + query);
+        entityManager.createNativeQuery(query).executeUpdate();
     }
 }

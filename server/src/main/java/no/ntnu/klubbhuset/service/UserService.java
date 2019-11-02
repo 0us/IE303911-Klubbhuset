@@ -85,8 +85,7 @@ public class UserService {
             String target = user.getUid() + File.separator + PROFILE_PICTURE;
 
             Image avatar = saveImages.saveImage(inputStream, target, filename);
-            avatar.setUser(user);
-            entityManager.persist(avatar); // persist image (avatar)
+            coupleImageAndOrganization(user, avatar);
         }
 
         return Response.status(Response.Status.CREATED)
@@ -103,5 +102,15 @@ public class UserService {
 
         entityManager.remove(user);
         return Response.ok("User removed from system").build();
+    }
+
+
+    // --- Private methods below --- //
+    private void coupleImageAndOrganization(User user, Image profilePicture) {
+        long uid = user.getUid();
+        long iid = profilePicture.getIid();
+        String query = "update auser set iid = " + iid + " where uid = " + uid;
+        System.out.println("query = " + query);
+        entityManager.createNativeQuery(query).executeUpdate();
     }
 }

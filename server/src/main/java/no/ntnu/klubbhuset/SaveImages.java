@@ -51,9 +51,16 @@ public class SaveImages {
             saveImageToDisk(inputStream, FULL_PATH); // todo should this be END_PATH or path?
             image = new Image();
             image.setUrl(RELATIVE_URL); // todo should this be END_PATH or path?
+            persistImage(image);
+            System.out.println("image id = " + image.getIid());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return image;
+    }
+
+    private Image persistImage(Image image) {
+        entityManager.persist(image);
         return image;
     }
 
