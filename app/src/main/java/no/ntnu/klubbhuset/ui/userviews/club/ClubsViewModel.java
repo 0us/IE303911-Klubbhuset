@@ -11,18 +11,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
-import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.GET_CLUBS_URL;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
 
 public class ClubsViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
@@ -44,8 +41,8 @@ public class ClubsViewModel extends AndroidViewModel {
         return clubs;
     }
 
-    protected void loadClubs() {
-        String url = API_URL + GET_CLUBS_URL;
+    private void loadClubs() {
+        String url = API_URL + ORGANIZATION;
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     List<Club> clubs = new ArrayList<>();
