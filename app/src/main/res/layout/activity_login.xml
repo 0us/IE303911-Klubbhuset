@@ -60,6 +60,22 @@
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintVertical_bias="0.2" />
 
+
+    <Button
+        android:id="@+id/create_new_user_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        android:text="@string/create_new_user"/>
+
+    <View
+        android:id="@+id/fragment_create_new_user_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ProgressBar
         android:id="@+id/loading"
         android:layout_width="wrap_content"

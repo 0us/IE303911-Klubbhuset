@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,9 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.fragments.CreateNewUserFragment;
 
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
 
     private LoginViewModel loginViewModel;
 
@@ -53,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final Button createNewUserButton = findViewById(R.id.create_new_user_button);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -117,6 +121,13 @@ public class LoginActivity extends AppCompatActivity {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(),
                     passwordEditText.getText().toString());
+        });
+
+        createNewUserButton.setOnClickListener(view -> {
+            Log.d(TAG, "showLogin: pressedbutton");
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_create_new_user_container, new CreateNewUserFragment())
+                    .commit();
         });
     }
 
