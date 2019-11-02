@@ -2,6 +2,7 @@ package no.ntnu.klubbhuset;
 
 import no.ntnu.klubbhuset.domain.Image;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.glassfish.jersey.media.multipart.BodyPart;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -11,13 +12,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Path;
 
 
 /**
- * Saves an image to the system. The image is first uploaded to the disk, then it is saved to the database.
- * If any of the processes fails, the image is deleted from the disk again.
- * Images should be saved under specific destinations like /organizations/images or /user/images
+ * Saves an image to the filesystem.
+ * Creates paths for the destination if they don't exist
  */
 
 //Todo check that all files is valide file types
@@ -33,6 +32,14 @@ public class SaveImages {
     private final String LOCAL_STORAGE_DIR = System.getProperty("user.home") + File.separator + "files";
 
 
+    /**
+     * Save an image to the filesystem
+     *
+     * @param inputStream the input stream
+     * @param path        the path The path where you want the file saved to. Eg. {userid}/profilePicture/
+     * @param filename    the filename The name of the file you want to save.
+     * @return the image The image that was saved.
+     */
     public Image saveImage(InputStream inputStream, String path, String filename) {
         final String END_PATH = LOCAL_STORAGE_DIR + File.separator + path;
         final String FULL_PATH = END_PATH + File.separator + filename;
@@ -44,10 +51,34 @@ public class SaveImages {
             saveImageToDisk(inputStream, FULL_PATH); // todo should this be END_PATH or path?
             image = new Image();
             image.setUrl(RELATIVE_URL); // todo should this be END_PATH or path?
+            persistImage(image);
+            System.out.println("image id = " + image.getIid());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return image;
+    }
+
+    private Image persistImage(Image image) {
+        entityManager.persist(image);
+        return image;
+    }
+
+    /**
+     * Checks that file from inputstrem is acctually an image
+     *
+     * @param bodyPart
+     * @return true if mime matches "image/*" false if not.
+     */
+    public boolean checkBodyPartIsImage(BodyPart bodyPart) {
+        boolean result = false;
+        String mimeType = bodyPart.getMediaType().toString();
+        System.out.println("SaveImages.isImage");
+        System.out.println("mimeType = " + mimeType);
+        if ( mimeType.startsWith("image/") ) {
+            result = true;
+        }
+        return result;
     }
 
 
@@ -70,7 +101,7 @@ public class SaveImages {
         System.out.println("SaveImages.createFolderIfNotExists");
         System.out.println("dirName = " + dirName);
         File theDir = new File(dirName);
-        if (!theDir.exists()) {
+        if ( !theDir.exists() ) {
             System.out.println("SaveImages.createFolderIfNotExists: File path does not exist. Trying to create");
             boolean created = theDir.mkdirs();
             System.out.println("created = " + created);

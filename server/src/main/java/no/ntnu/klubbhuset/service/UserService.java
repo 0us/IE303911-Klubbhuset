@@ -6,7 +6,7 @@ import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.annotation.Resource;
@@ -41,7 +41,7 @@ public class UserService {
 
         User user = entityManager.find(User.class, uid);
 
-        if (user == null) {
+        if ( user == null ) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -68,35 +68,49 @@ public class UserService {
         user.setPhonenumber(phonenumber);
         entityManager.persist(user);
 
-        // todo save image
-        InputStream inputStream = multiPart.getField(PROFILE_PICTURE).getValueAs(InputStream.class);
-        if (inputStream != null) {
+        FormDataBodyPart bodyPart = multiPart.getField(PROFILE_PICTURE);
+        if ( bodyPart != null ) {
+            if ( !saveImages.checkBodyPartIsImage(bodyPart) ) {
+                entityManager.remove(user);  // the user is already persisted to the database. Since the file uploaded is not an image, removing the user is done
+                return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE)
+                        .entity("File must be image, no image was uploaded")
+                        .build();
+            }
+
+            InputStream inputStream = bodyPart.getValueAs(InputStream.class);
             System.out.println("UserService.createNewUser: saving image");
 
-            ContentDisposition fileDetails = multiPart.getField(PROFILE_PICTURE).getContentDisposition();
+            ContentDisposition fileDetails = bodyPart.getContentDisposition();
             String filename = fileDetails.getFileName();
-            String target = user.getUid() + File.separator + PROFILE_PICTURE; // todo save location directory uid?
+            String target = user.getUid() + File.separator + PROFILE_PICTURE;
 
             Image avatar = saveImages.saveImage(inputStream, target, filename);
-            avatar.setUser(user);
-//            user.setAvatar(avatar);
-//            entityManager.merge(user);
-            entityManager.persist(avatar);
+            coupleImageAndOrganization(user, avatar);
         }
 
-        return Response.status(Response.Status.CREATED).entity(user).build();
-
-
+        return Response.status(Response.Status.CREATED)
+                .entity(user)
+                .build();
     }
 
     public Response deleteUser() {
         User user = entityManager.find(User.class, principal.getName());
 
-        if (user == null) {
+        if ( user == null ) {
             return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
         }
 
         entityManager.remove(user);
         return Response.ok("User removed from system").build();
+    }
+
+
+    // --- Private methods below --- //
+    private void coupleImageAndOrganization(User user, Image profilePicture) {
+        long uid = user.getUid();
+        long iid = profilePicture.getIid();
+        String query = "update auser set iid = " + iid + " where uid = " + uid;
+        System.out.println("query = " + query);
+        entityManager.createNativeQuery(query).executeUpdate();
     }
 }
