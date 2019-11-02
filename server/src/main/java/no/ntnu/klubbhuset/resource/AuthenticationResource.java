@@ -24,16 +24,16 @@ public class AuthenticationResource {
     @Inject
     AuthenticationService authenticationService;
 
-    @POST
-    public Response login(@FormParam("username") String username,
-                          @FormParam("password") String password) {
-        System.out.println("AuthenticationResource.login");
-        return authenticationService.login(username, password);
-    }
+//    @POST
+//    public Response login(@FormParam("username") String username,
+//                          @FormParam("password") String password) {
+//        System.out.println("AuthenticationResource.login");
+//        return authenticationService.login(username, password);
+//    }
 
-    @DELETE
-    public Response logout() {
-        return authenticationService.logout();
-    }
+//    @DELETE
+//    public Response logout() {
+//        return authenticationService.logout();
+//    }
 }
 
