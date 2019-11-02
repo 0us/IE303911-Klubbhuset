@@ -112,12 +112,15 @@ public class AuthenticationService {
             Date now = new Date();
             Date expiration = Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant()); // the token is valid for one day
             JwtBuilder jb = Jwts.builder()
-                    .setId(name)
                     .setHeaderParam("typ", "JWT")
-                    //.setIssuer(issuer)
-                    .claim("iss", issuer)
+                    .setHeaderParam("kid", "THEONEANDONLY") // this is a hint to which signature is been used. we only have one
+                    .setHeaderParam("alg", "RS256")
+                    .setIssuer(issuer)
+//                    .claim("iss", issuer)
                     .setIssuedAt(now)
                     .setExpiration(expiration)
+                    .setSubject(name)
+                    .setAudience(issuer)
                     .claim("upn", name)
                     .claim("groups", groups)
                     .claim("auth_time", now)
