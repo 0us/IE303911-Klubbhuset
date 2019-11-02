@@ -73,12 +73,11 @@ public class AuthenticationService {
      * @param request
      * @return
      */
-    @GET
-    @Path("login")
     public Response login(
             @QueryParam("email") @NotBlank String email,
-            @QueryParam("pwd") @NotBlank String pwd,
-            @Context HttpServletRequest request) {
+            @QueryParam("pwd") @NotBlank String pwd
+//            @Context HttpServletRequest request // todo what is this used for?
+    ) {
         CredentialValidationResult result = identityStoreHandler.validate(
                 new UsernamePasswordCredential(email, pwd));
 
@@ -111,19 +110,19 @@ public class AuthenticationService {
     private String issueToken(String name, Set<String> groups, HttpServletRequest request) {
         try {
             Date now = new Date();
-            Date expiration = Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant());
+            Date expiration = Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant()); // the token is valid for one day
             JwtBuilder jb = Jwts.builder()
                     .setHeaderParam("typ", "JWT")
-                    .setHeaderParam("kid", "abc-1234567890")
-                    .setSubject(name)
-                    .setId("a-123")
-                    //.setIssuer(issuer)
-                    .claim("iss", issuer)
+                    .setHeaderParam("kid", "THEONEANDONLY") // this is a hint to which signature is been used. we only have one
+                    .setHeaderParam("alg", "RS256")
+                    .setIssuer(issuer)
+//                    .claim("iss", issuer)
                     .setIssuedAt(now)
                     .setExpiration(expiration)
+                    .setSubject(name)
+                    .setAudience(issuer)
                     .claim("upn", name)
                     .claim("groups", groups)
-                    .claim("aud", "aud")
                     .claim("auth_time", now)
                     .signWith(keyService.getPrivate());
             return jb.compact();
@@ -134,11 +133,6 @@ public class AuthenticationService {
     }
 
     /**
-     * Does an insert into the AUSER and AUSERGROUP tables. It creates a SHA-256
-     * hash of the password and Base64 encodes it before the user is created in
-     * the database. The authentication system will read the AUSER table when
-     * doing an authentication.
-     *
      * @return
      */
     @POST
@@ -176,7 +170,6 @@ public class AuthenticationService {
      * @return
      */
     @GET
-    @Path("currentuser")
     @RolesAllowed(value = {Group.USER})
     @Produces(MediaType.APPLICATION_JSON)
     public User getCurrentUser() {
@@ -284,5 +277,9 @@ public class AuthenticationService {
             em.merge(user);
             return Response.ok().build();
         }
+    }
+
+    public Response logout() {
+
     }
 }
