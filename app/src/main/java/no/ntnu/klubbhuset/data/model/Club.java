@@ -22,7 +22,11 @@ public class Club {
             this.name = json.getString("name");
             this.url = json.getString("url");
             this.emailContact = json.getString("emailContact");
-            this.priceOfMembership = json.getLong("priceOfMembership");
+            if (json.getString("priceOfMembership").equals("null")) {
+                this.priceOfMembership = 0;
+            } else {
+                this.priceOfMembership = json.getLong("priceOfMembership");
+            }
             this.description = json.getString("description");
         } catch (JSONException e) {
             e.printStackTrace();
