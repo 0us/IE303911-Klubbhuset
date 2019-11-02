@@ -18,6 +18,11 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.GET_CLUBS_URL;
 
 public class ClubsViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
@@ -31,7 +36,7 @@ public class ClubsViewModel extends AndroidViewModel {
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public LiveData<List<Club>> getSellables() {
+    public LiveData<List<Club>> getClubs() {
         if (clubs == null) {
             clubs = new MutableLiveData<>();
             loadClubs();
@@ -40,7 +45,7 @@ public class ClubsViewModel extends AndroidViewModel {
     }
 
     protected void loadClubs() {
-        String url = CommunicationConfig.API_URL;
+        String url = API_URL + GET_CLUBS_URL;
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     List<Club> clubs = new ArrayList<>();
