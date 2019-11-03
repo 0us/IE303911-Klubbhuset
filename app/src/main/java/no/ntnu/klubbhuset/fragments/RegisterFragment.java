@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.service.UserService;
 
-public class CreateNewUserFragment extends Fragment {
+public class RegisterFragment extends Fragment {
     EditText mFirstName;
     EditText mLastName;
     EditText mEmail;
