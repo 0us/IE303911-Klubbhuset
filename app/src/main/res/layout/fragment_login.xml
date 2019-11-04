@@ -5,9 +5,9 @@
     android:gravity="center_vertical"
     android:padding="16dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+<!--    <RelativeLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content">-->
 
         <TextView
             android:id="@+id/username_label"
@@ -39,28 +39,29 @@
             android:inputType="textPassword" />
 
         <Button
+            android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/password_input"
             android:layout_centerHorizontal="true"
             android:text="@string/login" />
-    </RelativeLayout>
+<!--    </RelativeLayout>-->
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_arrow_right_black_30dp"
-        android:layout_above="@id/swipeRight"
-        android:layout_centerHorizontal="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Swipe left for register"
         android:id="@+id/swipeRight"
+        android:layout_below="@id/login_button"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
         />
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_arrow_right_black_30dp"
+        android:layout_below="@id/swipeRight"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
