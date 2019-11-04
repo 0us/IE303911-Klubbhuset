@@ -38,18 +38,13 @@ public class RegisterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_user, container, false);
         bindFields(view);
 
-        mCreateUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userService.createNewUser(
-                        mFirstName.getText().toString(),
-                        mLastName.getText().toString(),
-                        mEmail.getText().toString(),
-                        mPhonenumber.getText().toString(),
-                        mPassword.getText().toString()
-                );
-            }
-        });
+        mCreateUser.setOnClickListener(v -> userService.createNewUser(
+                mFirstName.getText().toString(),
+                mLastName.getText().toString(),
+                mEmail.getText().toString(),
+                mPhonenumber.getText().toString(),
+                mPassword.getText().toString()
+        ));
 
         return view;
     }
