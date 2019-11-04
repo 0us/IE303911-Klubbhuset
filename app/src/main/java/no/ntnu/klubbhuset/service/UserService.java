@@ -38,6 +38,8 @@ public class UserService {
                 response -> {
                 },
                 error -> {
+                    Log.d(TAG, "createNewUser: error");
+                    Log.d(TAG, error.getMessage());
                 });
 
         queue.add(request);
