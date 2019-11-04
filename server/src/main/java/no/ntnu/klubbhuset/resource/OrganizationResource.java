@@ -1,5 +1,6 @@
 package no.ntnu.klubbhuset.resource;
 
+import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.service.OrganizationService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -50,6 +51,11 @@ public class OrganizationResource {
 //                                          @FormDataParam("image")FormDataContentDisposition fileDetails
     ) {
         return organizationService.createNewOrganization(name, price, description, multiPart);
+    }
+
+    @POST
+    public Response createNewOrganization(Organization organization) {
+        return organizationService.createNewOrganization(organization);
     }
 
 //    @PUT
