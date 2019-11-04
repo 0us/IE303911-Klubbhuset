@@ -54,6 +54,21 @@ public class UserService {
         return Response.ok(user).build();
     }
 
+    /**
+     * Create new user from json.
+     *
+     * @param user the user
+     * @return the response Returns  Created if created. Forbidden if user is null
+     */
+    public Response createNewUser(User user) {
+        if (user == null) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        entityManager.persist(user);
+
+        return Response.status(Response.Status.CREATED).entity(user).build();
+    }
+
     public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
         Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, "UserService.createNewUser: was called");
 

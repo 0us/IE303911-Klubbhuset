@@ -64,5 +64,20 @@
             android:text="@string/cancel" />
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/swipeLeft"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_arrow_left_black_30dp" />
+    <TextView
+        android:id="@+id/swipeLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Swipe right to login"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        />
 
 </RelativeLayout>

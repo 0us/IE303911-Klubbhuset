@@ -170,4 +170,13 @@ public class OrganizationService {
         System.out.println("query = " + query);
         entityManager.createNativeQuery(query).executeUpdate();
     }
+
+    public Response createNewOrganization(Organization organization) {
+        if ( organization == null) {
+            return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
+        }
+        entityManager.persist(organization);
+
+        return Response.status(Response.Status.CREATED).entity(organization).build();
+    }
 }

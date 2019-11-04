@@ -8,10 +8,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp">
 
         <TextView
-            android:id="@+id/username_lable"
+            android:id="@+id/username_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -21,7 +20,7 @@
             android:id="@+id/username_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/username_lable"
+            android:layout_below="@id/username_label"
             android:inputType="textEmailAddress" />
 
         <TextView
@@ -46,6 +45,22 @@
             android:layout_centerHorizontal="true"
             android:text="@string/login" />
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_arrow_right_black_30dp"
+        android:layout_above="@id/swipeRight"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Swipe left for register"
+        android:id="@+id/swipeRight"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        />
 
 
 </RelativeLayout>

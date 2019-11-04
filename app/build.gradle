@@ -46,4 +46,11 @@ dependencies {
     // Circle image view
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
+
+    // multipart/form-data request volley
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+
+    implementation 'com.github.hardillb:MultiPartVolley:0.0.3'
 }
