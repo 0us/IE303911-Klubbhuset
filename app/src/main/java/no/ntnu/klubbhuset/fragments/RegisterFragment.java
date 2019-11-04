@@ -35,7 +35,7 @@ public class RegisterFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_new_user, container, true);
+        View view = inflater.inflate(R.layout.fragment_new_user, container, false);
         bindFields(view);
 
         mCreateUser.setOnClickListener(new View.OnClickListener() {
