@@ -1,5 +1,6 @@
 package no.ntnu.klubbhuset.service;
 
+import lombok.extern.java.Log;
 import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Image;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Log
 public class UserService {
 
     public static final String PROFILE_PICTURE = "profilePicture";
@@ -61,6 +63,7 @@ public class UserService {
      * @return the response Returns  Created if created. Forbidden if user is null
      */
     public Response createNewUser(User user) {
+        log.log(Level.INFO, "UserService.CreateUser: was called. Json edition");
         if (user == null) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }

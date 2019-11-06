@@ -36,6 +36,8 @@ public class UserResource {
 
     @POST
     public Response createNewUserProfile(User user) {
+        System.out.println("UserResource.createNewUserProfile");
+        System.out.println("user = " + user);
         return userService.createNewUser(user);
     }
 
