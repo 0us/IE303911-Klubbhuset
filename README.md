@@ -3,7 +3,9 @@ IE303911-Mobile-og-Distribuerte Applikasjoner Prosjektoppgave
 
 Distribuert løsning for medlemsskap i klubber og organisasjoner
 
-Local files:
+
+
+# Reqiuired Local Files:
 create this file
 .\app\src\main\assets\connection.properties
 
