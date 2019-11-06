@@ -20,6 +20,7 @@ import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -43,6 +44,9 @@ public class UserService {
 
     @Inject
     JsonWebToken principal;
+
+    @Inject
+    PasswordHash hasher;
 
     public Response getCurrentUser() {
         int uid = principal.getClaim("userId"); // todo this, or similar value, should be part of the token
@@ -72,9 +76,10 @@ public class UserService {
         }
         SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
         user.addSecurityGroup(securityGroup);
+        user.setPassword(hasher.generate(user.getPassword().toCharArray()));
         entityManager.persist(user);
 
-        return Response.status(Response.Status.CREATED).entity(user).build();
+        return Response.status(Response.Status.CREATED).build();
     }
 
     public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
