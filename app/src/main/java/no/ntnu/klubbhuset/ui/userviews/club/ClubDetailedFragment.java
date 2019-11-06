@@ -16,69 +16,28 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.model.Club;
 
 
 public class ClubDetailedFragment extends Fragment {
 
-    private Button joinClubBtn;
-    private int id;
-    private TextView name;
-    private TextView description;
-    private TextView url;
-    private TextView email;
-    private ClubsViewModel model;
-
-    public static Fragment newInstance() {
-        return new ClubDetailedFragment();
+    public static ClubDetailedFragment newInstance(Club club) {
+        ClubDetailedFragment frag = new ClubDetailedFragment();
+        return frag;
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = ViewModelProviders.of((FragmentActivity) Objects.requireNonNull(getContext())).get(ClubsViewModel.class);
-        model.getSelectedClub().observe(this, club -> {
-            name.setText(club.getName());
-            description.setText(club.getDescription());
-            url.setText(club.getUrl());
-            email.setText(club.getEmailContact());
-        });
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View result = inflater.inflate(R.layout.club_detailed_fragment, container, false);
-        name = result.findViewById(R.id.club_detailed_name);
-        description = result.findViewById(R.id.club_detailed_description);
-        url = result.findViewById(R.id.club_detailed_homepage);
-        email = result.findViewById(R.id.club_detailed_email);
-        return result;
+        return inflater.inflate(R.layout.content_club_detailed, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-//        id = getArguments().getInt("id");
-
-//        joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
-//        joinClubBtn.setOnClickListener(click -> {
-//            mViewModel.joinClub(id).observe(this, success -> {
-//                if (success) {
-//                    joinClub();
-//                }
-//            });
-//        });
-        //
-    }
-
-
-
-    public void joinClub() {
-
-    }
 
 }

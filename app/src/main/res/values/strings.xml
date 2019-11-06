@@ -34,4 +34,8 @@
     <string name="profile">Profile</string>
     <string name="sign_out">Sign out</string>
     <string name="join_club">Join club</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_club_detailed">ClubDetailed</string>
 </resources>

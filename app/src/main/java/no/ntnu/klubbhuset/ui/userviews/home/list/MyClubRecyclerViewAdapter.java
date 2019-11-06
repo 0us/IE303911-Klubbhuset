@@ -49,7 +49,7 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
         holder.mMembercountView.setText("0"); // TODO
 
         holder.view.setOnClickListener(v -> {
-            model.setSelectedClub(holder.mItem);
+            mListener.onListFragmentInteraction(holder.mItem);
         });
     }
 
