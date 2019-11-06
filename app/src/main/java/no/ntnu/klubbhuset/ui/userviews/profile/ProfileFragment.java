@@ -25,6 +25,7 @@ import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.ui.login.LoginActivity;
 import no.ntnu.klubbhuset.ui.login.LoginViewModel;
+import no.ntnu.klubbhuset.ui.managerviews.ManagerActivity;
 
 
 public class ProfileFragment extends Fragment {
@@ -37,6 +38,7 @@ public class ProfileFragment extends Fragment {
     private TextView phone;
     private ImageView picture;
     private Button signout;
+    private Button manage;
 
 
     public static ProfileFragment newInstance() {
@@ -78,15 +80,24 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initButtons() {
+        // sign out
         signout = getView().findViewById(R.id.btn_sign_out);
         signout.setOnClickListener(l -> signOut());
 
+        // manage orgs
+        manage = getView().findViewById(R.id.profile_manage_orgs);
+        manage.setOnClickListener(l -> manageOrgs());
     }
 
     private void signOut() {
         Intent result = new Intent("logout");
         getActivity().setResult(Activity.RESULT_OK, result);
         getActivity().finish();
+    }
+
+    private void manageOrgs() {
+        Intent intent = new Intent(this.getActivity(), ManagerActivity.class);
+        startActivity(intent);
     }
 
 }

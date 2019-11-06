@@ -9,14 +9,16 @@
         android:id="@+id/firstname_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/firstname"
-        android:focusedByDefault="true"/>
+        android:focusedByDefault="true"
+        android:text="Teste"
+        android:hint="@string/firstname" />
 
     <EditText
         android:id="@+id/lastname_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/firstname_input"
+        android:text="Testesen"
         android:hint="@string/lastname" />
 
     <EditText
@@ -25,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lastname_input"
         android:hint="@string/prompt_email"
+        android:text="test@test.no"
         android:inputType="textEmailAddress" />
 
     <EditText
@@ -33,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/email_input"
         android:hint="@string/prompt_password"
+        android:text="123456"
         android:inputType="textPassword" />
 
     <EditText
@@ -41,14 +45,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/password_input"
         android:hint="@string/phone_number"
+        android:text="12345678"
         android:inputType="phone" />
 
     <LinearLayout
+        android:id="@+id/buttons_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/phonenumber_input"
-        android:gravity="center_horizontal"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/create_user_submit"
@@ -64,20 +70,20 @@
             android:text="@string/cancel" />
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/swipeLeft"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_arrow_left_black_30dp" />
     <TextView
         android:id="@+id/swipeLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Swipe right to login"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/buttons_container"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        />
+        android:layout_marginTop="30dp"
+        android:text="Swipe right to login" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/swipeLeft"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_arrow_left_black_30dp" />
 
 </RelativeLayout>

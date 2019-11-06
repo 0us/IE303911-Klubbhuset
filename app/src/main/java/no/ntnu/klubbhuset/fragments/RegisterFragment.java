@@ -10,9 +10,11 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.service.UserService;
+import no.ntnu.klubbhuset.ui.login.LoginViewModel;
 
 public class RegisterFragment extends Fragment {
     EditText mFirstName;
@@ -25,31 +27,29 @@ public class RegisterFragment extends Fragment {
     Button mCancel;
 
     UserService userService;
+    LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userService = new UserService(getActivity());
+        loginViewModel = ViewModelProviders.of(getActivity()).get(LoginViewModel.class);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_new_user, container, true);
+        View view = inflater.inflate(R.layout.fragment_new_user, container, false);
         bindFields(view);
 
-        mCreateUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userService.createNewUser(
-                        mFirstName.getText().toString(),
-                        mLastName.getText().toString(),
-                        mEmail.getText().toString(),
-                        mPhonenumber.getText().toString(),
-                        mPassword.getText().toString()
-                );
-            }
-        });
+        mCreateUser.setOnClickListener(v -> userService.createNewUser(
+                mFirstName.getText().toString(),
+                mLastName.getText().toString(),
+                mEmail.getText().toString(),
+                mPhonenumber.getText().toString(),
+                mPassword.getText().toString()
+        ));
 
         return view;
     }

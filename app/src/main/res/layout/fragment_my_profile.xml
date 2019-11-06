@@ -84,6 +84,25 @@
             android:orientation="vertical" >
 
             <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:background="?android:attr/listDivider"/>
+
+            <Button
+                android:id="@+id/profile_manage_orgs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:drawableStart="@drawable/ic_work_black_24dp"
+                android:drawablePadding="32dp"
+                android:gravity="start|center_vertical"
+                android:paddingStart="16dp"
+                android:text="@string/manageorgs" />
+
+            <View
                 android:id="@+id/divider5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
