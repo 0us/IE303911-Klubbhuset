@@ -5,7 +5,9 @@ Distribuert løsning for medlemsskap i klubber og organisasjoner
 
 
 
-# Reqiuired Local Files:
+
+
+## Reqiuired Local Files:
 create this file
 .\app\src\main\assets\connection.properties
 
