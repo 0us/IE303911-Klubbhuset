@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
 //        final EditText passwordEditText = findViewById(R.id.password);
 //        final Button loginButton = findViewById(R.id.login);
 //        final Button createNewUserButton = findViewById(R.id.create_new_user_button);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        //final ProgressBar loadingProgressBar = (ProgressBar) findViewById(R.id.loading);
 
 //        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
 //            if (loginFormState == null) {
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 //        });
 
-        loginViewModel.getLoginResult().observe(this, loginResult -> {
+        /*loginViewModel.getLoginResult().observe(this, loginResult -> {
             if (loginResult == null) {
                 return;
             }
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             showHome(); // TODO
-        });
+        });*/
 
 //        TextWatcher afterTextChangedListener = new TextWatcher() {
 //            @Override
@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-         super.onBackPressed();
+        super.onBackPressed();
 //         forbid the user from going to home without being logged in
     }
 }

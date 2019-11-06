@@ -32,6 +32,7 @@ public class LoginFragment extends Fragment {
 
     EditText username, password;
     Button loginButton;
+    private ProgressBar loadingProgressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +44,6 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        final ProgressBar loadingProgressBar = getActivity().findViewById(R.id.loading);
 
         bindFields(view);
 
@@ -107,15 +107,20 @@ public class LoginFragment extends Fragment {
             return false;
         });
 
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        loadingProgressBar = getActivity().findViewById(R.id.loading);
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(username.getText().toString(),
                     password.getText().toString());
         });
-
-        return view;
     }
-
 
     private void bindFields(View view) {
         username = view.findViewById(R.id.username_input);
