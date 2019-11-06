@@ -1,5 +1,7 @@
 package no.ntnu.klubbhuset.ui.login;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,7 +16,7 @@ import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 import no.ntnu.klubbhuset.R;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends AndroidViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
@@ -24,10 +26,17 @@ public class LoginViewModel extends ViewModel {
 
     private final String LOGGED_IN = "loggedin";
 
-    LoginViewModel(Application context, LoginRepository loginRepository) {
+//    LoginViewModel(Application context, LoginRepository loginRepository) {
+//        this.loginRepository = loginRepository;
+//        this.context = context;
+//        this.pref = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+//    }
+
+
+    public LoginViewModel(@NonNull Application application, LoginRepository loginRepository) {
+        super(application);
         this.loginRepository = loginRepository;
-        this.context = context;
-        this.pref = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+        this.pref = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
     }
 
     LiveData<LoginFormState> getLoginFormState() {
