@@ -34,4 +34,5 @@
     <string name="profile">Profile</string>
     <string name="sign_out">Sign out</string>
     <string name="join_club">Join club</string>
+    <string name="manageorgs">Manage organzations</string>
 </resources>
