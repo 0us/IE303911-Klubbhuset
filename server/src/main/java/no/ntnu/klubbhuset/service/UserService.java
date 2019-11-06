@@ -17,14 +17,13 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.InputStream;
+import java.sql.SQLDataException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
