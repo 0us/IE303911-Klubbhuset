@@ -1,43 +1,58 @@
 package no.ntnu.klubbhuset.data;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class LoginDataSource {
+    private static final String TAG = "LoginDataSource";
+    private final String URL = API_URL;
+
+    private RequestQueue requestQueue;
+    private Result<LoggedInUser> result;
+    private Context context;
+
+    public LoginDataSource(Context context) {
+        this.context = context;
+        requestQueue = Volley.newRequestQueue(context);
+    }
 
     public Result<LoggedInUser> login(String username, String password) {
-        HttpURLConnection c = null;
-        try {
-            // TODO: get a real server, maaaan
-            URL url = new URL("http://158.38.101.86:8080/api/auth/login?uid=" + username + "&pwd=" + password);
-            c = (HttpURLConnection) url.openConnection();
-            c.setUseCaches(true);
-            c.setRequestMethod("GET");
 
-            if(c.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream(),"UTF-8"));
-                String token = br.readLine();
-                System.out.println(token);
-                LoggedInUser user = new LoggedInUser(username,token);
-                c.getInputStream().close(); // Why?
-                return new Result.Success<>(user);
+        StringRequest request = new StringRequest(Request.Method.POST, URL,
+                response -> {
+                    Log.d(TAG, "login: response: " + response);
+                    result = new Result.Success<>(response);
+                },
+                error -> {
+                    Log.d(TAG, "login: error: " + error);
+                    result = new Result.Error(error);
+                }) {
+            // adding data to the string request
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> data = new HashMap<>();
+                data.put("username", username);
+                data.put("password", password);
+                return data;
             }
-            // TODO: handle loggedInUser authentication
-            return new Result.Error(new IOException("Error logging in " + c.getResponseMessage()));
-        } catch (Exception e) {
-            System.err.println("Failed to call " + e);
-            return new Result.Error(new IOException("Error logging in", e));
-        } finally {
-            if(c != null) c.disconnect();
-        }
+        };
+        requestQueue.add(request);
+        return result;
     }
 
     public void logout() {
