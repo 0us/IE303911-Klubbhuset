@@ -11,10 +11,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class UserService {
     private static final String TAG = "UserService";
     RequestQueue queue; // fixme needs context
-    final String URL = "http://10.22.195.81/Klubbhuset/api/user"; // todo needs other domain
+    final String URL = "http://10.22.195.81:8080/Klubbhuset/api/user"; // todo needs other domain
 
     public UserService(Context context) {
         queue = Volley.newRequestQueue(context);
@@ -34,15 +36,20 @@ public class UserService {
         }
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, newUserJson,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, newUserJson,
                 response -> {
+                    Log.d(TAG, "createNewUser: got response" + response);
+                    // todo. Start main activity. send response to the activity
                 },
                 error -> {
                     Log.d(TAG, "createNewUser: error");
-                    Log.d(TAG, error.getMessage());
+                    if ( error != null) {
+                        // todo handle error
+                        Log.d(TAG, "createNewUser: Error" + error);
+                    }
                 });
 
-        queue.add(request);
+        queue.add(jsonObjectRequest);
         return newUserJson;
     }
 
