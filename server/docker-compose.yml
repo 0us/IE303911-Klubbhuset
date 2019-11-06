@@ -1,0 +1,4 @@
+version: "3.7"
+
+db:
+  image: mysql:5.7.28
