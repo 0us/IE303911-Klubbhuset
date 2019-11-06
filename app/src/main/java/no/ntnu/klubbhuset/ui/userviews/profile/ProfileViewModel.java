@@ -11,6 +11,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.InvalidObjectException;
+
 import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.User;
 
@@ -36,8 +38,13 @@ public class ProfileViewModel extends AndroidViewModel {
         String url = CommunicationConfig.API_URL + "currentuser";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-            User newUser = new User(response);
-            user.setValue(newUser);
+                    User newUser = null;
+                    try {
+                        newUser = new User(response);
+                    } catch (InvalidObjectException e) {
+                        e.printStackTrace();
+                    }
+                    user.setValue(newUser);
         },
                 error -> {
                     // error
