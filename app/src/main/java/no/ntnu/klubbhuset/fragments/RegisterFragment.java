@@ -10,9 +10,11 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.service.UserService;
+import no.ntnu.klubbhuset.ui.login.LoginViewModel;
 
 public class RegisterFragment extends Fragment {
     EditText mFirstName;
@@ -25,11 +27,14 @@ public class RegisterFragment extends Fragment {
     Button mCancel;
 
     UserService userService;
+    LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userService = new UserService(getActivity());
+        loginViewModel = ViewModelProviders.of(getActivity()).get(LoginViewModel.class);
+
     }
 
     @Nullable
