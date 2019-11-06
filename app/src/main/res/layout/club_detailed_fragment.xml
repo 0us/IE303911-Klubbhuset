@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="no.ntnu.klubbhuset.ui.userviews.club.ClubDetailed">
+    tools:context=".ui.userviews.club.ClubDetailedFragment">
 
     <TextView
         android:id="@+id/textView9"
@@ -29,7 +29,7 @@
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/banner_gradient"
             android:layout_width="fill_parent"
             android:layout_height="256dp"
             android:src="@drawable/banner_gradient" />
