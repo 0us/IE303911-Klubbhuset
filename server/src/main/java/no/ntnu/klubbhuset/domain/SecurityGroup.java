@@ -27,7 +27,7 @@ public class SecurityGroup {
 
     @JsonbTransient
     @ManyToMany
-    @JoinTable(name="AUSERGROUP",
+    @JoinTable(name="USERSECURITYROLES",
             joinColumns = @JoinColumn(name="name", referencedColumnName = "name"),
             inverseJoinColumns = @JoinColumn(name="uid",referencedColumnName = "uid"))
     List<User> users;

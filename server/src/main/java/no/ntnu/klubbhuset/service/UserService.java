@@ -3,7 +3,9 @@ package no.ntnu.klubbhuset.service;
 import lombok.extern.java.Log;
 import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
+import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Image;
+import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import no.ntnu.klubbhuset.resource.UserResource;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -17,6 +19,7 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -67,6 +70,8 @@ public class UserService {
         if (user == null) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+        SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
+        user.addSecurityGroup(securityGroup);
         entityManager.persist(user);
 
         return Response.status(Response.Status.CREATED).entity(user).build();
