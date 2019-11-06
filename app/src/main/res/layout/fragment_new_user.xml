@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusedByDefault="true"
+        android:text="Teste"
         android:hint="@string/firstname" />
 
     <EditText
@@ -17,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/firstname_input"
+        android:text="Testesen"
         android:hint="@string/lastname" />
 
     <EditText
@@ -25,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lastname_input"
         android:hint="@string/prompt_email"
+        android:text="test@test.no"
         android:inputType="textEmailAddress" />
 
     <EditText
@@ -33,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/email_input"
         android:hint="@string/prompt_password"
+        android:text="123456"
         android:inputType="textPassword" />
 
     <EditText
@@ -41,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/password_input"
         android:hint="@string/phone_number"
+        android:text="12345678"
         android:inputType="phone" />
 
     <LinearLayout
