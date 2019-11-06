@@ -1,15 +1,12 @@
 package no.ntnu.klubbhuset.resource;
 
+import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.service.AuthenticationService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -33,6 +30,13 @@ public class AuthenticationResource {
     @DELETE
     public Response logout() {
         return authenticationService.logout();
+    }
+
+    @GET
+    @RolesAllowed(value = {Group.USER})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCurrentUser() {
+        return authenticationService.getCurrentUser();
     }
 }
 

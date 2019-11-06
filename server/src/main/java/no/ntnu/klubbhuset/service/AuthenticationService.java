@@ -164,13 +164,12 @@ public class AuthenticationService {
     }
 
     /**
-     * @return
+     *
+     * @return Returns current user trying to authenticate with token
      */
-    @GET
-    @RolesAllowed(value = {Group.USER})
-    @Produces(MediaType.APPLICATION_JSON)
-    public User getCurrentUser() {
-        return em.find(User.class, principal.getName());
+    public Response getCurrentUser() {
+        User user = em.find(User.class, principal.getName());
+        return Response.status(Response.Status.OK).entity(user).build();
     }
 
 
