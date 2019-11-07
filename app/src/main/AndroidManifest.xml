@@ -12,7 +12,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.userviews.club.ClubDetailedActivity"
-            android:label="@string/title_activity_club_detailed"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.login.LoginActivity"

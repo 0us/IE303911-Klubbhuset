@@ -31,11 +31,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
-
-    @Override
     public void onListFragmentInteraction(Club item) {
         Intent intent = new Intent(this, ClubDetailedActivity.class);
         intent.putExtra("club", item);

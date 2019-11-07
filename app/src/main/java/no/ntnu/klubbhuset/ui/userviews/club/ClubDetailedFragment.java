@@ -21,17 +21,6 @@ import no.ntnu.klubbhuset.data.model.Club;
 
 public class ClubDetailedFragment extends Fragment {
 
-    public static ClubDetailedFragment newInstance(Club club) {
-        ClubDetailedFragment frag = new ClubDetailedFragment();
-        return frag;
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
