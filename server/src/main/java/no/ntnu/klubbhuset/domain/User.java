@@ -16,6 +16,14 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements Serializable {
+
+    public void addSecurityGroup(SecurityGroup securityGroup) {
+        if(securityGroups == null) {
+            securityGroups = new ArrayList<>();
+        }
+        securityGroups.add(securityGroup);
+    }
+
     public enum State {
         ACTIVE, INACTIVE
     }
@@ -44,6 +52,7 @@ public class User implements Serializable {
 
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     String phonenumber;
 
@@ -58,10 +67,10 @@ public class User implements Serializable {
     private Map<String, String> properties = new HashMap<String, String>();
 
     @ManyToMany
-    @JoinTable(name="AUSERGROUP",
+    @JoinTable(name="USERSECURITYROLES",
             joinColumns = @JoinColumn(name="uid", referencedColumnName = "uid"),
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
-    List<Group> groups;
+    List<SecurityGroup> securityGroups;
 
     @Override
     public String toString() {

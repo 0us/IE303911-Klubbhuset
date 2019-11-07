@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset;
+package no.ntnu.klubbhuset.service;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -13,13 +13,14 @@ import javax.security.enterprise.identitystore.PasswordHash;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import javax.annotation.Resource;
-import javax.validation.constraints.NotBlank;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.java.Log;
+import no.ntnu.klubbhuset.DatasourceProducer;
+import no.ntnu.klubbhuset.KeyService;
 import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.User;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -69,17 +70,13 @@ public class AuthenticationService {
 
     /**
      * @param email
-     * @param pwd
-     * @param request
+     * @param password
+     * @param context
      * @return
      */
-    public Response login(
-            @QueryParam("email") @NotBlank String email,
-            @QueryParam("pwd") @NotBlank String pwd,
-            @Context HttpServletRequest request // todo what is this used for?
-    ) {
+    public Response login(String email, String password, HttpServletRequest context) {
         CredentialValidationResult result = identityStoreHandler.validate(
-                new UsernamePasswordCredential(email, pwd));
+                new UsernamePasswordCredential(email, password));
 
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
             long uid = (long) em.createNativeQuery(
@@ -87,11 +84,11 @@ public class AuthenticationService {
                     setParameter("email", result.getCallerPrincipal().getName()).
                     getResultList().get(0);
             List resultList = em.createNativeQuery(
-                    "select name from ausergroup where uid = #uid").
+                    "select name from usersecurityroles where uid = #uid").
                     setParameter("uid", uid).getResultList();
             Set<String> group = new HashSet<>(resultList);
             String token = issueToken(result.getCallerPrincipal().getName(),
-                    group, request);
+                    group, context);
             return Response
                     .ok(token)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)

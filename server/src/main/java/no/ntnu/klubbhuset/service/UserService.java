@@ -3,7 +3,9 @@ package no.ntnu.klubbhuset.service;
 import lombok.extern.java.Log;
 import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
+import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Image;
+import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import no.ntnu.klubbhuset.resource.UserResource;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -15,12 +17,13 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
+import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.InputStream;
+import java.sql.SQLDataException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +43,9 @@ public class UserService {
 
     @Inject
     JsonWebToken principal;
+
+    @Inject
+    PasswordHash hasher;
 
     public Response getCurrentUser() {
         int uid = principal.getClaim("userId"); // todo this, or similar value, should be part of the token
@@ -67,9 +73,12 @@ public class UserService {
         if (user == null) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+        SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
+        user.addSecurityGroup(securityGroup);
+        user.setPassword(hasher.generate(user.getPassword().toCharArray()));
         entityManager.persist(user);
 
-        return Response.status(Response.Status.CREATED).entity(user).build();
+        return Response.status(Response.Status.CREATED).build();
     }
 
     public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
