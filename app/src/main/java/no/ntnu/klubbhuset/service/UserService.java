@@ -11,12 +11,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
 
 public class UserService {
     private static final String TAG = "UserService";
     RequestQueue queue; // fixme needs context
-    final String URL = "http://10.22.195.81:8080/Klubbhuset/api/user"; // todo needs other domain
+    final String URL =  API_URL;// todo needs other domain
 
     public UserService(Context context) {
         queue = Volley.newRequestQueue(context);
