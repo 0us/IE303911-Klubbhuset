@@ -6,6 +6,7 @@ services:
 #    image: nginx
 
   db:
+    container_name: klubbhuset-db
     image: mysql:5.7.28
     # todo add all necessary inputs
     restart: always
@@ -30,7 +31,13 @@ services:
   # Names our volume
 
   custompayaraserver:
-    image: klubbhuset/server
+    depends_on:
+      - db
+    container_name: klubbhuset-applicationserver
+#    image: klubbhuset/server
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
       - "4848:4848"
