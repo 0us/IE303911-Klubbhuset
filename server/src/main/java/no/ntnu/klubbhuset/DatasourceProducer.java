@@ -12,10 +12,10 @@ import static no.ntnu.klubbhuset.DatasourceProducer.JNDI_NAME;
 @Singleton
 @DataSourceDefinition(
         name = JNDI_NAME,
-        className = "com.mysql.jdbc.jdbc2.optional.MysqlDataSource"
-//        user = "markus",
-//        password = "knugen",
-//        url = "jdbc:mysql://localhost:3306/klubbhuset?useSSL=false"
+        className = "com.mysql.jdbc.jdbc2.optional.MysqlDataSource",
+        user = "user",
+        password = "password",
+        url = "jdbc:mysql://klubbhusetdb:3306/klubbhuset?useSSL=false"
 )
 public class DatasourceProducer {
     public static final String JNDI_NAME = "java:app/jdbc/klubbhuset";
