@@ -20,7 +20,7 @@ services:
 
 
   db:
-    container_name: klubbhuset-db
+    container_name: klubbhusetdb
     image: mysql:5.7.28
     # todo add all necessary inputs
     restart: always
@@ -47,7 +47,7 @@ services:
   custompayaraserver:
     depends_on:
       - db
-    container_name: klubbhuset-applicationserver
+    container_name: klubbhusetapplicationserver
 #    image: klubbhuset/server
     build:
       context: .
