@@ -94,8 +94,10 @@ public class UserService {
         user.setFirstName(firstname);
         user.setLastName(lastname);
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(hasher.generate(password.toCharArray()));
         user.setPhonenumber(phonenumber);
+        SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
+        user.addSecurityGroup(securityGroup);
         entityManager.persist(user);
 
         FormDataBodyPart bodyPart = multiPart.getField(PROFILE_PICTURE);

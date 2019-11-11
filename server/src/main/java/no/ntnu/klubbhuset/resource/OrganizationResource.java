@@ -58,6 +58,7 @@ public class OrganizationResource {
         return organizationService.createNewOrganization(organization);
     }
 
+
 //    @PUT
 //    @Path("/{organizationId}")
 //    public Response updateOrganization(@PathParam("organizationId") int id, Organization organization) {
