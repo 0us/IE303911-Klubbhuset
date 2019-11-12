@@ -56,16 +56,21 @@ public class OrganizationService {
         if ( organizations.isEmpty() ) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
+        System.out.println("organizations = " + organizations);
 
-        String json = null;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
-            json = objectMapper.writeValueAsString(organizations);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Response.ok(json).build();
+        Jsonb jsonb = JsonbBuilder.create();
+        String organizationsJson = jsonb.toJson(organizations);
+        System.out.println("organizationsJson = " + organizationsJson);
+
+//        String json = null;
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+//            json = objectMapper.writeValueAsString(organizations);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        return Response.ok(organizationsJson).build();
     }
 
 
