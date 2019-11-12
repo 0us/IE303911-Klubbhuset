@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -33,6 +35,7 @@ public class Image {
 
     private String url;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "avatar")
     private User user;
 
