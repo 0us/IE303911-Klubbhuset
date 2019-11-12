@@ -57,7 +57,7 @@ public class User implements Serializable {
     String phonenumber;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "iid", referencedColumnName = "uid")
+    @JoinColumn(name = "iid", referencedColumnName = "iid")
     private Image avatar;
 
     @ElementCollection(fetch = FetchType.LAZY)
