@@ -3,8 +3,6 @@ package no.ntnu.klubbhuset.ui.login;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
@@ -14,7 +12,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.AuthenticationPageAdapter;
-import no.ntnu.klubbhuset.fragments.LoginFragment;
 import no.ntnu.klubbhuset.fragments.RegisterFragment;
 
 

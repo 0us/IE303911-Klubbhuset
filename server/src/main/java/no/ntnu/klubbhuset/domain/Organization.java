@@ -38,10 +38,11 @@ public class Organization implements Serializable {
     private BigDecimal priceOfMembership;
     private String description;
 
-    @JsonIgnore
+    @JsonbTransient
     @OneToMany(mappedBy = "organization")
     Set<Member> members;
 
+    @JsonbTransient
     @ManyToMany
     @JoinTable(
             name = "orgImages",

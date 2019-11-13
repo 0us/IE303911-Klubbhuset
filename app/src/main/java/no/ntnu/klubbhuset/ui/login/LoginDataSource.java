@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.data;
+package no.ntnu.klubbhuset.ui.login;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 
 import java.util.HashMap;
 import java.util.Map;

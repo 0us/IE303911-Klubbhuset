@@ -6,6 +6,7 @@ import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.Organization;
+import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
@@ -19,8 +20,6 @@ import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
@@ -29,14 +28,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 @Stateless
+@RolesAllowed({SecurityGroup.USER})
 public class OrganizationService {
 
     public static final String IMAGES = "images";
     public static final String IMAGE = "image";
+
     @Inject
     JsonWebToken principal;
 
@@ -56,21 +58,11 @@ public class OrganizationService {
         if ( organizations.isEmpty() ) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
+        System.out.println("organizations = " + organizations);
 
-        String json = null;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
-            json = objectMapper.writeValueAsString(organizations);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Response.ok(json).build();
+        return Response.ok(organizations).build();
     }
 
-
-    // todo implement security
-    //@RolesAllowed(value = {Group.USER})
     public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
         Organization organization = new Organization();
         FormDataBodyPart imageBodyPart = multiPart.getField(IMAGE);
@@ -96,7 +88,6 @@ public class OrganizationService {
 
             Image organizationImage = saveImages.saveImage(inputStream, target, filename);
 
-            //entityManager.persist(organizationImage);
             coupleImageAndOrganization(organization, organizationImage);
         }
 
@@ -116,30 +107,48 @@ public class OrganizationService {
         return Response.ok("Organization removed from system").build();
     }
 
-    @RolesAllowed(value = {Group.USER})
-    public Response joinOrganization(int organizationId) {
+    /**
+     * A user can join a organization based on the organization ID. The user has to be logged in and is retrived trough
+     * the JWT principal.
+     * @param organizationId
+     * @return
+     */
+    public Response joinOrganization(Long organizationId) {
+        //Getting organization
         Organization organization = entityManager.find(Organization.class, organizationId);
-        int userId = Integer.parseInt(principal.getName());
-        User user = entityManager.find(User.class, userId);
-        Member member = new Member(); // todo connect user to member
+
+        // Getting user
+        User user = getUserFromPrincipal();
+
+        if (isAlreadyMember(organizationId, user)) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
+        }
+
+        // Getting default group (user)
+        Group group = getDefaultGroup();
+
+        Member member = new Member();
         member.setUser(user);
-        organization.getMembers().add(member); // todo is this even gonna work?
-        entityManager.persist(organization); // todo is this redundant
+        member.setOrganization(organization);
+        member.setGroup(group);
+        member.setOrganization(organization);
+        entityManager.persist(member);
 
         return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
     }
 
-    public Response getOrganizationById(int organizationId) {
+    /**
+     * Getting an organization based on id
+     * @param organizationId Id must be long since database value is BIGINT
+     * @return Organization with id = organizationID
+     */
+    public Response getOrganizationById(Long organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
         if ( organization == null ) {
             return Response.status(Response.Status.NOT_FOUND).entity("Organization not found").build();
         }
-
-        Jsonb jsonb = JsonbBuilder.create();
-        jsonb.toJson(organization);
-
-        return Response.ok(jsonb).build();
+        return Response.ok(organization).build();
     }
 
     public Response getMembers(String organizationId) {
@@ -162,6 +171,15 @@ public class OrganizationService {
         return Response.ok(json).build();
     }
 
+    public Response createNewOrganization(Organization organization) {
+        if ( organization == null) {
+            return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
+        }
+        entityManager.persist(organization);
+
+        return Response.status(Response.Status.CREATED).entity(organization).build();
+    }
+
     // --- Private methods below --- //
     private void coupleImageAndOrganization(Organization organization, Image organizationImage) {
         long oid = organization.getOid();
@@ -171,12 +189,41 @@ public class OrganizationService {
         entityManager.createNativeQuery(query).executeUpdate();
     }
 
-    public Response createNewOrganization(Organization organization) {
-        if ( organization == null) {
-            return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
-        }
-        entityManager.persist(organization);
+    /**
+     * Getting the default groupe which is `user`
+     * @return
+     */
+    private Group getDefaultGroup() {
+        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", Group.USER).getSingleResult();
+    }
 
-        return Response.status(Response.Status.CREATED).entity(organization).build();
+    /**
+     * Getting the user based on JWT principal
+     * @return the user that is logged in
+     */
+    private User getUserFromPrincipal() {
+        String userId = principal.getName();
+        return entityManager.find(User.class, userId);
+    }
+
+    /**
+     * Checks if a user already is member of an organization
+     * @param organizationId
+     * @param user
+     * @return True if the user is in organization, false if not
+     */
+    private boolean isAlreadyMember(Long organizationId, User user) {
+        Organization organization = entityManager.find(Organization.class, organizationId);
+        Set<Member> members = organization.getMembers();
+        Iterator it = members.iterator();
+        boolean found = false;
+        while(it.hasNext() && !found) {
+            Member member = (Member) it.next();
+            if (member.getUser().getEmail().equals(user.getEmail())) {
+                found = true;
+            }
+            return found;
+        }
+        return false;
     }
 }
