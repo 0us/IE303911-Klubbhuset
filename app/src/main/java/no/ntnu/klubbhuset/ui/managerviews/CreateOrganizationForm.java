@@ -1,8 +1,13 @@
 package no.ntnu.klubbhuset.ui.managerviews;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -11,8 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -22,7 +30,10 @@ import no.ntnu.klubbhuset.data.model.Club;
 
 public class CreateOrganizationForm extends Fragment {
 
+    private static final int UPLOAD_IMAGE_CODE = 1;
     private OnFragmentInteractionListener mListener;
+
+    ImageView imageView;
 
     public CreateOrganizationForm() {
         // Required empty public constructor
@@ -36,10 +47,16 @@ public class CreateOrganizationForm extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_new_organization, container, false);
         Button registerBtn = view.findViewById(R.id.register_organization);
         Button cancelBtn = view.findViewById(R.id.cancel_registration);
+        imageView = view.findViewById(R.id.organization_profile_picture);
 
+        imageView.setOnClickListener(l -> onUploadImageButtonPressed());
         registerBtn.setOnClickListener(l -> onCreateButtonPressed());
         cancelBtn.setOnClickListener(l -> onCancelButtonPressed());
         return view;
+    }
+
+    private void onUploadImageButtonPressed() {
+        selectImageFromGallery();
     }
 
     private void onCreateButtonPressed() {
@@ -83,6 +100,28 @@ public class CreateOrganizationForm extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    /**
+     * Retrieves image from users ImageGallery
+     */
+    private void selectImageFromGallery(){
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, UPLOAD_IMAGE_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        InputStream stream = null;
+        try {
+            stream = Objects.requireNonNull(getActivity()).getContentResolver().openInputStream(
+                    Objects.requireNonNull(Objects.requireNonNull(data).getData()));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(stream);
+        imageView.setImageBitmap(bitmap);
     }
 
     /**
