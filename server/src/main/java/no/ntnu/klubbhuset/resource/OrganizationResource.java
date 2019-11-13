@@ -1,12 +1,14 @@
 package no.ntnu.klubbhuset.resource;
 
 import no.ntnu.klubbhuset.domain.Organization;
+import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.service.OrganizationService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -22,6 +24,7 @@ import java.io.InputStream;
 
 @Stateless
 @Path("organization")
+@RolesAllowed({SecurityGroup.USER})
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class OrganizationResource {

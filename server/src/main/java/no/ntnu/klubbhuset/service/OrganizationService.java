@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 @Stateless
+@RolesAllowed({SecurityGroup.USER})
 public class OrganizationService {
 
     public static final String IMAGES = "images";
