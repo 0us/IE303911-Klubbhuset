@@ -5,13 +5,13 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Patterns;
 
-import no.ntnu.klubbhuset.data.LoginRepository;
-import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 import no.ntnu.klubbhuset.R;
 
@@ -48,8 +48,8 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     public void login(String email, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(email, password);
+
+        Result result = loginRepository.login(email, password);
 
         SharedPreferences.Editor editor = pref.edit();
         if (result instanceof Result.Success) {

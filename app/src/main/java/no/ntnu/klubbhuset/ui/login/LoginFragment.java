@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.fragments;
+package no.ntnu.klubbhuset.ui.login;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -49,7 +49,6 @@ public class LoginFragment extends Fragment {
 
         loginButton.setOnClickListener(v -> {
             loginViewModel.login(username.getText().toString(), password.getText().toString());
-            // FIXME Login are not handled correctly
         });
 
 //        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
@@ -65,19 +64,18 @@ public class LoginFragment extends Fragment {
 //            }
 //        });
 
-//        loginViewModel.getLoginResult().observe(this, loginResult -> {
-//                    if (loginResult == null) {
-//                        return;
-//                    }
-//                    loadingProgressBar.setVisibility(View.GONE);
-//                    if (loginResult.getError() != null) {
-//                        showLoginFailed(loginResult.getError());
-//                    }
-//                    if (loginResult.getSuccess() != null) {
-//                        showHome();
-//                    }
-//                    showHome(); // TODO
-//                });
+        loginViewModel.getLoginResult().observe(this, loginResult -> {
+                    if (loginResult == null) {
+                        return;
+                    }
+                    loadingProgressBar.setVisibility(View.GONE);
+                    if (loginResult.getError() != null) {
+                        showLoginFailed(loginResult.getError());
+                    }
+                    if (loginResult.getSuccess() != null) {
+                        showHome();
+                    }
+                });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override

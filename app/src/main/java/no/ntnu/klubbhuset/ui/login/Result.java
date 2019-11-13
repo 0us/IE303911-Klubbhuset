@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.data;
+package no.ntnu.klubbhuset.ui.login;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.
