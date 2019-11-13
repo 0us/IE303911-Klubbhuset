@@ -57,6 +57,7 @@ public class OrganizationResource {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response createNewOrganization(Organization organization) {
         return organizationService.createNewOrganization(organization);
     }
