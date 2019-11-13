@@ -6,6 +6,7 @@ import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.Organization;
+import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
@@ -38,6 +39,7 @@ public class OrganizationService {
 
     public static final String IMAGES = "images";
     public static final String IMAGE = "image";
+
     @Inject
     JsonWebToken principal;
 
@@ -122,15 +124,19 @@ public class OrganizationService {
         return Response.ok("Organization removed from system").build();
     }
 
-    @RolesAllowed(value = {Group.USER})
-    public Response joinOrganization(int organizationId) {
+//    @RolesAllowed(value = {Group.USER})
+    public Response joinOrganization(Long organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
-        int userId = Integer.parseInt(principal.getName());
+//        int userId = Integer.parseInt(principal.getName());
+//        String userId = principal.getName();
+        Long userId = Long.valueOf(201);
         User user = entityManager.find(User.class, userId);
         Member member = new Member(); // todo connect user to member
         member.setUser(user);
+        member.setGroup(new Group(organization.getName()));
         organization.getMembers().add(member); // todo is this even gonna work?
         entityManager.persist(organization); // todo is this redundant
+        entityManager.persist(member);
 
         return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
     }

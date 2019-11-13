@@ -73,7 +73,7 @@ public class OrganizationResource {
 
     @POST
     @Path("/{organizationId}/join")
-    public Response joinOrganization(@PathParam("organizationId") int id) {
+    public Response joinOrganization(@PathParam("organizationId") Long id) {
         return organizationService.joinOrganization(id);
     }
 
