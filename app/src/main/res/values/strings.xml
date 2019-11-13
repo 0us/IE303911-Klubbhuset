@@ -4,6 +4,7 @@
     <string name="tab_text_memberships">My memberships</string>
     <string name="tab_text_profile">Profile</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_manager">Manage Organizations</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>

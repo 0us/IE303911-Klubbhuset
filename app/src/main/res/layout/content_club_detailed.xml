@@ -2,15 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/club_detailed_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="no.ntnu.klubbhuset.ui.userviews.club.ClubDetailed">
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+    tools:context=".ui.userviews.club.ClubDetailedFragment">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -29,7 +24,7 @@
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/banner_gradient"
             android:layout_width="fill_parent"
             android:layout_height="256dp"
             android:src="@drawable/banner_gradient" />
@@ -67,7 +62,6 @@
                 android:typeface="normal" />
 
 
-
         </LinearLayout>
 
 
@@ -81,15 +75,13 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
         android:text="@string/join_club"
-        app:layout_constraintEnd_toEndOf="@+id/textView9"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/club_detailed_joinbtn">

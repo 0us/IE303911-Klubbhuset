@@ -22,10 +22,10 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
 
 public class ClubsViewModel extends AndroidViewModel {
-    // TODO: Implement the ViewModel
     MutableLiveData<List<Club>> clubs;
 
     RequestQueue requestQueue;
+    private MutableLiveData<Club> selectedClub = new MutableLiveData<>();
 
 
     public ClubsViewModel(Application context) {
@@ -39,6 +39,12 @@ public class ClubsViewModel extends AndroidViewModel {
             loadClubs();
         }
         return clubs;
+    }
+
+    public LiveData<Club> getSelectedClub() { return selectedClub; }
+
+    public void setSelectedClub(Club selectedClub) {
+        this.selectedClub.setValue(selectedClub);
     }
 
     private void loadClubs() {
