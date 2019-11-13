@@ -20,18 +20,14 @@ import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -64,24 +60,9 @@ public class OrganizationService {
         }
         System.out.println("organizations = " + organizations);
 
-//        Jsonb jsonb = JsonbBuilder.create();
-//        String organizationsJson = jsonb.toJson(organizations);
-//        System.out.println("organizationsJson = " + organizationsJson);
-
-//        String json = null;
-//        try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
-//            json = objectMapper.writeValueAsString(organizations);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         return Response.ok(organizations).build();
     }
 
-
-    // todo implement security
-    //@RolesAllowed(value = {Group.USER})
     public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
         Organization organization = new Organization();
         FormDataBodyPart imageBodyPart = multiPart.getField(IMAGE);
@@ -107,7 +88,6 @@ public class OrganizationService {
 
             Image organizationImage = saveImages.saveImage(inputStream, target, filename);
 
-            //entityManager.persist(organizationImage);
             coupleImageAndOrganization(organization, organizationImage);
         }
 
