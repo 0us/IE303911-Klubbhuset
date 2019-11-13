@@ -58,9 +58,9 @@ public class OrganizationService {
         }
         System.out.println("organizations = " + organizations);
 
-        Jsonb jsonb = JsonbBuilder.create();
-        String organizationsJson = jsonb.toJson(organizations);
-        System.out.println("organizationsJson = " + organizationsJson);
+//        Jsonb jsonb = JsonbBuilder.create();
+//        String organizationsJson = jsonb.toJson(organizations);
+//        System.out.println("organizationsJson = " + organizationsJson);
 
 //        String json = null;
 //        try {
@@ -70,7 +70,7 @@ public class OrganizationService {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        return Response.ok(organizationsJson).build();
+        return Response.ok(organizations).build();
     }
 
 
