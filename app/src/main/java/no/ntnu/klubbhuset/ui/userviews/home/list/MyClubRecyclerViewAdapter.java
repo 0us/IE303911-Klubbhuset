@@ -48,15 +48,8 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mMembercountView.setText("0"); // TODO
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
+        holder.view.setOnClickListener(v -> {
+            mListener.onListFragmentInteraction(holder.mItem);
         });
     }
 
@@ -71,6 +64,7 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
         public TextView mMembercountView;
         public ImageView mLogo;
         public Club mItem;
+
         public ViewHolder(View v) {
             super(v);
             view = v;
