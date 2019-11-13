@@ -14,13 +14,14 @@ import java.util.Map;
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.LOGIN;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class LoginDataSource {
     private static final String TAG = "LoginDataSource";
-    private final String URL = API_URL;
+    private final String URL = API_URL + LOGIN;
 
     private RequestQueue requestQueue;
     private Result<LoggedInUser> result;
@@ -31,12 +32,13 @@ public class LoginDataSource {
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<LoggedInUser> login(String email, String password) {
 
         StringRequest request = new StringRequest(Request.Method.POST, URL,
                 response -> {
                     Log.d(TAG, "login: response: " + response);
-                    result = new Result.Success<>(response);
+                    LoggedInUser user = new LoggedInUser(email, response);
+                    result = new Result.Success<>(user);
                 },
                 error -> {
                     Log.d(TAG, "login: error: " + error);
@@ -46,7 +48,7 @@ public class LoginDataSource {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> data = new HashMap<>();
-                data.put("username", username);
+                data.put("email", email);
                 data.put("password", password);
                 return data;
             }
