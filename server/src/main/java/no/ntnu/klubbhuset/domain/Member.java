@@ -20,8 +20,8 @@ public class Member implements Serializable {
     MemberKey id;
 
     @ManyToOne
-    @MapsId("uid")
-    @JoinColumn(name = "uid")
+    @MapsId("email")
+    @JoinColumn(name = "email")
     private User user;
 
     @ManyToOne

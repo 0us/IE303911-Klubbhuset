@@ -29,7 +29,7 @@ public class SecurityGroup {
     @ManyToMany
     @JoinTable(name="USERSECURITYROLES",
             joinColumns = @JoinColumn(name="name", referencedColumnName = "name"),
-            inverseJoinColumns = @JoinColumn(name="uid",referencedColumnName = "uid"))
+            inverseJoinColumns = @JoinColumn(name="email",referencedColumnName = "email"))
     List<User> users;
 
     public SecurityGroup(String name) {
