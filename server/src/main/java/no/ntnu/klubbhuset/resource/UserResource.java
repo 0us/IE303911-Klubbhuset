@@ -3,7 +3,6 @@ package no.ntnu.klubbhuset.resource;
 import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.User;
 import no.ntnu.klubbhuset.service.UserService;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
