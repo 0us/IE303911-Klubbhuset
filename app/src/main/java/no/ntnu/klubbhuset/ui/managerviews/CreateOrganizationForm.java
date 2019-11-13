@@ -47,7 +47,7 @@ public class CreateOrganizationForm extends Fragment {
         TextView title = Objects.requireNonNull(view).findViewById(R.id.organization_name);
         TextView description = view.findViewById(R.id.organization_description);
         TextView price = view.findViewById(R.id.membership_price);
-        TextView email = view.findViewById(R.id.contact_info);
+        TextView email = view.findViewById(R.id.contact_email);
         //Image image
         Club club = new Club(
                 description.getText().toString(),
