@@ -1,12 +1,14 @@
 package no.ntnu.klubbhuset.resource;
 
 import no.ntnu.klubbhuset.domain.Organization;
+import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.service.OrganizationService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -22,6 +24,7 @@ import java.io.InputStream;
 
 @Stateless
 @Path("organization")
+@RolesAllowed({SecurityGroup.USER})
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class OrganizationResource {
@@ -37,7 +40,7 @@ public class OrganizationResource {
 
     @GET
     @Path("/{organizationId}")
-    public Response getOrganizationById(@PathParam("organizationId") int organizationId) {
+    public Response getOrganizationById(@PathParam("organizationId") Long organizationId) {
         return organizationService.getOrganizationById(organizationId);
     }
 
@@ -58,6 +61,7 @@ public class OrganizationResource {
         return organizationService.createNewOrganization(organization);
     }
 
+
 //    @PUT
 //    @Path("/{organizationId}")
 //    public Response updateOrganization(@PathParam("organizationId") int id, Organization organization) {
@@ -72,7 +76,7 @@ public class OrganizationResource {
 
     @POST
     @Path("/{organizationId}/join")
-    public Response joinOrganization(@PathParam("organizationId") int id) {
+    public Response joinOrganization(@PathParam("organizationId") Long id) {
         return organizationService.joinOrganization(id);
     }
 
