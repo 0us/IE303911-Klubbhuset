@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -138,6 +139,11 @@ public class OrganizationService {
 
         // Getting user
         User user = getUserFromPrincipal();
+
+        if (isAlreadyMember(organizationId, user)) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
+        }
+
         // Getting default group (user)
         Group group = getDefaultGroup();
 
@@ -218,5 +224,26 @@ public class OrganizationService {
     private User getUserFromPrincipal() {
         String userId = principal.getName();
         return entityManager.find(User.class, userId);
+    }
+
+    /**
+     * Checks if a user already is member of an organization
+     * @param organizationId
+     * @param user
+     * @return True if the user is in organization, false if not
+     */
+    private boolean isAlreadyMember(Long organizationId, User user) {
+        Organization organization = entityManager.find(Organization.class, organizationId);
+        Set<Member> members = organization.getMembers();
+        Iterator it = members.iterator();
+        boolean found = false;
+        while(it.hasNext() && !found) {
+            Member member = (Member) it.next();
+            if (member.getUser().getEmail().equals(user.getEmail())) {
+                found = true;
+            }
+            return found;
+        }
+        return false;
     }
 }
