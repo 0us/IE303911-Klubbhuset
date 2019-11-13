@@ -14,6 +14,7 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.annotation.Resource;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -21,6 +22,7 @@ import javax.persistence.*;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.io.File;
 import java.io.InputStream;
 import java.sql.SQLDataException;
@@ -28,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Log
+@Stateless
 public class UserService {
 
     public static final String PROFILE_PICTURE = "profilePicture";
@@ -47,10 +50,8 @@ public class UserService {
     @Inject
     PasswordHash hasher;
 
-    public Response getCurrentUser() {
-        int uid = principal.getClaim("userId"); // todo this, or similar value, should be part of the token
-
-        User user = entityManager.find(User.class, uid);
+    public Response getCurrentUser(SecurityContext securityContext) {
+        String user = principal.getClaim("sub");
 
         if ( user == null ) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -112,7 +113,7 @@ public class UserService {
 
             ContentDisposition fileDetails = bodyPart.getContentDisposition();
             String filename = fileDetails.getFileName();
-            String target = user.getUid() + File.separator + PROFILE_PICTURE;
+            String target = user.getEmail() + File.separator + PROFILE_PICTURE;
 
             Image avatar = saveImages.saveImage(inputStream, target, filename);
             coupleImageAndOrganization(user, avatar);
@@ -137,9 +138,9 @@ public class UserService {
 
     // --- Private methods below --- //
     private void coupleImageAndOrganization(User user, Image profilePicture) {
-        long uid = user.getUid();
+        String email = user.getEmail();
         long iid = profilePicture.getIid();
-        String query = "update auser set iid = " + iid + " where uid = " + uid;
+        String query = "update auser set iid = " + iid + " where email = " + email;
         System.out.println("query = " + query);
         entityManager.createNativeQuery(query).executeUpdate();
     }
