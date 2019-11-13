@@ -40,17 +40,17 @@ public class ManagerViewModel extends AndroidViewModel {
         return clubs;
     }
 
-    public LiveData<Club> createNewClub(Club club){
+    public LiveData<Club> createNewClub(Club club, byte[] imageInByte) {
         if (createdClub == null) {
             createdClub = new MutableLiveData<>();
         }
-        createClubRequest(club);
+        createClubRequest(club, imageInByte);
         return createdClub;
     }
 
-    private void createClubRequest(Club club) {
+    private void createClubRequest(Club club, byte[] imageInByte) {
         String url = API_URL + ORGANIZATION;
-        JSONObject jsonObject = club.toJson();
+        JSONObject jsonObject = club.toJson(imageInByte);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 response -> {
                     createdClub.setValue(new Club(response));

@@ -44,6 +44,22 @@ public class Club implements Serializable {
         }
     }
 
+    public JSONObject toJson(byte[] imageInByte) {
+        JSONObject json  = new JSONObject();
+
+        try {
+            json.put("name", name);
+            json.put("url", url);
+            json.put("emailContact", emailContact);
+            json.put("priceOfMembership", priceOfMembership);
+            json.put("description", description);
+            json.put("image", imageInByte);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
     public JSONObject toJson() {
         JSONObject json  = new JSONObject();
 

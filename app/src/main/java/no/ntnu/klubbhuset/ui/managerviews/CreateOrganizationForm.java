@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -65,7 +67,12 @@ public class CreateOrganizationForm extends Fragment {
         TextView description = view.findViewById(R.id.organization_description);
         TextView price = view.findViewById(R.id.membership_price);
         TextView email = view.findViewById(R.id.contact_email);
-        //Image image
+
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageInByte = baos.toByteArray();
+
         Club club = new Club(
                 description.getText().toString(),
                 new BigDecimal(price.getText().toString()),
@@ -73,7 +80,7 @@ public class CreateOrganizationForm extends Fragment {
                 null,
                 title.getText().toString());
         ManagerViewModel viewModel = ViewModelProviders.of(this).get(ManagerViewModel.class);
-        viewModel.createNewClub(club).observe(this, response -> {
+        viewModel.createNewClub(club, imageInByte).observe(this, response -> {
             if (mListener != null) {
                 mListener.onOrganizationCreated(club);
             }
