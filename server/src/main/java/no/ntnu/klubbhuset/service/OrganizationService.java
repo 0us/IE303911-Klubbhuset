@@ -151,19 +151,6 @@ public class OrganizationService {
     }
 
     /**
-     * Getting the default groupe which is `user`
-     * @return
-     */
-    private Group getDefaultGroup() {
-        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", Group.USER).getSingleResult();
-    }
-
-    private User getUserFromPrincipal() {
-        String userId = principal.getName();
-        return entityManager.find(User.class, userId);
-    }
-
-    /**
      * Getting an organization based on id
      * @param organizationId Id must be long since database value is BIGINT
      * @return Organization with id = organizationID
@@ -197,6 +184,15 @@ public class OrganizationService {
         return Response.ok(json).build();
     }
 
+    public Response createNewOrganization(Organization organization) {
+        if ( organization == null) {
+            return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
+        }
+        entityManager.persist(organization);
+
+        return Response.status(Response.Status.CREATED).entity(organization).build();
+    }
+
     // --- Private methods below --- //
     private void coupleImageAndOrganization(Organization organization, Image organizationImage) {
         long oid = organization.getOid();
@@ -206,12 +202,20 @@ public class OrganizationService {
         entityManager.createNativeQuery(query).executeUpdate();
     }
 
-    public Response createNewOrganization(Organization organization) {
-        if ( organization == null) {
-            return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
-        }
-        entityManager.persist(organization);
+    /**
+     * Getting the default groupe which is `user`
+     * @return
+     */
+    private Group getDefaultGroup() {
+        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", Group.USER).getSingleResult();
+    }
 
-        return Response.status(Response.Status.CREATED).entity(organization).build();
+    /**
+     * Getting the user based on JWT principal
+     * @return the user that is logged in
+     */
+    private User getUserFromPrincipal() {
+        String userId = principal.getName();
+        return entityManager.find(User.class, userId);
     }
 }
