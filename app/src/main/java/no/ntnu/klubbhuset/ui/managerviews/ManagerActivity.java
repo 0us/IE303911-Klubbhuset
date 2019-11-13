@@ -11,17 +11,14 @@ import no.ntnu.klubbhuset.ui.managerviews.list.ManagedOrgsListFragment;
 import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
 
 public class
-ManagerActivity extends AppCompatActivity implements ManagedOrgsListFragment.OnListFragmentInteractionListener, CreateOrganizationForm.OnFragmentInteractionListener {
+ManagerActivity extends AppCompatActivity implements
+        ManagedOrgsListFragment.OnListFragmentInteractionListener,
+        CreateOrganizationForm.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manager_activity);
-        /*if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, ManagerFragment.newInstance())
-                    .commitNow();
-        }*/
     }
 
     @Override
@@ -31,8 +28,5 @@ ManagerActivity extends AppCompatActivity implements ManagedOrgsListFragment.OnL
 
     @Override
     public void onOrganizationCreated(Club club) {
-        if (club != null) {
-
-        }
     }
 }

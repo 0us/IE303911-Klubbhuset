@@ -1,11 +1,8 @@
 package no.ntnu.klubbhuset.ui.managerviews;
 
 import android.content.Context;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -17,28 +14,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CreateOrganizationForm.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CreateOrganizationForm#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CreateOrganizationForm extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,10 +42,9 @@ public class CreateOrganizationForm extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onCreateButtonPressed() {
+    private void onCreateButtonPressed() {
         View view = getView();
-        TextView title = view.findViewById(R.id.organization_name);
+        TextView title = Objects.requireNonNull(view).findViewById(R.id.organization_name);
         TextView description = view.findViewById(R.id.organization_description);
         TextView price = view.findViewById(R.id.membership_price);
         TextView email = view.findViewById(R.id.contact_info);
@@ -83,8 +64,8 @@ public class CreateOrganizationForm extends Fragment {
 
     }
 
-    public void onCancelButtonPressed() {
-        Navigation.findNavController(getView()).popBackStack();
+    private void onCancelButtonPressed() {
+        Navigation.findNavController(Objects.requireNonNull(getView())).popBackStack();
     }
 
     @Override
@@ -115,7 +96,6 @@ public class CreateOrganizationForm extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onOrganizationCreated(Club club);
     }
 }
