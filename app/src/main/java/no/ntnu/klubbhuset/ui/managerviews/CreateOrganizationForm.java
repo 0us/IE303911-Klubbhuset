@@ -51,17 +51,13 @@ public class CreateOrganizationForm extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_new_organization, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Button registerBtn = getView().findViewById(R.id.register_organization);
-        Button cancelBtn = getView().findViewById(R.id.cancel_registration);
+        View view = inflater.inflate(R.layout.fragment_create_new_organization, container, false);
+        Button registerBtn = view.findViewById(R.id.register_organization);
+        Button cancelBtn = view.findViewById(R.id.cancel_registration);
 
         registerBtn.setOnClickListener(l -> onCreateButtonPressed());
         cancelBtn.setOnClickListener(l -> onCancelButtonPressed());
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
