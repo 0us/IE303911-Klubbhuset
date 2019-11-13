@@ -1,5 +1,6 @@
-package no.ntnu.klubbhuset.ui.managerviews.ui.manager;
+package no.ntnu.klubbhuset.ui.managerviews;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -7,12 +8,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
+import no.ntnu.klubbhuset.ui.userviews.home.list.MyClubRecyclerViewAdapter;
 
 
 public class ManagerFragment extends Fragment {
@@ -33,8 +39,6 @@ public class ManagerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ManagerViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

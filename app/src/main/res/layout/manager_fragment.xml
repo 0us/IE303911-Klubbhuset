@@ -8,13 +8,50 @@
     tools:context=".ui.manager.ManagerFragment">
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/manager_info_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ManagerFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="32dp"
+        android:text="TextView"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:drawableStart="@drawable/ic_add_black_24dp"
+        android:text="@string/create_new_organization"
+        app:layout_constraintBottom_toTopOf="@+id/manager_scrollview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/manager_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button">
+
+        <fragment
+            android:id="@+id/manager_clubs_recycler_view"
+            android:name="no.ntnu.klubbhuset.ui.managerviews.list.ManagedOrgsListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_club_list" />
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

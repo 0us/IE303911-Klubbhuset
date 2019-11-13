@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.ui.managerviews.ui.manager.ManagerFragment;
+import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.ui.managerviews.list.ManagedOrgsListFragment;
+import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
 
 public class
-ManagerActivity extends AppCompatActivity {
+ManagerActivity extends AppCompatActivity implements ManagedOrgsListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,5 +21,10 @@ ManagerActivity extends AppCompatActivity {
                     .replace(R.id.container, ManagerFragment.newInstance())
                     .commitNow();
         }
+    }
+
+    @Override
+    public void onListFragmentInteraction(Club item) {
+
     }
 }

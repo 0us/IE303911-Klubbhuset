@@ -51,7 +51,7 @@ public class CommunicationConfig {
     private void initializeValues() {
         host = retrieveHost();
         port = retrievePort();
-        API_URL = "http://" + host + ":" + port + "/klubbhuset/api/";
+        API_URL = "http://" + host + ":" + port + "/api/";
     }
 
     private int retrievePort() {
