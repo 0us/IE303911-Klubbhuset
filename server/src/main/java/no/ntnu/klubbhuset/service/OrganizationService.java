@@ -24,6 +24,7 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -124,21 +125,42 @@ public class OrganizationService {
         return Response.ok("Organization removed from system").build();
     }
 
-//    @RolesAllowed(value = {Group.USER})
+    /**
+     * A user can join a organization based on the organization ID. The user has to be logged in and is retrived trough
+     * the JWT principal.
+     * @param organizationId
+     * @return
+     */
     public Response joinOrganization(Long organizationId) {
+        //Getting organization
         Organization organization = entityManager.find(Organization.class, organizationId);
-//        int userId = Integer.parseInt(principal.getName());
-//        String userId = principal.getName();
-        Long userId = Long.valueOf(201);
-        User user = entityManager.find(User.class, userId);
-        Member member = new Member(); // todo connect user to member
+
+        // Getting user
+        User user = getUserFromPrincipal();
+        // Getting default group (user)
+        Group group = getDefaultGroup();
+
+        Member member = new Member();
         member.setUser(user);
-        member.setGroup(new Group(organization.getName()));
-        organization.getMembers().add(member); // todo is this even gonna work?
-        entityManager.persist(organization); // todo is this redundant
+        member.setOrganization(organization);
+        member.setGroup(group);
+        member.setOrganization(organization);
         entityManager.persist(member);
 
         return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
+    }
+
+    /**
+     * Getting the default groupe which is `user`
+     * @return
+     */
+    private Group getDefaultGroup() {
+        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", Group.USER).getSingleResult();
+    }
+
+    private User getUserFromPrincipal() {
+        String userId = principal.getName();
+        return entityManager.find(User.class, userId);
     }
 
     /**
