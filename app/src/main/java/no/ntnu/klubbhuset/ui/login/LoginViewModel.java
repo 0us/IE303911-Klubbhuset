@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import android.app.Application;
 import android.content.Context;
@@ -25,6 +24,7 @@ public class LoginViewModel extends AndroidViewModel {
     private Application context;
 
     private final String LOGGED_IN = "loggedin";
+    private final String TOKEN = "token";
 
 //    LoginViewModel(Application context, LoginRepository loginRepository) {
 //        this.loginRepository = loginRepository;
@@ -47,15 +47,15 @@ public class LoginViewModel extends AndroidViewModel {
         return loginResult;
     }
 
-    public void login(String username, String password) {
+    public void login(String email, String password) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        Result<LoggedInUser> result = loginRepository.login(email, password);
 
-        // TODO: save user credentials in prefs file
         SharedPreferences.Editor editor = pref.edit();
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            editor.putString(TOKEN, data.getToken());
             editor.putBoolean(LOGGED_IN, true);
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
