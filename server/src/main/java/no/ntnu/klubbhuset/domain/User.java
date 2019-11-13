@@ -33,6 +33,7 @@ public class User implements Serializable {
     private String email;
 
     @JsonIgnore
+    @JsonbTransient
     private String password;
 
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -43,10 +44,12 @@ public class User implements Serializable {
         joined = new Date();
     }
 
+    @JsonbTransient
     @Enumerated(EnumType.STRING)
     private State currentState = State.ACTIVE;
 
     @JsonIgnore
+    @JsonbTransient
     @OneToMany(mappedBy = "user")
     Set<Member> members;
 
@@ -58,12 +61,14 @@ public class User implements Serializable {
     @JoinColumn(name = "iid", referencedColumnName = "iid")
     private Image avatar;
 
+    @JsonbTransient
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "email"))
     @MapKeyColumn(name = "key_column")
     @Column(name = "value_column")
     private Map<String, String> properties = new HashMap<String, String>();
 
+    @JsonbTransient
     @ManyToMany
     @JoinTable(name="USERSECURITYROLES",
             joinColumns = @JoinColumn(name="email", referencedColumnName = "email"),
