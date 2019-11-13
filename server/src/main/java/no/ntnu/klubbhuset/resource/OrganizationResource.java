@@ -37,7 +37,7 @@ public class OrganizationResource {
 
     @GET
     @Path("/{organizationId}")
-    public Response getOrganizationById(@PathParam("organizationId") int organizationId) {
+    public Response getOrganizationById(@PathParam("organizationId") Long organizationId) {
         return organizationService.getOrganizationById(organizationId);
     }
 

@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
@@ -134,17 +135,18 @@ public class OrganizationService {
         return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
     }
 
-    public Response getOrganizationById(int organizationId) {
+    /**
+     * Getting an organization based on id
+     * @param organizationId Id must be long since database value is BIGINT
+     * @return Organization with id = organizationID
+     */
+    public Response getOrganizationById(Long organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
         if ( organization == null ) {
             return Response.status(Response.Status.NOT_FOUND).entity("Organization not found").build();
         }
-
-        Jsonb jsonb = JsonbBuilder.create();
-        jsonb.toJson(organization);
-
-        return Response.ok(jsonb).build();
+        return Response.ok(organization).build();
     }
 
     public Response getMembers(String organizationId) {
