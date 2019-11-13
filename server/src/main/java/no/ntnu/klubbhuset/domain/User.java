@@ -28,9 +28,9 @@ public class User implements Serializable {
         ACTIVE, INACTIVE
     }
 
+    @Column(unique = true)
     @Id
-    @GeneratedValue
-    private Long uid;
+    private String email;
 
     @JsonIgnore
     private String password;
@@ -52,8 +52,6 @@ public class User implements Serializable {
 
     private String firstName;
     private String lastName;
-    @Column(unique = true)
-    private String email;
     String phonenumber;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -61,14 +59,14 @@ public class User implements Serializable {
     private Image avatar;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "uid"))
+    @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "email"))
     @MapKeyColumn(name = "key_column")
     @Column(name = "value_column")
     private Map<String, String> properties = new HashMap<String, String>();
 
     @ManyToMany
     @JoinTable(name="USERSECURITYROLES",
-            joinColumns = @JoinColumn(name="uid", referencedColumnName = "uid"),
+            joinColumns = @JoinColumn(name="email", referencedColumnName = "email"),
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
     List<SecurityGroup> securityGroups;
 

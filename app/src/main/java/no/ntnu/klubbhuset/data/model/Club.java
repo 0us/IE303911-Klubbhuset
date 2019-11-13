@@ -3,12 +3,14 @@ package no.ntnu.klubbhuset.data.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Club {
+public class Club implements Serializable {
     private String description;
     private long priceOfMembership;
     private String emailContact;

@@ -13,8 +13,8 @@ import java.io.Serializable;
 @Embeddable
 public class MemberKey implements Serializable {
 
-    @Column(name = "uid")
-    Long uid;
+    @Column(name = "email")
+    String email;
 
     @Column(name = "oid")
     Long oid;
