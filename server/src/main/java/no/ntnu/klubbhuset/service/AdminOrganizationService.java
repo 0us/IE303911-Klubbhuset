@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.core.Response;
 import java.util.Set;
 
@@ -52,22 +53,23 @@ public class AdminOrganizationService {
         Group role = entityManager.find(Group.class, 52L); // magic number is the current gid of admin
 
         Member member;
+        TypedQuery<Member> query = entityManager
+                .createQuery("select m from Member m " +
+                                "where m.user = :user " +
+                                "and m.organization = :organization " +
+                                "and m.group = :role",
+                        Member.class)
+                .setParameter("user", user)
+                .setParameter("organization", organization)
+                .setParameter("role", role);
+
         try {
-            member = entityManager
-                    .createQuery("select m from Member m " +
-                                    "where m.user = :user " +
-                                    "and m.organization = :organization " +
-                                    "and m.group = :role",
-                            Member.class)
-                    .setParameter("user", user)
-                    .setParameter("organization", organization)
-                    .setParameter("role", role)
-                    .getSingleResult();
+            member = query.getSingleResult(); // Throws error if no member is found
         } catch (NoResultException e) {
             return false;
         }
 
-        if (member != null) {
+        if ( member != null ) { // might be redundant
             result = true;
         }
 
