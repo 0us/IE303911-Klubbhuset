@@ -1,8 +1,4 @@
-package no.ntnu.klubbhuset.ui.userviews.home.list;
-
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
+package no.ntnu.klubbhuset.ui.managerviews.list;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,25 +6,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.model.Club;
+
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Club} and makes a call to the
- * specified {@link ClubFragment.OnListFragmentInteractionListener}.
+ * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecyclerViewAdapter.ViewHolder> {
+public class ManagedOrgsRecyclerViewAdapter extends RecyclerView.Adapter<ManagedOrgsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Club> mValues;
-    private final ClubFragment.OnListFragmentInteractionListener mListener;
-    private ClubsViewModel model;
+    private final ManagedOrgsListFragment.OnListFragmentInteractionListener mListener;
 
-    public MyClubRecyclerViewAdapter(List<Club> items,
-                                     ClubFragment.OnListFragmentInteractionListener listener) {
+    public ManagedOrgsRecyclerViewAdapter(List<Club> items, ManagedOrgsListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +32,6 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_club, parent, false);
-        model = ViewModelProviders.of(
-                (FragmentActivity) parent.getContext()).get(ClubsViewModel.class);
         return new ViewHolder(view);
     }
 
@@ -48,8 +41,15 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mMembercountView.setText("0"); // TODO
 
-        holder.view.setOnClickListener(v -> {
-            mListener.onListFragmentInteraction(holder.mItem);
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onListFragmentInteraction(holder.mItem);
+                }
+            }
         });
     }
 
@@ -64,7 +64,6 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
         public TextView mMembercountView;
         public ImageView mLogo;
         public Club mItem;
-
         public ViewHolder(View v) {
             super(v);
             view = v;

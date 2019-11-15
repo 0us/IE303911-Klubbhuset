@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.java.Log;
@@ -43,8 +44,8 @@ import java.util.logging.Level;
 @Log
 public class AuthenticationService {
 
-    private static final String INSERT_USERGROUP = "INSERT INTO AUSERGROUP(NAME,uid) VALUES (?,?)";
-    private static final String DELETE_USERGROUP = "DELETE FROM AUSERGROUP WHERE NAME = ? AND uid = ?";
+    private static final String INSERT_USERGROUP = "INSERT INTO AUSERGROUP(NAME,email) VALUES (?,?)";
+    private static final String DELETE_USERGROUP = "DELETE FROM AUSERGROUP WHERE NAME = ? AND email = ?";
 
     @Inject
     KeyService keyService;
@@ -79,13 +80,9 @@ public class AuthenticationService {
                 new UsernamePasswordCredential(email, password));
 
         if (result.getStatus() == CredentialValidationResult.Status.VALID) {
-            long uid = (long) em.createNativeQuery(
-                    "select uid from auser where EMAIL = #email").
-                    setParameter("email", result.getCallerPrincipal().getName()).
-                    getResultList().get(0);
             List resultList = em.createNativeQuery(
-                    "select name from usersecurityroles where uid = #uid").
-                    setParameter("uid", uid).getResultList();
+                    "select name from usersecurityroles where email = #email").
+                    setParameter("email", email).getResultList();
             Set<String> group = new HashSet<>(resultList);
             String token = issueToken(result.getCallerPrincipal().getName(),
                     group, context);
@@ -113,7 +110,8 @@ public class AuthenticationService {
                     .setHeaderParam("kid", "THEONEANDONLY") // this is a hint to which signature is been used. we only have one
                     .setHeaderParam("alg", "RS256")
                     .setIssuer(issuer)
-//                    .claim("iss", issuer)
+                    .claim("iss", issuer)
+                    .claim(Claims.ID, "test123")
                     .setIssuedAt(now)
                     .setExpiration(expiration)
                     .setSubject(name)
@@ -143,12 +141,9 @@ public class AuthenticationService {
             @FormDataParam("email") String email
     ) {
         // Checks if the user exists in the database
-        Query query = em.createNativeQuery("select uid from auser where email = #email");
-        query.setParameter("email", email);
-        User user;
-         if (!query.getResultList().isEmpty()) {
-            log.log(Level.INFO, "User already exists {0}", email);
+        User user = em.find(User.class, email);
 
+         if (user == null) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("User already exists")
                     .build();
@@ -163,118 +158,96 @@ public class AuthenticationService {
         }
     }
 
-    /**
-     * @return
-     */
-    @GET
-    @RolesAllowed(value = {Group.USER})
-    @Produces(MediaType.APPLICATION_JSON)
-    public User getCurrentUser() {
-        return em.find(User.class, principal.getName());
-    }
+//    @PUT
+//    @Path("addrole")
+//    @RolesAllowed(value = {Group.ADMIN})
+//    public Response addRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
+//        if (!roleExists(role)) {
+//            return Response.status(Response.Status.FORBIDDEN).build();
+//        }
+//
+//        try (Connection c = dataSource.getConnection();
+//             PreparedStatement psg = c.prepareStatement(INSERT_USERGROUP)) {
+//            psg.setString(1, role);
+//            psg.setString(2, uid);
+//            psg.executeUpdate();
+//        } catch (SQLException ex) {
+//            log.log(Level.SEVERE, null, ex);
+//            return Response.status(Response.Status.BAD_REQUEST).build();
+//        }
+//
+//        return Response.ok().build();
+//    }
+//
+//    /**
+//     * @param role
+//     * @return
+//     */
+//    private boolean roleExists(String role) {
+//        boolean result = false;
+//
+//        if (role != null) {
+//            switch (role) {
+//                case Group.ADMIN:
+//                case Group.USER:
+//                    result = true;
+//                    break;
+//            }
+//        }
+//
+//        return result;
+//    }
+//
+//    /**
+//     * @param uid
+//     * @param role
+//     * @return
+//     */
+//    @PUT
+//    @Path("removerole")
+//    @RolesAllowed(value = {Group.ADMIN})
+//    public Response removeRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
+//        if (!roleExists(role)) {
+//            return Response.status(Response.Status.FORBIDDEN).build();
+//        }
+//
+//        try (Connection c = dataSource.getConnection();
+//             PreparedStatement psg = c.prepareStatement(DELETE_USERGROUP)) {
+//            psg.setString(1, role);
+//            psg.setString(2, uid);
+//            psg.executeUpdate();
+//        } catch (SQLException ex) {
+//            log.log(Level.SEVERE, null, ex);
+//            return Response.status(Response.Status.BAD_REQUEST).build();
+//        }
+//
+//        return Response.ok().build();
+//    }
 
-
-    /**
-     * @param uid
-     * @param role
-     * @return
-     */
-    @PUT
-    @Path("addrole")
-    @RolesAllowed(value = {Group.ADMIN})
-    public Response addRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
-        if (!roleExists(role)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        try (Connection c = dataSource.getConnection();
-             PreparedStatement psg = c.prepareStatement(INSERT_USERGROUP)) {
-            psg.setString(1, role);
-            psg.setString(2, uid);
-            psg.executeUpdate();
-        } catch (SQLException ex) {
-            log.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        return Response.ok().build();
-    }
-
-    /**
-     * @param role
-     * @return
-     */
-    private boolean roleExists(String role) {
-        boolean result = false;
-
-        if (role != null) {
-            switch (role) {
-                case Group.ADMIN:
-                case Group.USER:
-                    result = true;
-                    break;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * @param uid
-     * @param role
-     * @return
-     */
-    @PUT
-    @Path("removerole")
-    @RolesAllowed(value = {Group.ADMIN})
-    public Response removeRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
-        if (!roleExists(role)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        try (Connection c = dataSource.getConnection();
-             PreparedStatement psg = c.prepareStatement(DELETE_USERGROUP)) {
-            psg.setString(1, role);
-            psg.setString(2, uid);
-            psg.executeUpdate();
-        } catch (SQLException ex) {
-            log.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        return Response.ok().build();
-    }
-
-    /**
-     * @param uid
-     * @param password
-     * @param sc
-     * @return
-     */
-    @PUT
-    @Path("changepassword")
-    @RolesAllowed(value = {Group.USER})
-    public Response changePassword(@FormDataParam("uid") String uid,
-                                   @FormDataParam("pwd") String password,
-                                   @Context SecurityContext sc) {
-        String authuser = sc.getUserPrincipal() != null ? sc.getUserPrincipal().getName() : null;
-        if (authuser == null || uid == null || (password == null || password.length() < 3)) {
-            log.log(Level.SEVERE, "Failed to change password on user {0}", uid);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if (authuser.compareToIgnoreCase(uid) != 0 && !sc.isUserInRole(Group.ADMIN)) {
-            log.log(Level.SEVERE,
-                    "No admin access for {0}. Failed to change password on user {1}",
-                    new Object[]{authuser, uid});
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        } else {
-            User user = em.find(User.class, uid);
-            user.setPassword(hasher.generate(password.toCharArray()));
-            em.merge(user);
-            return Response.ok().build();
-        }
-    }
+//    @PUT
+//    @Path("changepassword")
+//    @RolesAllowed(value = {Group.USER})
+//    public Response changePassword(@FormDataParam("uid") String uid,
+//                                   @FormDataParam("pwd") String password,
+//                                   @Context SecurityContext sc) {
+//        String authuser = sc.getUserPrincipal() != null ? sc.getUserPrincipal().getName() : null;
+//        if (authuser == null || email == null || (password == null || password.length() < 3)) {
+//            log.log(Level.SEVERE, "Failed to change password on user {0}", email);
+//            return Response.status(Response.Status.BAD_REQUEST).build();
+//        }
+//
+//        if (authuser.compareToIgnoreCase(email) != 0 && !sc.isUserInRole(Group.ADMIN)) {
+//            log.log(Level.SEVERE,
+//                    "No admin access for {0}. Failed to change password on user {1}",
+//                    new Object[]{authuser, email});
+//            return Response.status(Response.Status.BAD_REQUEST).build();
+//        } else {
+//            User user = em.find(User.class, email);
+//            user.setPassword(hasher.generate(password.toCharArray()));
+//            em.merge(user);
+//            return Response.ok().build();
+//        }
+//    }
 
     public Response logout() {
         return null; //todo implement

@@ -4,6 +4,7 @@
     <string name="tab_text_memberships">My memberships</string>
     <string name="tab_text_profile">Profile</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_manager">Manage Organizations</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -36,4 +37,8 @@
     <string name="join_club">Join club</string>
     <string name="manageorgs">Manage organzations</string>
     <string name="create_new_user">Create new user</string>
+    <string name="create_new_organization">Create new Organization</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

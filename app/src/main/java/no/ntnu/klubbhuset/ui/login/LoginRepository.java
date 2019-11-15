@@ -1,4 +1,6 @@
-package no.ntnu.klubbhuset.data;
+package no.ntnu.klubbhuset.ui.login;
+
+import org.json.JSONObject;
 
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 

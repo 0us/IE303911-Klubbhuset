@@ -17,6 +17,7 @@ public class CommunicationConfig {
     private String host;
     public static String API_URL;
     public static String ORGANIZATION = "organization";
+    public static final String LOGIN = "auth";
     public static String JOIN = "join";
     private int port;
 
@@ -51,7 +52,7 @@ public class CommunicationConfig {
     private void initializeValues() {
         host = retrieveHost();
         port = retrievePort();
-        API_URL = "http://" + host + ":" + port + "/klubbhuset/api/";
+        API_URL = "http://" + host + ":" + port + "/api/";
     }
 
     private int retrievePort() {

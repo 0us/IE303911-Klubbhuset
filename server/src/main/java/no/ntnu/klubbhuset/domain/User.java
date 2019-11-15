@@ -28,11 +28,12 @@ public class User implements Serializable {
         ACTIVE, INACTIVE
     }
 
+    @Column(unique = true)
     @Id
-    @GeneratedValue
-    private Long uid;
+    private String email;
 
     @JsonIgnore
+    @JsonbTransient
     private String password;
 
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -43,32 +44,34 @@ public class User implements Serializable {
         joined = new Date();
     }
 
+    @JsonbTransient
     @Enumerated(EnumType.STRING)
     private State currentState = State.ACTIVE;
 
     @JsonIgnore
+    @JsonbTransient
     @OneToMany(mappedBy = "user")
     Set<Member> members;
 
     private String firstName;
     private String lastName;
-    @Column(unique = true)
-    private String email;
     String phonenumber;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "iid", referencedColumnName = "uid")
+    @JoinColumn(name = "iid", referencedColumnName = "iid")
     private Image avatar;
 
+    @JsonbTransient
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "uid"))
+    @CollectionTable(name = "auser_properties", joinColumns = @JoinColumn(name = "email"))
     @MapKeyColumn(name = "key_column")
     @Column(name = "value_column")
     private Map<String, String> properties = new HashMap<String, String>();
 
+    @JsonbTransient
     @ManyToMany
     @JoinTable(name="USERSECURITYROLES",
-            joinColumns = @JoinColumn(name="uid", referencedColumnName = "uid"),
+            joinColumns = @JoinColumn(name="email", referencedColumnName = "email"),
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
     List<SecurityGroup> securityGroups;
 

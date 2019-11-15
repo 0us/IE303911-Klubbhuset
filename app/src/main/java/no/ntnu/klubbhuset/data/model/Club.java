@@ -3,18 +3,29 @@ package no.ntnu.klubbhuset.data.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Club {
+public class Club implements Serializable {
     private String description;
-    private long priceOfMembership;
+    private BigDecimal priceOfMembership;
     private String emailContact;
     private String url;
     private long oid;
     private String name;
+
+    public Club(String description, BigDecimal priceOfMembership, String emailContact, String url, String name) {
+        this.description = description;
+        this.priceOfMembership = priceOfMembership;
+        this.emailContact = emailContact;
+        this.url = url;
+        this.name = name;
+    }
 
     public Club(JSONObject json) {
         try {
@@ -23,13 +34,28 @@ public class Club {
             this.url = json.getString("url");
             this.emailContact = json.getString("emailContact");
             if (json.getString("priceOfMembership").equals("null")) {
-                this.priceOfMembership = 0;
+                this.priceOfMembership = BigDecimal.valueOf(0);
             } else {
-                this.priceOfMembership = json.getLong("priceOfMembership");
+                this.priceOfMembership = BigDecimal.valueOf(json.getDouble("priceOfMembership"));
             }
             this.description = json.getString("description");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public JSONObject toJson() {
+        JSONObject json  = new JSONObject();
+
+        try {
+            json.put("name", name);
+            json.put("url", url);
+            json.put("emailContact", emailContact);
+            json.put("priceOfMembership", priceOfMembership);
+            json.put("description", description);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }
