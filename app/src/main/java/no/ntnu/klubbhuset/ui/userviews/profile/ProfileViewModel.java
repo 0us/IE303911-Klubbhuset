@@ -3,12 +3,16 @@ package no.ntnu.klubbhuset.ui.userviews.profile;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Base64;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,6 +27,7 @@ import java.util.Map;
 
 import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.User;
+import no.ntnu.klubbhuset.util.AuthHelper;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.USER;
 
@@ -63,14 +68,10 @@ public class ProfileViewModel extends AndroidViewModel {
                     System.out.println(error.networkResponse);
                 }) {
             @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", "Bearer " + pref.getString("token", ""));
-                return params;
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(getApplication());
             }
         };
-
         requestQueue.add(request);
     }
 }

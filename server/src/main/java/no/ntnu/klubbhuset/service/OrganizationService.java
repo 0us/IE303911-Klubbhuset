@@ -24,10 +24,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +57,7 @@ public class OrganizationService {
         System.out.println("Fetching all organizations");
         List<Organization> organizations = entityManager.createQuery("Select o From Organization o", Organization.class).getResultList();
 
-        if ( organizations.isEmpty() ) {
+        if (organizations.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
         System.out.println("organizations = " + organizations);
@@ -72,7 +74,7 @@ public class OrganizationService {
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
         entityManager.persist(organization);
 
-        if ( imageBodyPart != null ) {
+        if (imageBodyPart != null) {
             if (!saveImages.checkBodyPartIsImage(imageBodyPart)) {
                 entityManager.remove(organization);  // the organization is already persisted to the database. Since the file uploaded is not an image, removing the organization is done
                 return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE)
@@ -91,6 +93,9 @@ public class OrganizationService {
             coupleImageAndOrganization(organization, organizationImage);
         }
 
+        // add the creator as a member
+        doJoinOrganization(organization, getUserFromPrincipal(), getGroup(Group.ADMIN));
+
         return Response.status(Response.Status.CREATED).entity(organization).build();
     }
 
@@ -99,7 +104,7 @@ public class OrganizationService {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
 
-        if ( organization == null ) {
+        if (organization == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organization with id: " + organizationId).build();
         }
 
@@ -110,10 +115,12 @@ public class OrganizationService {
     /**
      * A user can join a organization based on the organization ID. The user has to be logged in and is retrived trough
      * the JWT principal.
+     *
      * @param organizationId
      * @return
      */
     public Response joinOrganization(Long organizationId) {
+
         //Getting organization
         Organization organization = entityManager.find(Organization.class, organizationId);
 
@@ -123,29 +130,20 @@ public class OrganizationService {
         if (isAlreadyMember(organizationId, user)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
-
-        // Getting default group (user)
-        Group group = getDefaultGroup();
-
-        Member member = new Member();
-        member.setUser(user);
-        member.setOrganization(organization);
-        member.setGroup(group);
-        member.setOrganization(organization);
-        entityManager.persist(member);
-
+        doJoinOrganization(organization, user, getGroup(Group.USER));
         return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
     }
 
     /**
      * Getting an organization based on id
+     *
      * @param organizationId Id must be long since database value is BIGINT
      * @return Organization with id = organizationID
      */
     public Response getOrganizationById(Long organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
-        if ( organization == null ) {
+        if (organization == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Organization not found").build();
         }
         return Response.ok(organization).build();
@@ -172,12 +170,28 @@ public class OrganizationService {
     }
 
     public Response createNewOrganization(Organization organization) {
-        if ( organization == null) {
+        if (organization == null) {
             return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
         }
         entityManager.persist(organization);
 
+        // add the creator as a member
+        doJoinOrganization(organization, getUserFromPrincipal(), getGroup(Group.ADMIN));
+
+
         return Response.status(Response.Status.CREATED).entity(organization).build();
+    }
+
+    public Response getOwnedOrganizationsForUser() {
+        User user = getUserFromPrincipal();
+
+        List<Organization> organizations = entityManager.createQuery(
+                "select o from Organization o where o in (select m.organization from Member m where m.group =:ogroup and m.user = :user)", Organization.class)
+                .setParameter("user", user)
+                .setParameter("ogroup", getGroup(Group.ADMIN))
+                .getResultList();
+
+        return Response.ok(organizations).build();
     }
 
     // --- Private methods below --- //
@@ -190,15 +204,18 @@ public class OrganizationService {
     }
 
     /**
-     * Getting the default groupe which is `user`
-     * @return
+     * Getting a group from the given string
+     *
+     * @param name the name of the group. The name should always be defined as a constant in Group, e.g "Group.USER"
+     * @return the group
      */
-    private Group getDefaultGroup() {
-        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", Group.USER).getSingleResult();
+    private Group getGroup(String name) {
+        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", name).getSingleResult();
     }
 
     /**
      * Getting the user based on JWT principal
+     *
      * @return the user that is logged in
      */
     private User getUserFromPrincipal() {
@@ -208,6 +225,7 @@ public class OrganizationService {
 
     /**
      * Checks if a user already is member of an organization
+     *
      * @param organizationId
      * @param user
      * @return True if the user is in organization, false if not
@@ -217,7 +235,7 @@ public class OrganizationService {
         Set<Member> members = organization.getMembers();
         Iterator it = members.iterator();
         boolean found = false;
-        while(it.hasNext() && !found) {
+        while (it.hasNext() && !found) {
             Member member = (Member) it.next();
             if (member.getUser().getEmail().equals(user.getEmail())) {
                 found = true;
@@ -225,5 +243,16 @@ public class OrganizationService {
             return found;
         }
         return false;
+    }
+
+    private void doJoinOrganization(Organization org, User user, Group group) {
+        Member member = new Member();
+        System.out.println(member);
+        member.setUser(user);
+        member.setOrganization(org);
+        member.setGroup(group);
+        member.setOrganization(org);
+        System.out.println(member);
+        entityManager.persist(member);
     }
 }

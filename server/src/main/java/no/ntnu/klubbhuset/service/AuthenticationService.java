@@ -1,5 +1,6 @@
 package no.ntnu.klubbhuset.service;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -75,6 +76,7 @@ public class AuthenticationService {
      * @param context
      * @return
      */
+    @PermitAll
     public Response login(String email, String password, HttpServletRequest context) {
         CredentialValidationResult result = identityStoreHandler.validate(
                 new UsernamePasswordCredential(email, password));

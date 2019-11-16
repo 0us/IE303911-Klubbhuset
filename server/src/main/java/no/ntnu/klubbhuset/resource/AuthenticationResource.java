@@ -2,6 +2,7 @@ package no.ntnu.klubbhuset.resource;
 
 import no.ntnu.klubbhuset.service.AuthenticationService;
 
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -31,6 +32,7 @@ public class AuthenticationResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @PermitAll
     public Response login(@FormParam("email") String email,
                           @FormParam("password") String password,
                           @Context HttpServletRequest context) {

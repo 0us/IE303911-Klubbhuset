@@ -10,7 +10,7 @@ import lombok.*;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
-@Table(name = "AGROUP")
+@Table(name = "ORG_GROUP")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,8 +26,6 @@ public class Group implements Serializable {
     private Long gid;
 
     private String name;
-
-    private String project;
 
     @JsonIgnore
     @OneToMany(mappedBy = "group")
