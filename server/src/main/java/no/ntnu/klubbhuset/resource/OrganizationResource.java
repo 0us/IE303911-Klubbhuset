@@ -92,7 +92,7 @@ public class OrganizationResource {
     }
 
     @GET
-    @Path("/owned")
+    @Path("/managed")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOwnedOrganizationsForUser() {
         return organizationService.getOwnedOrganizationsForUser();
