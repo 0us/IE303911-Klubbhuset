@@ -17,13 +17,13 @@ public class RunOnStartup {
 
     @PostConstruct
     public void init() {
-        long groups = (long) em.createNativeQuery("SELECT count(g.name) from AGROUP g").getSingleResult();
+        long groups = (long) em.createNativeQuery("SELECT count(g.name) from org_group g").getSingleResult();
         if(groups == 0) {
             em.persist(new Group(Group.USER));
             em.persist(new Group(Group.ADMIN));
         }
 
-        long securitygroups = (long) em.createNativeQuery("SELECT count(g.name) from SECURITYROLES g").getSingleResult();
+        long securitygroups = (long) em.createNativeQuery("SELECT count(g.name) from securityroles g").getSingleResult();
         if(securitygroups == 0) {
             em.persist(new SecurityGroup(SecurityGroup.USER));
             em.persist(new SecurityGroup(SecurityGroup.ADMIN));

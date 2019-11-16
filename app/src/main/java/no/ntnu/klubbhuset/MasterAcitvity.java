@@ -59,6 +59,7 @@ public class MasterAcitvity extends AppCompatActivity {
                 SharedPreferences pref = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("loggedin", false);
+                editor.putString("token", "");
                 editor.apply();
                 showLogin();
             }
