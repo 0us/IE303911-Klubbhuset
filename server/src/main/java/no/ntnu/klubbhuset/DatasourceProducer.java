@@ -13,11 +13,13 @@ import static no.ntnu.klubbhuset.DatasourceProducer.JNDI_NAME;
 @DataSourceDefinition(
         name = JNDI_NAME,
         className = "com.mysql.jdbc.jdbc2.optional.MysqlDataSource",
-        serverName = "klubbhusetdb",
-        databaseName = "klubbhuset",
+//        serverName = "klubbhusetdb",
+//        databaseName = "klubbhuset",
+//        portNumber = 3306,
+//        url = "jdbc:mysql://klubbhusetdb:3306/klubbhuset?useSSL=false",
+        url = "jdbc:mysql://klubbhusetdb:3306/klubbhuset?serverTimezone=Europe/Oslo&useSSL=false&allowPublicKeyRetrieval=true",
         user = "user",
         password = "password"
-//        url = "jdbc:mysql://klubbhusetdb:3306/klubbhuset?useSSL=false"
 )
 public class DatasourceProducer {
     public static final String JNDI_NAME = "java:app/jdbc/klubbhuset";
