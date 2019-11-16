@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.ui.managerviews;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -17,9 +18,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import no.ntnu.klubbhuset.adapter.AuthenticationPageAdapter;
 import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.util.AuthHelper;
@@ -29,6 +32,7 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
 
 
 public class ManagerViewModel extends AndroidViewModel {
+    private static final String TAG = "ManagerViewModel";
 
     private MutableLiveData<List<Club>> clubs;
     private MutableLiveData<Club> createdClub;
@@ -63,7 +67,15 @@ public class ManagerViewModel extends AndroidViewModel {
                     createdClub.setValue(new Club(response));
                 }, error -> {
 
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> authHeaders = AuthHelper.getAuthHeaders(getApplication());
+                String token = authHeaders.get("Authorization");
+                Log.d(TAG, "getHeaders: token " + token);
+                return authHeaders;
+            }
+        };
         requestQueue.add(request);
     }
 
