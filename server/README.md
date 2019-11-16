@@ -12,3 +12,10 @@ MySQL-Connector must be placed in
 
 ## JWT
 https://www.eclipse.org/community/eclipse_newsletter/2017/september/article2.php
+
+## Docker-Compose
+To run project from docker run the following command from inside
+`server/`: `docker-compose up --build -d`.
+
+If you want to log what is happening just skip the `-d` or run
+`docker log --follow <container-name>`
