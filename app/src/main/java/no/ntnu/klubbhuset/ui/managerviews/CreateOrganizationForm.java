@@ -83,9 +83,17 @@ public class CreateOrganizationForm extends Fragment {
         viewModel.createNewClub(club, imageInByte).observe(this, response -> {
             if (mListener != null) {
                 mListener.onOrganizationCreated(club);
+                navigateBack();
             }
         });
 
+    }
+
+    /**
+     * This method will return the user to the previous view
+     */
+    private void navigateBack() {
+        Navigation.findNavController(Objects.requireNonNull(getView())).popBackStack();
     }
 
     private void onCancelButtonPressed() {

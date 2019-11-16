@@ -3,6 +3,7 @@ package no.ntnu.klubbhuset.ui.managerviews;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -62,6 +63,11 @@ public class ManagerViewModel extends AndroidViewModel {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 response -> {
                     createdClub.setValue(new Club(response));
+                    Toast.makeText(
+                            getApplication().getApplicationContext(),
+                            "Organzation got created successfully!",
+                            Toast.LENGTH_SHORT)
+                            .show();
                 }, error -> {
             System.out.println("Something went wrong! " + error.getMessage());
         }) {
