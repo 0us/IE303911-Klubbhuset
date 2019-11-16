@@ -1,13 +1,13 @@
 package no.ntnu.klubbhuset;
 
+import no.ntnu.klubbhuset.domain.Group;
+import no.ntnu.klubbhuset.domain.SecurityGroup;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import no.ntnu.klubbhuset.domain.Group;
-import no.ntnu.klubbhuset.domain.SecurityGroup;
 
 @Singleton
 @Startup

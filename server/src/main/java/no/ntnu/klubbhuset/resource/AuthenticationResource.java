@@ -25,8 +25,9 @@ public class AuthenticationResource {
     AuthenticationService authenticationService;
 
     @GET
-    public Response test() {
-        return Response.ok("all good").build();
+    public Response testConnection() {
+        System.out.println("ApplicationConfiguration.testConnection");
+        return Response.ok("all is good").build();
     }
 
     @POST

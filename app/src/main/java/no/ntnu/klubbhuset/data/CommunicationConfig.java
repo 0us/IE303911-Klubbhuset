@@ -18,7 +18,8 @@ public class CommunicationConfig {
     public static String API_URL;
     public static String ORGANIZATION = "organization";
     public static final String LOGIN = "auth";
-    public static String JOIN = "join";
+    public static final String JOIN = "join";
+    public static final String USER = "user";
     private int port;
 
 

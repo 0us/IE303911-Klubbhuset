@@ -51,9 +51,15 @@ public class UserService {
     PasswordHash hasher;
 
     public Response getCurrentUser(SecurityContext securityContext) {
-        String user = principal.getClaim("sub");
+        String email = principal.getClaim("sub");
 
-        if ( user == null ) {
+        if ( email == null ) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        User user = entityManager.find(User.class, email);
+
+        if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
