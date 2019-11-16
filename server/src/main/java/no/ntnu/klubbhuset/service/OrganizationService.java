@@ -57,7 +57,7 @@ public class OrganizationService {
         System.out.println("Fetching all organizations");
         List<Organization> organizations = entityManager.createQuery("Select o From Organization o", Organization.class).getResultList();
 
-        if ( organizations.isEmpty() ) {
+        if (organizations.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organizations registered").build();
         }
         System.out.println("organizations = " + organizations);
@@ -74,7 +74,7 @@ public class OrganizationService {
         organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
         entityManager.persist(organization);
 
-        if ( imageBodyPart != null ) {
+        if (imageBodyPart != null) {
             if (!saveImages.checkBodyPartIsImage(imageBodyPart)) {
                 entityManager.remove(organization);  // the organization is already persisted to the database. Since the file uploaded is not an image, removing the organization is done
                 return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE)
@@ -104,7 +104,7 @@ public class OrganizationService {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
 
-        if ( organization == null ) {
+        if (organization == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organization with id: " + organizationId).build();
         }
 
@@ -115,6 +115,7 @@ public class OrganizationService {
     /**
      * A user can join a organization based on the organization ID. The user has to be logged in and is retrived trough
      * the JWT principal.
+     *
      * @param organizationId
      * @return
      */
@@ -135,13 +136,14 @@ public class OrganizationService {
 
     /**
      * Getting an organization based on id
+     *
      * @param organizationId Id must be long since database value is BIGINT
      * @return Organization with id = organizationID
      */
     public Response getOrganizationById(Long organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
 
-        if ( organization == null ) {
+        if (organization == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Organization not found").build();
         }
         return Response.ok(organization).build();
@@ -168,7 +170,7 @@ public class OrganizationService {
     }
 
     public Response createNewOrganization(Organization organization) {
-        if ( organization == null) {
+        if (organization == null) {
             return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
         }
         entityManager.persist(organization);
@@ -182,9 +184,14 @@ public class OrganizationService {
 
     public Response getOwnedOrganizationsForUser() {
         User user = getUserFromPrincipal();
-        String json = null;
-        //List<Organization> organizations = entityManager.createQuery()
-        return Response.ok(json).build();
+
+        List<Organization> organizations = entityManager.createQuery(
+                "select o from Organization o where o in (select m.organization from Member m where m.group =:ogroup and m.user = :user)", Organization.class)
+                .setParameter("user", user)
+                .setParameter("ogroup", getGroup(Group.ADMIN))
+                .getResultList();
+
+        return Response.ok(organizations).build();
     }
 
     // --- Private methods below --- //
@@ -198,6 +205,7 @@ public class OrganizationService {
 
     /**
      * Getting a group from the given string
+     *
      * @param name the name of the group. The name should always be defined as a constant in Group, e.g "Group.USER"
      * @return the group
      */
@@ -207,6 +215,7 @@ public class OrganizationService {
 
     /**
      * Getting the user based on JWT principal
+     *
      * @return the user that is logged in
      */
     private User getUserFromPrincipal() {
@@ -216,6 +225,7 @@ public class OrganizationService {
 
     /**
      * Checks if a user already is member of an organization
+     *
      * @param organizationId
      * @param user
      * @return True if the user is in organization, false if not
@@ -225,7 +235,7 @@ public class OrganizationService {
         Set<Member> members = organization.getMembers();
         Iterator it = members.iterator();
         boolean found = false;
-        while(it.hasNext() && !found) {
+        while (it.hasNext() && !found) {
             Member member = (Member) it.next();
             if (member.getUser().getEmail().equals(user.getEmail())) {
                 found = true;
