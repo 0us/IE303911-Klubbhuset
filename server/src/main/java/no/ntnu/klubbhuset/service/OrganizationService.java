@@ -63,36 +63,36 @@ public class OrganizationService {
         return Response.ok(organizations).build();
     }
 
-    public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
-        Organization organization = new Organization();
-        FormDataBodyPart imageBodyPart = multiPart.getField(IMAGE);
-
-        organization.setName(name);
-        organization.setDescription(description);
-        organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
-        entityManager.persist(organization);
-
-        if ( imageBodyPart != null ) {
-            if (!saveImages.checkBodyPartIsImage(imageBodyPart)) {
-                entityManager.remove(organization);  // the organization is already persisted to the database. Since the file uploaded is not an image, removing the organization is done
-                return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE)
-                        .entity("File must be image, no image was uploaded")
-                        .build();
-            }
-
-            InputStream inputStream = imageBodyPart.getValueAs(InputStream.class);
-            ContentDisposition fileDetails = imageBodyPart.getContentDisposition();
-            String filename = fileDetails.getFileName();
-            System.out.println("filename = " + filename);
-            String target = organization.getOid() + File.separator + IMAGES; // todo directory should be organization name or id?
-
-            Image organizationImage = saveImages.saveImage(inputStream, target, filename);
-
-            coupleImageAndOrganization(organization, organizationImage);
-        }
-
-        return Response.status(Response.Status.CREATED).entity(organization).build();
-    }
+//    public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
+//        Organization organization = new Organization();
+//        FormDataBodyPart imageBodyPart = multiPart.getField(IMAGE);
+//
+//        organization.setName(name);
+//        organization.setDescription(description);
+//        organization.setPriceOfMembership(BigDecimal.valueOf(Long.parseLong(price))); // todo go through during code review. a bit cumbersome but should work. Maybe change?
+//        entityManager.persist(organization);
+//
+//        if ( imageBodyPart != null ) {
+//            if (!saveImages.checkBodyPartIsImage(imageBodyPart)) {
+//                entityManager.remove(organization);  // the organization is already persisted to the database. Since the file uploaded is not an image, removing the organization is done
+//                return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE)
+//                        .entity("File must be image, no image was uploaded")
+//                        .build();
+//            }
+//
+//            InputStream inputStream = imageBodyPart.getValueAs(InputStream.class);
+//            ContentDisposition fileDetails = imageBodyPart.getContentDisposition();
+//            String filename = fileDetails.getFileName();
+//            System.out.println("filename = " + filename);
+//            String target = organization.getOid() + File.separator + IMAGES; // todo directory should be organization name or id?
+//
+//            Image organizationImage = saveImages.saveImage(inputStream, target, filename);
+//
+//            coupleImageAndOrganization(organization, organizationImage);
+//        }
+//
+//        return Response.status(Response.Status.CREATED).entity(organization).build();
+//    }
 
     @RolesAllowed(value = {Group.USER})
     public Response deleteOrganization(int organizationId) {

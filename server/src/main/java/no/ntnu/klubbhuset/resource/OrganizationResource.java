@@ -44,17 +44,17 @@ public class OrganizationResource {
         return organizationService.getOrganizationById(organizationId);
     }
 
-    @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response createNewOrganization(@FormDataParam("name") String name,
-                                          @FormDataParam("priceOfMembership") String price,
-                                          @FormDataParam("description") String description,
-                                          FormDataMultiPart multiPart
-//                                          @FormDataParam("image") InputStream uploadedInputStream,
-//                                          @FormDataParam("image")FormDataContentDisposition fileDetails
-    ) {
-        return organizationService.createNewOrganization(name, price, description, multiPart);
-    }
+//    @POST
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    public Response createNewOrganization(@FormDataParam("name") String name,
+//                                          @FormDataParam("priceOfMembership") String price,
+//                                          @FormDataParam("description") String description,
+//                                          FormDataMultiPart multiPart
+////                                          @FormDataParam("image") InputStream uploadedInputStream,
+////                                          @FormDataParam("image")FormDataContentDisposition fileDetails
+//    ) {
+//        return organizationService.createNewOrganization(name, price, description, multiPart);
+//    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
