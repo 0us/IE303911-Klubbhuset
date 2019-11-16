@@ -14,3 +14,6 @@ Android guide to app architecture https://developer.android.com/jetpack/docs/gui
 
 MVC file structure in android example https://github.com/MindorksOpenSource/android-mvp-architecture 
 
+## Docker
+
+Setting up docker with payara and postgres https://ralph.blog.imixs.com/2018/03/01/running-payara-and-postgresql-in-docker/ 
