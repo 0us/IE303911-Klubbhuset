@@ -19,3 +19,7 @@ To run project from docker run the following command from inside
 
 If you want to log what is happening just skip the `-d` or run
 `docker log --follow <container-name>`
+
+The database is presisted to a docker volume named `server_my-db`.
+If there is a need to reset the db this volume needs to be removed.
+This can be done by `docker volume rm server_my-db`.
