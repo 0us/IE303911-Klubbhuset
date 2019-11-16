@@ -93,6 +93,9 @@ public class OrganizationService {
             coupleImageAndOrganization(organization, organizationImage);
         }
 
+        // add the creator as a member
+        doJoinOrganization(organization, getUserFromPrincipal(), getGroup(Group.ADMIN));
+
         return Response.status(Response.Status.CREATED).entity(organization).build();
     }
 
@@ -169,10 +172,9 @@ public class OrganizationService {
             return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
         }
         entityManager.persist(organization);
-        Organization org = entityManager.find(Organization.class, organization.getOid());
 
         // add the creator as a member
-        doJoinOrganization(org, getUserFromPrincipal(), getGroup(Group.ADMIN));
+        doJoinOrganization(organization, getUserFromPrincipal(), getGroup(Group.ADMIN));
 
 
         return Response.status(Response.Status.CREATED).entity(organization).build();
@@ -235,10 +237,12 @@ public class OrganizationService {
 
     private void doJoinOrganization(Organization org, User user, Group group) {
         Member member = new Member();
+        System.out.println(member);
         member.setUser(user);
         member.setOrganization(org);
         member.setGroup(group);
         member.setOrganization(org);
+        System.out.println(member);
         entityManager.persist(member);
     }
 }
