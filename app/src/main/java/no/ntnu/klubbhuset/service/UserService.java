@@ -16,7 +16,7 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
 public class UserService {
     private static final String TAG = "UserService";
     RequestQueue queue; // fixme needs context
-    final String URL =  API_URL;// todo needs other domain
+    final String URL =  API_URL + "user";// todo needs other domain
 
     public UserService(Context context) {
         queue = Volley.newRequestQueue(context);
