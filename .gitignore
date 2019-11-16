@@ -12,9 +12,11 @@
 /captures
 .externalNativeBuild
 .cxx
-/app/src/main/assets/connection.properties
-connection.properties
+
+
 /app/build/
 
 .idea/
 */target/
+
+*.properies
