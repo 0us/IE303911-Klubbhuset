@@ -17,7 +17,7 @@ public class RunOnStartup {
 
     @PostConstruct
     public void init() {
-        long groups = (long) em.createNativeQuery("SELECT count(g.name) from agroup g").getSingleResult();
+        long groups = (long) em.createNativeQuery("SELECT count(g.name) from org_group g").getSingleResult();
         if(groups == 0) {
             em.persist(new Group(Group.USER));
             em.persist(new Group(Group.ADMIN));

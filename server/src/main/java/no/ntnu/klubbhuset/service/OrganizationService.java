@@ -24,10 +24,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -114,6 +116,7 @@ public class OrganizationService {
      * @return
      */
     public Response joinOrganization(Long organizationId) {
+
         //Getting organization
         Organization organization = entityManager.find(Organization.class, organizationId);
 
@@ -123,17 +126,7 @@ public class OrganizationService {
         if (isAlreadyMember(organizationId, user)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
-
-        // Getting default group (user)
-        Group group = getDefaultGroup();
-
-        Member member = new Member();
-        member.setUser(user);
-        member.setOrganization(organization);
-        member.setGroup(group);
-        member.setOrganization(organization);
-        entityManager.persist(member);
-
+        doJoinOrganization(organization, user, getGroup(Group.USER));
         return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
     }
 
@@ -176,8 +169,20 @@ public class OrganizationService {
             return Response.status(Response.Status.FORBIDDEN).entity("Organization can not be null").build();
         }
         entityManager.persist(organization);
+        Organization org = entityManager.find(Organization.class, organization.getOid());
+
+        // add the creator as a member
+        doJoinOrganization(org, getUserFromPrincipal(), getGroup(Group.ADMIN));
+
 
         return Response.status(Response.Status.CREATED).entity(organization).build();
+    }
+
+    public Response getOwnedOrganizationsForUser() {
+        User user = getUserFromPrincipal();
+        String json = null;
+        //List<Organization> organizations = entityManager.createQuery()
+        return Response.ok(json).build();
     }
 
     // --- Private methods below --- //
@@ -190,11 +195,12 @@ public class OrganizationService {
     }
 
     /**
-     * Getting the default groupe which is `user`
-     * @return
+     * Getting a group from the given string
+     * @param name the name of the group. The name should always be defined as a constant in Group, e.g "Group.USER"
+     * @return the group
      */
-    private Group getDefaultGroup() {
-        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", Group.USER).getSingleResult();
+    private Group getGroup(String name) {
+        return entityManager.createQuery("select g from Group g where g.name = :name", Group.class).setParameter("name", name).getSingleResult();
     }
 
     /**
@@ -225,5 +231,14 @@ public class OrganizationService {
             return found;
         }
         return false;
+    }
+
+    private void doJoinOrganization(Organization org, User user, Group group) {
+        Member member = new Member();
+        member.setUser(user);
+        member.setOrganization(org);
+        member.setGroup(group);
+        member.setOrganization(org);
+        entityManager.persist(member);
     }
 }
