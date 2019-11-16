@@ -58,6 +58,11 @@ public class UserService {
         }
 
         User user = entityManager.find(User.class, email);
+
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
         Jsonb jsonb = JsonbBuilder.create();
         jsonb.toJson(user);
 
