@@ -1,5 +1,7 @@
 package no.ntnu.klubbhuset.data.model;
 
+import android.util.Base64;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +48,7 @@ public class Club implements Serializable {
 
     public JSONObject toJson(byte[] imageInByte) {
         JSONObject json  = new JSONObject();
+        String base64String = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
         try {
             json.put("name", name);
@@ -53,7 +56,7 @@ public class Club implements Serializable {
             json.put("emailContact", emailContact);
             json.put("priceOfMembership", priceOfMembership);
             json.put("description", description);
-            json.put("image", imageInByte);
+            json.put("image", base64String);
         } catch (JSONException e) {
             e.printStackTrace();
         }
