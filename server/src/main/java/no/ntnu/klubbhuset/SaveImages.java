@@ -7,11 +7,7 @@ import org.glassfish.jersey.media.multipart.BodyPart;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 
 /**
@@ -59,6 +55,49 @@ public class SaveImages {
         return image;
     }
 
+
+    /**
+     * Save an image to the filesystem. This method does almost the same as the one
+     * above, but doesn't require a filename, it will instead create a unique filename for
+     * given directory.
+     *
+     * @param inputStream the input stream
+     * @param path        the path The path where you want the file saved to. Eg. {userid}/profilePicture/
+     * @return the image The image that was saved.
+     */
+    public Image saveImage(InputStream inputStream, String path) {
+        String filename = getUniqueFileName(path);
+        return saveImage(inputStream, path, filename);
+    }
+
+    /**
+     * Returns a unique filename in the directory specified
+     * by the parameter
+     * @param path directory to check
+     * @return A unique filename
+     */
+    private String getUniqueFileName(String path) {
+        String filename = "";
+        final String END_PATH = LOCAL_STORAGE_DIR + File.separator + path;
+        createFolderIfNotExists(END_PATH);
+        File testTile = new File(END_PATH);
+        File fileExists = null;
+        for (int i = 0; i < 255; i++) {
+            try {
+                fileExists = File.createTempFile("file", String.valueOf(i), testTile);
+                filename = String.valueOf(i);
+            } catch (IOException ie) {
+                continue;
+            }
+            break;
+        }
+        if (fileExists != null) {
+            System.out.println(("Deletion of testfile: " + fileExists.delete()));
+        }
+
+        return filename;
+    }
+
     private Image persistImage(Image image) {
         entityManager.persist(image);
         return image;
@@ -83,6 +122,11 @@ public class SaveImages {
 
 
     private void saveImageToDisk(InputStream inputStream, String target) throws IOException {
+        // If the filename doesn't contain a file extension, then it will be set to .png
+        if (!target.contains(".")) {
+            target = target + ".png";
+        }
+
         System.out.println("SaveImages.saveImageToDisk");
         System.out.println("target = " + target);
         OutputStream out = null;
