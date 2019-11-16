@@ -3,6 +3,7 @@ package no.ntnu.klubbhuset.resource;
 import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.service.OrganizationService;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -35,6 +36,9 @@ public class OrganizationResource {
 
     @Inject
     OrganizationService organizationService;
+
+    @Inject
+    JsonWebToken principal;
 
     @GET
     public Response getAllOrganizations() {
