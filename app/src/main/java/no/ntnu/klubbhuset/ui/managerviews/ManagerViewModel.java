@@ -10,19 +10,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.NetworkResponse;
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.util.AuthHelper;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
@@ -72,19 +78,16 @@ public class ManagerViewModel extends AndroidViewModel {
             System.out.println("Something went wrong! " + error.getMessage());
         }) {
             @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("Authorization", "Bearer " + pref.getString("token", ""));
-                return params;
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(getApplication());
             }
         };
         requestQueue.add(request);
     }
 
     private void loadManagedClubs() {
-        //String url = //TODO api to get all orgs where user is admin
-        /*JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
+        String url = API_URL + ORGANIZATION + "/owned";
+        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     List<Club> clubs = new ArrayList<>();
                     try {
@@ -95,7 +98,12 @@ public class ManagerViewModel extends AndroidViewModel {
                         System.out.println(jex);
                     }
                     this.clubs.setValue(clubs);
-                }, System.out::println);
-        requestQueue.add(jar);*/
+                }, System.out::println){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(getApplication());
+            }
+        };
+        requestQueue.add(jar);
     }
 }

@@ -13,8 +13,8 @@ import lombok.Data;
 public class User {
     public static final String PHONENUMBER = "phonenumber";
     public static final String EMAIL = "email";
-    public static final String LASTNAME = "lastname";
-    public static final String FIRSTNAME = "firstname";
+    public static final String LASTNAME = "lastName";
+    public static final String FIRSTNAME = "firstName";
     private String firstName;
     private String lastName;
     private String email;
