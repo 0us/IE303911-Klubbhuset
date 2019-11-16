@@ -1,7 +1,10 @@
 package no.ntnu.klubbhuset.ui.managerviews;
 
 import android.content.Context;
-import android.media.Image;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,33 +17,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CreateOrganizationForm.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CreateOrganizationForm#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CreateOrganizationForm extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private static final int UPLOAD_IMAGE_CODE = 1;
     private OnFragmentInteractionListener mListener;
+
+    ImageView imageView;
 
     public CreateOrganizationForm() {
         // Required empty public constructor
@@ -54,20 +49,30 @@ public class CreateOrganizationForm extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_new_organization, container, false);
         Button registerBtn = view.findViewById(R.id.register_organization);
         Button cancelBtn = view.findViewById(R.id.cancel_registration);
+        imageView = view.findViewById(R.id.organization_profile_picture);
 
+        imageView.setOnClickListener(l -> onUploadImageButtonPressed());
         registerBtn.setOnClickListener(l -> onCreateButtonPressed());
         cancelBtn.setOnClickListener(l -> onCancelButtonPressed());
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onCreateButtonPressed() {
+    private void onUploadImageButtonPressed() {
+        selectImageFromGallery();
+    }
+
+    private void onCreateButtonPressed() {
         View view = getView();
-        TextView title = view.findViewById(R.id.organization_name);
+        TextView title = Objects.requireNonNull(view).findViewById(R.id.organization_name);
         TextView description = view.findViewById(R.id.organization_description);
         TextView price = view.findViewById(R.id.membership_price);
-        TextView email = view.findViewById(R.id.contact_info);
-        //Image image
+        TextView email = view.findViewById(R.id.contact_email);
+
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageInByte = baos.toByteArray();
+
         Club club = new Club(
                 description.getText().toString(),
                 new BigDecimal(price.getText().toString()),
@@ -75,16 +80,24 @@ public class CreateOrganizationForm extends Fragment {
                 null,
                 title.getText().toString());
         ManagerViewModel viewModel = ViewModelProviders.of(this).get(ManagerViewModel.class);
-        viewModel.createNewClub(club).observe(this, response -> {
+        viewModel.createNewClub(club, imageInByte).observe(this, response -> {
             if (mListener != null) {
                 mListener.onOrganizationCreated(club);
+                navigateBack();
             }
         });
 
     }
 
-    public void onCancelButtonPressed() {
-        Navigation.findNavController(getView()).popBackStack();
+    /**
+     * This method will return the user to the previous view
+     */
+    private void navigateBack() {
+        Navigation.findNavController(Objects.requireNonNull(getView())).popBackStack();
+    }
+
+    private void onCancelButtonPressed() {
+        Navigation.findNavController(Objects.requireNonNull(getView())).popBackStack();
     }
 
     @Override
@@ -105,6 +118,28 @@ public class CreateOrganizationForm extends Fragment {
     }
 
     /**
+     * Retrieves image from users ImageGallery
+     */
+    private void selectImageFromGallery(){
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, UPLOAD_IMAGE_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        InputStream stream = null;
+        try {
+            stream = Objects.requireNonNull(getActivity()).getContentResolver().openInputStream(
+                    Objects.requireNonNull(Objects.requireNonNull(data).getData()));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(stream);
+        imageView.setImageBitmap(bitmap);
+    }
+
+    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -115,7 +150,6 @@ public class CreateOrganizationForm extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onOrganizationCreated(Club club);
     }
 }

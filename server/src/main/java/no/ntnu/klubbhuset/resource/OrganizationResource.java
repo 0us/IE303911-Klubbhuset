@@ -3,6 +3,7 @@ package no.ntnu.klubbhuset.resource;
 import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.service.OrganizationService;
+import org.apache.commons.codec.binary.Base64;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -10,7 +11,9 @@ import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.json.Json;
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -23,7 +26,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 @Stateless
 @Path("organization")
@@ -47,22 +54,22 @@ public class OrganizationResource {
         return organizationService.getOrganizationById(organizationId);
     }
 
-    @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response createNewOrganization(@FormDataParam("name") String name,
-                                          @FormDataParam("priceOfMembership") String price,
-                                          @FormDataParam("description") String description,
-                                          FormDataMultiPart multiPart
-//                                          @FormDataParam("image") InputStream uploadedInputStream,
-//                                          @FormDataParam("image")FormDataContentDisposition fileDetails
-    ) {
-        return organizationService.createNewOrganization(name, price, description, multiPart);
-    }
+//    @POST
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    public Response createNewOrganization(@FormDataParam("name") String name,
+//                                          @FormDataParam("priceOfMembership") String price,
+//                                          @FormDataParam("description") String description,
+//                                          FormDataMultiPart multiPart
+////                                          @FormDataParam("image") InputStream uploadedInputStream,
+////                                          @FormDataParam("image")FormDataContentDisposition fileDetails
+//    ) {
+//        return organizationService.createNewOrganization(name, price, description, multiPart);
+//    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewOrganization(Organization organization) {
-        return organizationService.createNewOrganization(organization);
+    public Response createNewOrganization(Map<String, String> map) {
+        return organizationService.createNewOrganization(map);
     }
 
 
