@@ -41,6 +41,9 @@ services:
       # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
+      - type: bind
+        source: ./mysqlconf
+        target: /etc/mysql/conf.d
   # Names our volume
 
   custompayaraserver:
