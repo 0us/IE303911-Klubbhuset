@@ -1,15 +1,19 @@
 package no.ntnu.klubbhuset.ui.managerviews;
 
 import android.app.Application;
-import android.util.Log;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -17,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +39,7 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
 public class ManagerViewModel extends AndroidViewModel {
     private static final String TAG = "ManagerViewModel";
 
+    private final SharedPreferences pref;
     private MutableLiveData<List<Club>> clubs;
     private MutableLiveData<Club> createdClub;
     private RequestQueue requestQueue;
@@ -41,6 +47,7 @@ public class ManagerViewModel extends AndroidViewModel {
     public ManagerViewModel(Application context) {
         super(context);
         requestQueue = Volley.newRequestQueue(context);
+        this.pref = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
     }
 
     public LiveData<List<Club>> getManagedClubs() {
@@ -51,29 +58,31 @@ public class ManagerViewModel extends AndroidViewModel {
         return clubs;
     }
 
-    public LiveData<Club> createNewClub(Club club){
+    public LiveData<Club> createNewClub(Club club, byte[] imageInByte) {
         if (createdClub == null) {
             createdClub = new MutableLiveData<>();
         }
-        createClubRequest(club);
+        createClubRequest(club, imageInByte);
         return createdClub;
     }
 
-    private void createClubRequest(Club club) {
+    private void createClubRequest(Club club, byte[] imageInByte) {
         String url = API_URL + ORGANIZATION;
-        JSONObject jsonObject = club.toJson();
+        JSONObject jsonObject = club.toJson(imageInByte);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 response -> {
                     createdClub.setValue(new Club(response));
+                    Toast.makeText(
+                            getApplication().getApplicationContext(),
+                            "Organzation got created successfully!",
+                            Toast.LENGTH_SHORT)
+                            .show();
                 }, error -> {
-
+            System.out.println("Something went wrong! " + error.getMessage());
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> authHeaders = AuthHelper.getAuthHeaders(getApplication());
-                String token = authHeaders.get("Authorization");
-                Log.d(TAG, "getHeaders: token " + token);
-                return authHeaders;
+                return AuthHelper.getAuthHeaders(getApplication());
             }
         };
         requestQueue.add(request);
