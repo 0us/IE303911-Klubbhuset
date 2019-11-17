@@ -18,3 +18,5 @@ connection.properties
 
 .idea/
 */target/
+
+*.properties
