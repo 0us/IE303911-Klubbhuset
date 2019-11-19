@@ -38,6 +38,7 @@
     <string name="manageorgs">Manage organzations</string>
     <string name="create_new_user">Create new user</string>
     <string name="create_new_organization">Create new Organization</string>
+    <string name="invalid_email">Not a valid email</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
