@@ -5,20 +5,24 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
-
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -31,11 +35,14 @@ import no.ntnu.klubbhuset.data.model.Club;
 
 
 public class CreateOrganizationForm extends Fragment {
+    private static final String TAG = "CreateOrganizationForm";
 
     private static final int UPLOAD_IMAGE_CODE = 1;
     private OnFragmentInteractionListener mListener;
 
     ImageView imageView;
+    TextView email;
+    ManagerViewModel viewModel;
 
     public CreateOrganizationForm() {
         // Required empty public constructor
@@ -45,11 +52,17 @@ public class CreateOrganizationForm extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        viewModel = ViewModelProviders.of(getActivity()).get(ManagerViewModel.class);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_new_organization, container, false);
         Button registerBtn = view.findViewById(R.id.register_organization);
         Button cancelBtn = view.findViewById(R.id.cancel_registration);
         imageView = view.findViewById(R.id.organization_profile_picture);
+        email = view.findViewById(R.id.contact_email);
+
+        email.addTextChangedListener(textWatcher);
 
         imageView.setOnClickListener(l -> onUploadImageButtonPressed());
         registerBtn.setOnClickListener(l -> onCreateButtonPressed());
@@ -66,19 +79,47 @@ public class CreateOrganizationForm extends Fragment {
         TextView title = Objects.requireNonNull(view).findViewById(R.id.organization_name);
         TextView description = view.findViewById(R.id.organization_description);
         TextView price = view.findViewById(R.id.membership_price);
-        TextView email = view.findViewById(R.id.contact_email);
 
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageInByte = baos.toByteArray();
+        byte[] imageInByte = null;
+        Drawable drawable = imageView.getDrawable();
+
+        // Check that a new image is loaded
+        if (!(drawable instanceof VectorDrawable)) {
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            imageInByte = baos.toByteArray();
+        }
+
+        String descriptionString = description.getText().toString();
+
+        BigDecimal priceOfMembership = BigDecimal.ZERO; // default zero (0)
+        try {
+            priceOfMembership = new BigDecimal(price.getText().toString()); // If field is text this will throw error
+        } catch (NumberFormatException e) {
+            Log.d(TAG, "onCreateButtonPressed: creating user. BigDecimal fail" + e.getStackTrace());
+        }
+
+        String emailString = email.getText().toString();
+        String titleString = title.getText().toString();
+
+        if (titleString.isEmpty()) {
+            Toast.makeText(getContext(), "Title can not be empty", Toast.LENGTH_SHORT).show();
+        }
+        if (emailString.isEmpty()) {
+            Toast.makeText(getContext(), "Email can not be empty", Toast.LENGTH_SHORT).show();
+        }
+
+        if (descriptionString.isEmpty()) {
+            descriptionString = "";
+        }
 
         Club club = new Club(
-                description.getText().toString(),
-                new BigDecimal(price.getText().toString()),
-                email.getText().toString(),
+                descriptionString,
+                priceOfMembership,
+                emailString,
                 null,
-                title.getText().toString());
+                titleString);
         ManagerViewModel viewModel = ViewModelProviders.of(this).get(ManagerViewModel.class);
         viewModel.createNewClub(club, imageInByte).observe(this, response -> {
             if (mListener != null) {
@@ -120,7 +161,7 @@ public class CreateOrganizationForm extends Fragment {
     /**
      * Retrieves image from users ImageGallery
      */
-    private void selectImageFromGallery(){
+    private void selectImageFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, UPLOAD_IMAGE_CODE);
@@ -152,4 +193,26 @@ public class CreateOrganizationForm extends Fragment {
     public interface OnFragmentInteractionListener {
         void onOrganizationCreated(Club club);
     }
+
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(charSequence).matches()) {
+//                Toast.makeText(getContext(), "Email must be valid", Toast.LENGTH_SHORT).show();
+//            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            viewModel.organizationDataChanged(email.getText().toString());
+            if (!viewModel.getCreateOrganizationFormState().getValue().isDataValid()) {
+                email.setError(getText(R.string.invalid_email));
+            }
+        }
+    };
 }
