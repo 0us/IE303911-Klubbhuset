@@ -106,10 +106,10 @@ public class CreateOrganizationForm extends Fragment {
         String titleString = organizationName.getText().toString();
 
         if (titleString.isEmpty()) {
-            Toast.makeText(getContext(), "Title can not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Title can not be empty", Toast.LENGTH_SHORT).show();
         }
         if (emailString.isEmpty()) {
-            Toast.makeText(getContext(), "Email can not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Email can not be empty", Toast.LENGTH_SHORT).show();
         }
 
         if (descriptionString.isEmpty()) {
