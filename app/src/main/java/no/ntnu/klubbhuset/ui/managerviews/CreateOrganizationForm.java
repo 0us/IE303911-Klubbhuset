@@ -120,7 +120,7 @@ public class CreateOrganizationForm extends Fragment {
                 emailString,
                 null,
                 titleString);
-        ManagerViewModel viewModel = ViewModelProviders.of(this).get(ManagerViewModel.class);
+       
         viewModel.createNewClub(club, imageInByte).observe(this, response -> {
             if (mListener != null) {
                 mListener.onOrganizationCreated(club);
