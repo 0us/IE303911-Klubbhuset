@@ -42,6 +42,7 @@ public class CreateOrganizationForm extends Fragment {
 
     ImageView imageView;
     TextView email;
+    TextView organizationName;
     ManagerViewModel viewModel;
 
     public CreateOrganizationForm() {
@@ -61,8 +62,10 @@ public class CreateOrganizationForm extends Fragment {
         Button cancelBtn = view.findViewById(R.id.cancel_registration);
         imageView = view.findViewById(R.id.organization_profile_picture);
         email = view.findViewById(R.id.contact_email);
+        organizationName = view.findViewById(R.id.organization_name);
 
         email.addTextChangedListener(textWatcher);
+        organizationName.addTextChangedListener(textWatcher);
 
         imageView.setOnClickListener(l -> onUploadImageButtonPressed());
         registerBtn.setOnClickListener(l -> onCreateButtonPressed());
@@ -76,7 +79,6 @@ public class CreateOrganizationForm extends Fragment {
 
     private void onCreateButtonPressed() {
         View view = getView();
-        TextView title = Objects.requireNonNull(view).findViewById(R.id.organization_name);
         TextView description = view.findViewById(R.id.organization_description);
         TextView price = view.findViewById(R.id.membership_price);
 
@@ -101,7 +103,7 @@ public class CreateOrganizationForm extends Fragment {
         }
 
         String emailString = email.getText().toString();
-        String titleString = title.getText().toString();
+        String titleString = organizationName.getText().toString();
 
         if (titleString.isEmpty()) {
             Toast.makeText(getContext(), "Title can not be empty", Toast.LENGTH_SHORT).show();
@@ -212,6 +214,9 @@ public class CreateOrganizationForm extends Fragment {
             viewModel.organizationDataChanged(email.getText().toString());
             if (!viewModel.getCreateOrganizationFormState().getValue().isDataValid()) {
                 email.setError(getText(R.string.invalid_email));
+            }
+            if (organizationName.getText().toString().trim().isEmpty()) {
+                organizationName.setError(getText(R.string.organization_name_not_empty));
             }
         }
     };
