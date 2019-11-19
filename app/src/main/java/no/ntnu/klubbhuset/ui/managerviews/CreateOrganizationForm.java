@@ -204,9 +204,6 @@ public class CreateOrganizationForm extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(charSequence).matches()) {
-//                Toast.makeText(getContext(), "Email must be valid", Toast.LENGTH_SHORT).show();
-//            }
         }
 
         @Override
