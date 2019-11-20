@@ -2,8 +2,10 @@ package no.ntnu.klubbhuset.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VippsService {
+    private static final String TAG = "VippsService";
     public static final String CLIENT_ID = ""; // todo get id
     public static final String CLIENT_SECRET = ""; // todo
     public static final String OCP_APIM_SUBSCRIPTION_KEY = ""; //todo
@@ -34,7 +37,7 @@ public class VippsService {
      */
     public void getAccessToken() {
         final String METHOD_URL = VIPPS_API_URL + "/accessToken/get";
-        JsonObjectRequest request = new JsonObjectRequest(METHOD_URL, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, METHOD_URL, null,
                 response -> {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("token", response.toString());
@@ -84,7 +87,7 @@ public class VippsService {
                 e.printStackTrace();
             }
 
-            JsonObjectRequest request = new JsonObjectRequest(METHOD_URL, details,
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,METHOD_URL, details,
                     response -> {
                         try {
                             String vippsURL = response.getString("url"); // todo don't know what we do with this. Can try to open it via intent or pase it to calling class
@@ -105,14 +108,13 @@ public class VippsService {
             };
             queue.add(request);
         }
-
     }
 
-    public void getOrderStatus(String orderId) {
-        final String METHOD_URL = VIPPS_API_URL + "/ecomm/v2/payments/" + orderId + "/status";
-        JsonObjectRequest request = new JsonObjectRequest(METHOD_URL, null,
+    public void getPaymentStatus(String orderId) {
+        final String METHOD_URL = VIPPS_API_URL + "/ecomm/v2/payments/" + orderId + "/details";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, METHOD_URL, null,
                 response -> {
-
+                    Log.d(TAG, "getPaymentStatus: response: " + response);
                 },
                 error -> {
                 }) // todo implement error handling
