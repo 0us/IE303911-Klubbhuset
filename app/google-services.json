@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "623462338541",
+    "firebase_url": "https://klubbhuset-27ad9.firebaseio.com",
+    "project_id": "klubbhuset-27ad9",
+    "storage_bucket": "klubbhuset-27ad9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623462338541:android:a57e43d1684cf2ccbb61e4",
+        "android_client_info": {
+          "package_name": "no.ntnu.klubbhuset"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623462338541-ilvm9rpmug4flb1s30klcgietg4vctde.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd2oAa3H0Eh2f--YuEsP2WjdMZqlKg_Hw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623462338541-ilvm9rpmug4flb1s30klcgietg4vctde.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
