@@ -17,18 +17,21 @@ import java.util.Map;
 
 public class VippsService {
     private static final String TAG = "VippsService";
-    public static final String CLIENT_ID = ""; // todo get id
-    public static final String CLIENT_SECRET = ""; // todo
-    public static final String OCP_APIM_SUBSCRIPTION_KEY = ""; //todo
-    public static final String VIPPS_API_URL = "https://apitest.vipps.no";
-    public static final String AUTHORIZATION = "Authorization";
-    public static final String OCP_APIM_SUBSCRIPTION_KEY_STRING = "Ocp-Apim-Subscription-Key";
-    public static final String APPLICATION_JSON = "application/json";
-    public static final String CONTENT_TYPE = "Content-Type";
+    private static final String CLIENT_ID = ""; // todo get id
+    private static final String CLIENT_SECRET = ""; // todo
+    private static final String OCP_APIM_SUBSCRIPTION_KEY = ""; //todo
+    private static final String VIPPS_API_URL = "https://apitest.vipps.no";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String OCP_APIM_SUBSCRIPTION_KEY_STRING = "Ocp-Apim-Subscription-Key";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String VIPPS_SRING = "vipps";
+    private static final String merchantSerialNumber = "";
+
 
     private RequestQueue queue;
     private Context context; // calling class needs to give context;
-    SharedPreferences preferences = context.getSharedPreferences("vipps", Context.MODE_PRIVATE);
+    SharedPreferences preferences = context.getSharedPreferences(VIPPS_SRING, Context.MODE_PRIVATE);
     String authToken = preferences.getString("token", null);
 
     public VippsService(Context context) {
@@ -53,7 +56,7 @@ public class VippsService {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("client_id", CLIENT_ID);
                 headers.put("client_secret", CLIENT_SECRET);
-                headers.put("Ocp-Apim-Subscription-Key", OCP_APIM_SUBSCRIPTION_KEY);
+                headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, OCP_APIM_SUBSCRIPTION_KEY);
                 return headers;
             }
         };
@@ -61,7 +64,7 @@ public class VippsService {
         queue.add(request);
     }
 
-    public void initiatePayment(int amount) {
+    public void initiatePayment(int amount, int mobileNumber) {
         final String METHOD_URL = VIPPS_API_URL + "/ecomm/v2/payments/";
         JSONObject details = new JSONObject();
 
@@ -167,7 +170,7 @@ public class VippsService {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put(AUTHORIZATION, authToken);
-                headers.put("Ocp-Apim-Subscription-Key", OCP_APIM_SUBSCRIPTION_KEY);
+                headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, OCP_APIM_SUBSCRIPTION_KEY);
                 return headers;
             }
         };
