@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.core.Response;
 import java.util.Set;
@@ -74,5 +75,26 @@ public class AdminOrganizationService {
         }
 
         return result;
+    }
+
+    public Response harMemberPaid(Long organizationId, User user) {
+        Member member;
+        Organization organization = entityManager.find(Organization.class, organizationId);
+        Query query = entityManager.createQuery("SELECT m from Member m " +
+                "where User = :user and Organization = :organization ", Member.class);
+        query.setParameter("user", user);
+        query.setParameter("organization", organization);
+        try {
+            member = (Member) query.getSingleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.fromStatusCode(418)).entity("Is not a member").build();
+        }
+
+        if ( !member.isHasPaid() ) {
+            return Response.status(Response.Status.fromStatusCode(418)).entity("Is not a member").build();
+        }
+
+        return Response.ok().entity("Has paid").build();
     }
 }
