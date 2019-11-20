@@ -47,8 +47,8 @@ public class CommunicationConfig {
         initializeValues();
     }
 
-    public static String joinClub(int id) {
-        return API_URL + ORGANIZATION + id + "/" + JOIN;
+    public static String joinClub(long id) {
+        return API_URL + ORGANIZATION + "/" +  id + "/" + JOIN;
     }
 
     private void initializeValues() {

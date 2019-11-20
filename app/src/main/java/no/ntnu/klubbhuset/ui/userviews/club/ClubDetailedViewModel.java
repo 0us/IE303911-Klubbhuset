@@ -11,6 +11,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -59,11 +60,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
                 response -> {
                     int result = statusCode[0];
                     if (result != 0) {
-                        if (result == HttpURLConnection.HTTP_OK) {
-                            membership.setValue(parseMembershipResponse(response));
-                        } else {
-                            membership.setValue(null);
-                        }
+                        membership.setValue(parseMembershipResponse(response));
                     }
                 },
                 error -> {
@@ -104,7 +101,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
     private Member parseMembershipResponse(JSONArray json) {
         Member[] memberships = gson.fromJson(json.toString(), Member[].class);
         Member result = null;
-        if (memberships != null && memberships.length < 1) {
+        if (memberships != null && memberships.length > 0) {
             result = memberships[0];
             for (Member member : memberships) {
                 if (member.getGroup().equals(Group.ADMIN)) {
@@ -112,6 +109,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
                 }
             }
         }
+
         return result;
     }
 

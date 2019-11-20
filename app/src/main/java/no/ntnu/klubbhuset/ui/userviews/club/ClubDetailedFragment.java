@@ -1,5 +1,6 @@
 package no.ntnu.klubbhuset.ui.userviews.club;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +19,20 @@ import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.model.Member;
+import no.ntnu.klubbhuset.ui.userviews.memberships.list.ClubMembershipFragment;
 
 
 public class ClubDetailedFragment extends Fragment {
 
-    ClubDetailedViewModel mViewModel;
+    private ClubDetailedViewModel mViewModel;
     private Club club;
     private Button joinClubBtn;
     private TextView name;
     private TextView description;
     private TextView url;
     private TextView email;
+    private onMembershipStatusChangedListener mListener;
 
     public static ClubDetailedFragment newInstance(Club club) {
         Bundle args = new Bundle();
@@ -47,22 +51,25 @@ public class ClubDetailedFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ClubDetailedFragment.onMembershipStatusChangedListener) {
+            mListener = (ClubDetailedFragment.onMembershipStatusChangedListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement onMembershipStatusChangedListener");
+        }
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
         club = ClubDetailedViewModel.getCurrentClub();
 
         // decide what content to show based on membership status
-        mViewModel.getMembership(club).observe(this, l -> {
-            if (l != null) {
-                // user is a member
-                Fragment newFragment = ClubDetailedMember.newInstance(club.getOid());
-
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.club_detailed_fragment_container, newFragment)
-                        .addToBackStack(null);
-                transaction.commit();
-            }
+        mViewModel.getMembership(club).observe(this, response -> {
+                mListener.onMembershipStatusChanged(response);
         });
 
 
@@ -76,15 +83,21 @@ public class ClubDetailedFragment extends Fragment {
         url.setText(club.getUrl());
         email.setText(club.getEmailContact());
 
-        joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
+        /*joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
         joinClubBtn.setOnClickListener(click -> {
             mViewModel.joinClub(club.getOid()).observe(this, response -> {
                 if (response != null) {
                     System.out.println("what it do . . .");
+                    mListener.onMembershipStatusChanged(response);
                 } else {
 
                 }
             });
-        });
+        });*/
     }
+
+    public interface onMembershipStatusChangedListener {
+        void onMembershipStatusChanged(Member member);
+    }
+
 }

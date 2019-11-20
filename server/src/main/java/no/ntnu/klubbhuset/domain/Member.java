@@ -28,6 +28,7 @@ import java.util.Date;
 public class Member implements Serializable {
 
     @EmbeddedId
+    @JsonbTransient
     MemberKey id;
 
     @ManyToOne
