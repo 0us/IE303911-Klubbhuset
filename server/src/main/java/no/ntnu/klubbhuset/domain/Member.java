@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.codehaus.jackson.map.annotate.JsonFilter;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.EmbeddedId;
@@ -23,6 +24,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@JsonFilter("beanFilter")
 public class Member implements Serializable {
 
     @EmbeddedId
@@ -31,6 +33,7 @@ public class Member implements Serializable {
     @ManyToOne
     @MapsId("email")
     @JoinColumn(name = "email")
+    @JsonbTransient
     private User user;
 
     @JsonbTransient
@@ -39,7 +42,6 @@ public class Member implements Serializable {
     @JoinColumn(name = "oid")
     private Organization organization;
 
-    @JsonbTransient
     @ManyToOne
     @MapsId("gid")
     @JoinColumn(name = "gid")

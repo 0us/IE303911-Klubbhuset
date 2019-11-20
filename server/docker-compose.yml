@@ -27,11 +27,11 @@ services:
       # Name of database
       MYSQL_DATABASE: klubbhuset
       # So you don't have to use root
-      MYSQL_USER: user
+      MYSQL_USER: lars
       # User password
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: ganymedes
       # Password for root access
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ganymedes
     ports:
       # <Port exposed> : < MySQL Port running inside container>
       - '3306:3306'

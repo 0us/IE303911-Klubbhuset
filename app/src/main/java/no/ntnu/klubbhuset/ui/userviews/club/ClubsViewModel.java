@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
 import org.json.JSONException;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.MEMBERSHIP;
 import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
 
 public class ClubsViewModel extends AndroidViewModel {
@@ -32,6 +34,7 @@ public class ClubsViewModel extends AndroidViewModel {
 
     RequestQueue requestQueue;
     private MutableLiveData<Club> selectedClub = new MutableLiveData<>();
+    private MutableLiveData<Member> membership = new MutableLiveData<>();
 
 
     public ClubsViewModel(Application context) {
@@ -74,5 +77,17 @@ public class ClubsViewModel extends AndroidViewModel {
             }
         };
         requestQueue.add(jar);
+    }
+
+    private void loadMembership(Club club) {
+        String url = API_URL + ORGANIZATION +  "/" + club.getOid() + "/" + MEMBERSHIP;
+    }
+
+    public void getMembership(Club club) {
+
+    }
+
+    public void joinClub(Club club) {
+
     }
 }

@@ -72,6 +72,12 @@ public class OrganizationResource {
         return organizationService.createNewOrganization(map);
     }
 
+    @GET
+    @Path("/{organizationId}/membership")
+    public Response getMembership(@PathParam("organizationId") long id) {
+        return organizationService.getMembership(id);
+    }
+
 
 //    @PUT
 //    @Path("/{organizationId}")
@@ -87,7 +93,7 @@ public class OrganizationResource {
 
     @POST
     @Path("/{organizationId}/join")
-    public Response joinOrganization(@PathParam("organizationId") Long id) {
+    public Response joinOrganization(@PathParam("organizationId") long id) {
         return organizationService.joinOrganization(id);
     }
 

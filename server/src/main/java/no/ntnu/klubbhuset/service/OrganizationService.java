@@ -10,6 +10,7 @@ import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -211,6 +212,20 @@ public class OrganizationService {
         return Response.ok(organizations).build();
     }
 
+    public Response getMembership(long oid) {
+        User user = getUserFromPrincipal();
+        Organization organization = entityManager.find(Organization.class, oid);
+        List<Member> memberships = entityManager.createQuery(
+                "select m from Member m where m.user = :user and m.organization = :organization")
+                .setParameter("user", user)
+                .setParameter("organization", organization)
+                .getResultList();
+        if (memberships == null || memberships.isEmpty()) {
+            return Response.noContent().build();
+        }
+        return Response.ok(memberships).build();
+    }
+
     // --- Private methods below --- //
     private void coupleImageAndOrganization(Organization organization, Image organizationImage) {
         long oid = organization.getOid();
@@ -262,7 +277,7 @@ public class OrganizationService {
         return false;
     }
 
-    private void doJoinOrganization(Organization org, User user, Group group) {
+    private Member doJoinOrganization(Organization org, User user, Group group) {
         Member member = new Member();
         System.out.println(member);
         member.setUser(user);
@@ -271,5 +286,6 @@ public class OrganizationService {
         member.setOrganization(org);
         System.out.println(member);
         entityManager.persist(member);
+        return member;
     }
 }
