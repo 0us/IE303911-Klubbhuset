@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.AttributeSet;
@@ -27,14 +28,10 @@ import static java.security.AccessController.getContext;
 
 public class ClubDetailedActivity extends AppCompatActivity {
 
-    private Button joinClubBtn;
-    private int id;
-    private TextView name;
-    private TextView description;
-    private TextView url;
-    private TextView email;
-    private ClubsViewModel model;
+
     private Club club;
+    private ClubDetailedViewModel mViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,29 +39,17 @@ public class ClubDetailedActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Club club = (Club) intent.getExtras().get("club");
+
         setContentView(R.layout.activity_club_detailed);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
+        ClubDetailedViewModel.setCurrentClub(club);
+        /*Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(club.getName());
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);*/
 
-        name = findViewById(R.id.club_detailed_name);
-        description = findViewById(R.id.club_detailed_description);
-        url = findViewById(R.id.club_detailed_homepage);
-        email = findViewById(R.id.club_detailed_email);
 
-        name.setText(club.getName());
-        description.setText(club.getDescription());
-        url.setText(club.getUrl());
-        email.setText(club.getEmailContact());
 
-        //        joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
-//        joinClubBtn.setOnClickListener(click -> {
-//            mViewModel.joinClub(id).observe(this, success -> {
-//                if (success) {
-//                    joinClub();
-//                }
-//            });
-//        });
     }
+
+
 }

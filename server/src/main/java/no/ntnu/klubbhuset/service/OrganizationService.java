@@ -126,17 +126,17 @@ public class OrganizationService {
      */
     public Response joinOrganization(Long organizationId) {
 
-        //Getting organization
-        Organization organization = entityManager.find(Organization.class, organizationId);
-
         // Getting user
         User user = getUserFromPrincipal();
+
+        //Getting organization
+        Organization organization = entityManager.find(Organization.class, organizationId);
 
         if (isAlreadyMember(organizationId, user)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
-        doJoinOrganization(organization, user, getGroup(Group.USER));
-        return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
+        Member member = doJoinOrganization(organization, user, getGroup(Group.USER));
+        return Response.status(Response.Status.CREATED).entity(member).build(); // todo return better feedback
     }
 
     /**

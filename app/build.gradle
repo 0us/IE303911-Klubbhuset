@@ -39,9 +39,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.2.1'
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
-    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.10'
@@ -54,6 +54,7 @@ dependencies {
     // multipart/form-data request volley
     repositories {
         maven { url 'https://jitpack.io' }
+        maven { url 'http://repo1.maven.org/maven2' }
     }
 
     implementation 'com.github.hardillb:MultiPartVolley:0.0.3'
