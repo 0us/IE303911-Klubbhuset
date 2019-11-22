@@ -79,6 +79,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
+    <Button
+        android:id="@+id/club_detailed_pay_membership_button"
+        android:text="@string/pay_with_vipps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frameLayout"
+        android:visibility="gone"
+        android:enabled="false"
+        />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
