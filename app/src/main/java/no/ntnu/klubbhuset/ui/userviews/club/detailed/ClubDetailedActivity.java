@@ -35,7 +35,7 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
 
         Fragment newFragment = ClubDetailedNotMemberFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
-                .replace(R.id.club_detailed_container, newFragment);
+                .replace(R.id.club_detailed_fragment_container, newFragment);
         transaction.commit();
     }
 
