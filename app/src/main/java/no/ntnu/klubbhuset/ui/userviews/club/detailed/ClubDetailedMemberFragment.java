@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -25,16 +24,16 @@ import no.ntnu.klubbhuset.data.model.Member;
  * Displays information relating to a users membership in an organization, like
  * payment-information etc
  */
-public class ClubDetailedMember extends Fragment {
+public class ClubDetailedMemberFragment extends Fragment {
 
     private ClubDetailedViewModel mViewModel;
     private Club club;
     private Member member;
 
-    public static ClubDetailedMember newInstance(Member member) {
+    public static ClubDetailedMemberFragment newInstance(Member member) {
         Bundle args = new Bundle();
         args.putSerializable("member", member);
-        ClubDetailedMember newInstance = new ClubDetailedMember();
+        ClubDetailedMemberFragment newInstance = new ClubDetailedMemberFragment();
         newInstance.setArguments(args);
         return newInstance;
     }

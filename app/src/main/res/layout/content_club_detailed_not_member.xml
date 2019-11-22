@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedNotMember">
+    tools:context="no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedNotMemberFragment">
 
     <Button
         android:id="@+id/club_detailed_joinbtn"

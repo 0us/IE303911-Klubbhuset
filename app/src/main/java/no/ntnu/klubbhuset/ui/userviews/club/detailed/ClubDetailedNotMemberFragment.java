@@ -21,19 +21,19 @@ import no.ntnu.klubbhuset.data.model.Club;
  * Displays information relating to a user who is NOT member of an organization,
  * like a join button
  */
-public class ClubDetailedNotMember extends Fragment {
+public class ClubDetailedNotMemberFragment extends Fragment {
 
     private ClubDetailedViewModel mViewModel;
     private ClubDetailedFragment.onMembershipStatusChangedListener mListener;
 
-    public static ClubDetailedNotMember newInstance() {
-        return new ClubDetailedNotMember();
+    public static ClubDetailedNotMemberFragment newInstance() {
+        return new ClubDetailedNotMemberFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.club_detailed_not_member_fragment, container, false);
+        return inflater.inflate(R.layout.content_club_detailed_not_member, container, false);
     }
 
     @Override
