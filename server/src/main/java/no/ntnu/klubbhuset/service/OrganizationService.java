@@ -136,7 +136,7 @@ public class OrganizationService {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
         Member member = doJoinOrganization(organization, user, getGroup(Group.USER));
-        return Response.status(Response.Status.CREATED).entity(member).build(); // todo return better feedback
+        return getMembership(organizationId); // todo return better feedback
     }
 
     /**
@@ -200,6 +200,10 @@ public class OrganizationService {
         coupleImageAndOrganization(org, avatar);
     }
 
+    /**
+     * Fetch all orgs where current user is admin
+     * @return
+     */
     public Response getOwnedOrganizationsForUser() {
         User user = getUserFromPrincipal();
 
@@ -212,6 +216,12 @@ public class OrganizationService {
         return Response.ok(organizations).build();
     }
 
+    /**
+     * get every membership for current user in given org, since users can
+     * for example be both an admin and a user in an organization.
+     * @param oid
+     * @return
+     */
     public Response getMembership(long oid) {
         User user = getUserFromPrincipal();
         Organization organization = entityManager.find(Organization.class, oid);
@@ -277,6 +287,13 @@ public class OrganizationService {
         return false;
     }
 
+    /**
+     * Creates and persists new member object
+     * @param org
+     * @param user
+     * @param group
+     * @return
+     */
     private Member doJoinOrganization(Organization org, User user, Group group) {
         Member member = new Member();
         System.out.println(member);
