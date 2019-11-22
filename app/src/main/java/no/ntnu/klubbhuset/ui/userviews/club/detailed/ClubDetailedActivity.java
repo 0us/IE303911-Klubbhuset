@@ -33,9 +33,9 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
         toolbar.setTitle(club.getName());
         setSupportActionBar(toolbar);*/
 
-        Fragment newFragment = ClubDetailedNotMember.newInstance();
+        Fragment newFragment = ClubDetailedNotMemberFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
-                .replace(R.id.club_detailed_fragment_container, newFragment);
+                .replace(R.id.club_detailed_container, newFragment);
         transaction.commit();
     }
 
@@ -49,12 +49,12 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
     public void onMembershipStatusChanged(Member member) {
         if (member != null) {
             // replace non-member view with member-view
-            Fragment newFragment = ClubDetailedMember.newInstance(member);
+            Fragment newFragment = ClubDetailedMemberFragment.newInstance(member);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                     .replace(R.id.club_detailed_fragment_container, newFragment);
             transaction.commit();
         } else {
-            Fragment newFragment = ClubDetailedNotMember.newInstance();
+            Fragment newFragment = ClubDetailedNotMemberFragment.newInstance();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                     .replace(R.id.club_detailed_fragment_container, newFragment);
             transaction.commit();
