@@ -97,7 +97,7 @@ public class AdminOrganizationService {
         }
 
         if ( !member.hasPaid()) {
-            return Response.status(Response.Status.NO_CONTENT).entity("Has NOT paid").build();
+            return Response.status(Response.Status.PAYMENT_REQUIRED).entity("Has NOT paid").build();
         }
 
         return Response.ok().entity("Has paid").build();
