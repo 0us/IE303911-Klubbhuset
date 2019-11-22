@@ -1,6 +1,8 @@
 package no.ntnu.klubbhuset.ui.userviews.memberships;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -39,18 +41,20 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
 
     private String getIdToken() {
         // TODO get token from loggedinuser
-        return "https://www.ungspiller.no/tipsOgTriks/";
+        SharedPreferences preferences = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
+        return preferences.getString("token", null);
     }
 
     private void generateQRCode() {
         String token = getIdToken();
-        Bitmap bitmap = null;
-        bitmap = encodeAsBitmap(token);
-        if (bitmap != null) {
-            QRCode.setValue(bitmap);
-        }
-        else {
+        if (token != null) {
+            Bitmap bitmap = null;
+            bitmap = encodeAsBitmap(token);
+            if (bitmap != null) {
+                QRCode.setValue(bitmap);
+            } else {
 
+            }
         }
     }
 
