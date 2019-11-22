@@ -5,6 +5,9 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.Data;
+
+@Data
 public class Member implements Serializable {
 
     private boolean hasPaid;
@@ -18,25 +21,4 @@ public class Member implements Serializable {
         this.created = created;
     }
 
-    public Member(JSONObject json) {
-    }
-
-
-
-
-    public boolean isHasPaid() {
-        return hasPaid;
-    }
-
-    public boolean isNeedsToPay() {
-        return needsToPay;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
 }
