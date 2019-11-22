@@ -1,29 +1,19 @@
 package no.ntnu.klubbhuset.ui.userviews.club;
 
-import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Objects;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
-
-import static java.security.AccessController.getContext;
 
 public class ClubDetailedActivity extends AppCompatActivity {
 
@@ -66,5 +56,28 @@ public class ClubDetailedActivity extends AppCompatActivity {
 //                }
 //            });
 //        });
+    }
+
+
+    // TODO Finish this
+
+    /**
+     * This method has to be implemented to work with the vipps app.
+     * @param intent
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        String url = null;
+        if (intent != null && intent.getData() != null) {
+            try {
+                url = URLDecoder.decode(intent.getData().toString(), "UTF-8");
+                Uri parseUri = Uri.parse(url);
+                String status = parseUri.getQueryParameter("status");
+                // TODO handle status
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
