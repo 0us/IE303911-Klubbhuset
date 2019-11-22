@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.ui.userviews.club;
+package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -17,7 +17,10 @@ import android.widget.Button;
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 
-
+/**
+ * Displays information relating to a user who is NOT member of an organization,
+ * like a join button
+ */
 public class ClubDetailedNotMember extends Fragment {
 
     private ClubDetailedViewModel mViewModel;

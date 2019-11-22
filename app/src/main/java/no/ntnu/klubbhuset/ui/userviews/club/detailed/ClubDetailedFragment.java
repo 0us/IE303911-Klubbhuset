@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.ui.userviews.club;
+package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,16 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-
-import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
-import no.ntnu.klubbhuset.ui.userviews.memberships.list.ClubMembershipFragment;
 
 
 public class ClubDetailedFragment extends Fragment {

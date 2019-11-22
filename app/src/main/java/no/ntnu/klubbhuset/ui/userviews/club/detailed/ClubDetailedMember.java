@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.ui.userviews.club;
+package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 
 import no.ntnu.klubbhuset.R;
@@ -23,16 +21,15 @@ import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 
 
+/**
+ * Displays information relating to a users membership in an organization, like
+ * payment-information etc
+ */
 public class ClubDetailedMember extends Fragment {
 
     private ClubDetailedViewModel mViewModel;
     private Club club;
     private Member member;
-    private Button joinClubBtn;
-    private TextView name;
-    private TextView description;
-    private TextView url;
-    private TextView email;
 
     public static ClubDetailedMember newInstance(Member member) {
         Bundle args = new Bundle();
@@ -56,22 +53,12 @@ public class ClubDetailedMember extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
 
-        /*name = getView().findViewById(R.id.club_detailed_name);
-        description = getView().findViewById(R.id.club_detailed_description);
-        url = getView().findViewById(R.id.club_detailed_homepage);
-        email = getView().findViewById(R.id.club_detailed_email);
-
-        name.setText(club.getName());
-        description.setText(club.getDescription());
-        url.setText(club.getUrl());
-        email.setText(club.getEmailContact());*/
-
         TextView memberSince = getView().findViewById(R.id.club_detailed_member_since);
         SimpleDateFormat format  =new SimpleDateFormat("dd MMMM yyyy");
         memberSince.setText(format.format(member.getCreated()));
-        mViewModel.getMembership(club).observe(this, l-> {
+        /*mViewModel.getMembership(club).observe(this, l-> {
 
-        });
+        });*/
     }
 
 }

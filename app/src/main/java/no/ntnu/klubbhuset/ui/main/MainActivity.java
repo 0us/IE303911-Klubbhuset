@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.ui.userviews.club.ClubDetailedActivity;
+import no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedActivity;
 import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
 import no.ntnu.klubbhuset.ui.userviews.memberships.list.ClubMembershipFragment;
 

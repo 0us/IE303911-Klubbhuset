@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.ui.userviews.club;
+package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import android.app.Application;
 
@@ -98,6 +98,10 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         requestQueue.add(jar);
     }
 
+    /**
+     * @param json
+     * @return the membership with the highest access level Group
+     */
     private Member parseMembershipResponse(JSONArray json) {
         Member[] memberships = gson.fromJson(json.toString(), Member[].class);
         Member result = null;
@@ -113,6 +117,11 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         return result;
     }
 
+    /**
+     * get users membership status in given organization
+     * @param club
+     * @return
+     */
     public MutableLiveData<Member> getMembership(Club club) {
         loadMembership(club);
         return membership;
@@ -122,6 +131,11 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         return focusedClub;
     }
 
+    /**
+     * set the currently focused organization, for use with
+     * clubDetailedView
+     * @param currentClub
+     */
     public static void setCurrentClub(Club currentClub) {
         focusedClub = currentClub;
     }
