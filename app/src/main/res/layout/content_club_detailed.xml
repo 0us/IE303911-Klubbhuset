@@ -33,7 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-
             android:orientation="vertical">
 
             <TextView
@@ -51,7 +50,6 @@
                 android:id="@+id/club_detailed_membercount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_gravity="bottom|center_horizontal"
                 android:alpha="1"
                 android:text="xxx MEMBERS"
@@ -60,44 +58,48 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:typeface="normal" />
-
-
         </LinearLayout>
-
-
     </FrameLayout>
 
-    <Button
-        android:id="@+id/club_detailed_joinbtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/join_club"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
-    <Button
-        android:id="@+id/club_detailed_pay_membership_button"
-        android:text="@string/pay_with_vipps"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/club_detailed_button_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frameLayout"
-        android:visibility="gone"
-        android:enabled="false"
-        />
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/frameLayout">
+
+        <Button
+            android:id="@+id/club_detailed_joinbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/join_club"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/club_detailed_pay_membership_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@null"
+            android:contentDescription="@string/pay_with_vipps"
+            android:enabled="false"
+            android:src="@drawable/ic_betal_med_vipps___210px"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frameLayout" />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/club_detailed_joinbtn">
+        app:layout_constraintTop_toBottomOf="@+id/club_detailed_button_container">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
