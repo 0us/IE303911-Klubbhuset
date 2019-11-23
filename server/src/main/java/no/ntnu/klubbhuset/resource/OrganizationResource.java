@@ -4,6 +4,7 @@ import no.ntnu.klubbhuset.domain.Organization;
 import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.service.OrganizationService;
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
