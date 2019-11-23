@@ -13,7 +13,6 @@ public class CommunicationConfig {
     private static CommunicationConfig single_instance = null;
     private final Context context;
 
-
     private String host;
     public static String API_URL;
     public static String ORGANIZATION = "organization";
@@ -23,7 +22,14 @@ public class CommunicationConfig {
     public static final String MEMBERSHIP = "membership";
     public static final String PUBLIC_KEY = "publickey.pem";
     private static final String ADMIN = "admin";
+    private static final String VIPPS_URL = "https://apitest.vipps.no/";
+    private static final String ACCESS_TOKEN = "accessToken/get";
+
     private int port;
+    private String clientID;
+    private String clientSecret;
+    private String merchantSerialNumber;
+    private String ocpApimSubscriptionKey;
 
 
     public static CommunicationConfig getInstance() {
@@ -53,13 +59,21 @@ public class CommunicationConfig {
         return API_URL + ORGANIZATION + "/" +  id + "/" + JOIN;
     }
 
+    public static String getVippsTokenURL() {
+        return VIPPS_URL + ACCESS_TOKEN;
+    }
+
     public static String checkHasPaid(long id) {
         return API_URL + ORGANIZATION + "/" + id + "/" + ADMIN;
     }
 
     private void initializeValues() {
-        host = retrieveHost();
-        port = retrievePort();
+        this.host = retrieveHost();
+        this.port = retrievePort();
+        this.clientID = retrieveClientID();
+        this.clientSecret = retrieveClientSecret();
+        this.ocpApimSubscriptionKey = retrieveOcpApimSubscriptionKey();
+        this.merchantSerialNumber = retrieveMerchantSerialNumber();
         API_URL = "http://" + host + ":" + port + "/api/";
     }
 
@@ -69,5 +83,21 @@ public class CommunicationConfig {
 
     private String retrieveHost() {
         return prop.getProperty("host");
+    }
+
+    private String retrieveClientID() {
+     return prop.getProperty("client_id");
+    }
+
+    private String retrieveClientSecret() {
+        return prop.getProperty("client_secret");
+    }
+
+    private String retrieveOcpApimSubscriptionKey() {
+        return prop.getProperty("Ocp-Apim-Subscription-Key");
+    }
+
+    private String retrieveMerchantSerialNumber() {
+        return prop.getProperty("merchantSerialNumber");
     }
 }
