@@ -69,7 +69,7 @@ public class VippsService {
         queue.add(request);
     }
 
-    public void initiatePayment(int amount, int mobileNumber, String transactionText, String orderId) {
+    public void initiatePayment(double amount, long mobileNumber, String transactionText, String orderId) {
         final String METHOD_URL = VIPPS_API_URL + "/ecomm/v2/payments/";
         JSONObject details = new JSONObject();
 

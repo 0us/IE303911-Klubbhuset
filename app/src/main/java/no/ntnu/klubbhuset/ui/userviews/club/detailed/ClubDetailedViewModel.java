@@ -124,9 +124,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
      * @return
      */
     public MutableLiveData<Member> getMembership(Club club) {
-        if (membership == null) {
-            loadMembership(club);
-        }
+        loadMembership(club);
         return membership;
     }
 

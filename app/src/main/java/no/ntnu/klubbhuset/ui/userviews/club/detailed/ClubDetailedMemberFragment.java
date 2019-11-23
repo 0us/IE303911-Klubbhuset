@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +42,10 @@ import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.data.model.OrderId;
+import no.ntnu.klubbhuset.data.model.User;
+import no.ntnu.klubbhuset.service.VippsService;
+import no.ntnu.klubbhuset.ui.userviews.profile.UserViewModel;
+import no.ntnu.klubbhuset.data.model.OrderId;
 import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 
 
@@ -57,14 +63,21 @@ public class ClubDetailedMemberFragment extends Fragment {
     private ClubDetailedViewModel mViewModel;
     private Club club;
     private Member member;
-    private RequestQueue queue = Volley.newRequestQueue(getActivity());
+    private RequestQueue queue;
     private Properties properties = new Properties();
+    private View vippsBtn;
+    private ImageView paymentStatusImg;
+    private TextView paymentStatusText;
+    private TextView paymentDueDate;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+
 
     public static ClubDetailedMemberFragment newInstance(Member member) {
         Bundle args = new Bundle();
         args.putSerializable("member", member);
         ClubDetailedMemberFragment newInstance = new ClubDetailedMemberFragment();
         newInstance.setArguments(args);
+
         return newInstance;
     }
 
@@ -77,9 +90,9 @@ public class ClubDetailedMemberFragment extends Fragment {
 
         vippsBtn = view.findViewById(R.id.club_detailed_pay_with_vipps);
         paymentStatusImg = view.findViewById(R.id.club_detailed_paid_status_img);
-        paymentStatusHeader = view.findViewById(R.id.club_detailed_payment_status_text);
         paymentStatusText = view.findViewById(R.id.club_detailed_payment_status_description);
         paymentDueDate = view.findViewById(R.id.club_detailed_due_date);
+        queue = Volley.newRequestQueue(getActivity());
         return view;
     }
 
@@ -89,8 +102,7 @@ public class ClubDetailedMemberFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
 
         TextView memberSince = getView().findViewById(R.id.club_detailed_member_since);
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
-        memberSince.setText(format.format(member.getCreated()));
+        memberSince.setText(dateFormat.format(member.getCreated()));
 
         mViewModel.getMembership(club).observe(this, response -> {
             this.member = response;
@@ -102,7 +114,7 @@ public class ClubDetailedMemberFragment extends Fragment {
             } else {
                 vippsBtn.setVisibility(View.VISIBLE);
                 paymentStatusText.setText(getString(R.string.payment_false));
-                paymentDueDate.setText(new Date(0).toString()); // todo real get a date
+                paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
                 paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
             }
         });
@@ -136,6 +148,7 @@ public class ClubDetailedMemberFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
+                String vippsToken = ""; //todo TEMPORARY TOKEN SO I CAN COMPILE@!!@!!@!!
                 headers.put("Authorization", "Bearer " + vippsToken);
                 headers.put("Content-Type", "application/json");
                 headers.put("Ocp-Apim-Subscription-Key", properties.getProperty("Ocp-Apim-Subscription-Key"));
