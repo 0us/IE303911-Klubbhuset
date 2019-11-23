@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import no.ntnu.klubbhuset.data.CommunicationConfig;
+
 public class VippsPaymentDetails {
     String mobileNummer;
     OrderId orderId;
@@ -28,8 +30,9 @@ public class VippsPaymentDetails {
         customerInfo.addProperty("mobileNumber", mobileNummer);
 
         JsonObject merchantInfo = new JsonObject();
-        merchantInfo.addProperty("callbackPrefix", ); //fixme
-        merchantInfo.addProperty("fallbackPrefix", ); //fixme
+
+        merchantInfo.addProperty("callbackPrefix", CommunicationConfig.API_URL); //fixme
+        merchantInfo.addProperty("fallbackPrefix", "no.ntnu.klubbhuset."); //fixme
         merchantInfo.addProperty("isApp", true);
         merchantInfo.addProperty("merchantSerialNumber", merchantSerialNumber);
 

@@ -19,14 +19,19 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="sampleApps" />
+
+                <data
+                    android:scheme="http"
+                    android:host="158.38.101.208"
+                    android:pathPrefix="/fallback" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login"/>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".ui.managerviews.ManagerActivity"
             android:label="@string/title_activity_manager" />
