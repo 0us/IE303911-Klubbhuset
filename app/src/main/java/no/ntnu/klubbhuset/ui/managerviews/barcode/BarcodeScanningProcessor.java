@@ -5,11 +5,12 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Base64;
 import android.util.Log;
 
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
@@ -29,8 +30,6 @@ import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
 
 import java.io.IOException;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
@@ -44,14 +43,21 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
 
     private final FirebaseVisionBarcodeDetector detector;
     private final Context context;
+    private final BarcodeViewModel barcodeViewModel;
+    private final BarcodeScannerActivity activity;
+    private MutableLiveData<String> userStatus = new MutableLiveData<>();
 
-    public BarcodeScanningProcessor(Context context) {
+    public BarcodeScanningProcessor(Context context, BarcodeScannerActivity barcodeScannerActivity) {
         this.context = context;
+        this.activity = barcodeScannerActivity;
         FirebaseVisionBarcodeDetectorOptions options =
                 new FirebaseVisionBarcodeDetectorOptions.Builder()
                         .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_QR_CODE)
                         .build();
         detector = FirebaseVision.getInstance().getVisionBarcodeDetector(options);
+
+        barcodeViewModel = ViewModelProviders.of(barcodeScannerActivity).get(BarcodeViewModel.class);
+
     }
 
     @Override
@@ -107,20 +113,16 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
                 }
 
                 // Retrieve the membership status of user
-                retrieveMemberShipStatus(email);
-
-                // Draw graphic onto the screen
-                BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, email);
-                graphicOverlay.add(barcodeGraphic);
+                barcodeViewModel.getUserPaymentStatus(email).observe(activity, s -> {
+                    // Draw graphic onto the screen
+                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, s);
+                    graphicOverlay.add(barcodeGraphic);
+                });
             }
         }
         graphicOverlay.postInvalidate();
     }
 
-    private void retrieveMemberShipStatus(String email) {
-
-
-    }
 
     @Override
     protected void onFailure(@NonNull Exception e) {
@@ -136,24 +138,22 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
      * @param key public key in string format
      * @return Public Key object
      */
-    private static PublicKey getKey(String key){
+    private static PublicKey getKey(String key) {
         if (key.contains("-----BEGIN PUBLIC KEY-----")
                 || key.contains("-----END PUBLIC KEY-----")) {
             key = key.replace("-----BEGIN PUBLIC KEY-----", "");
             key = key.replace("-----END PUBLIC KEY-----", "");
         }
-        try{
+        try {
             byte[] byteKey = Base64.decode(key.getBytes(), Base64.DEFAULT);
             X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
             KeyFactory kf = KeyFactory.getInstance("RSA");
 
             return kf.generatePublic(X509publicKey);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
-
 }

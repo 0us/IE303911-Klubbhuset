@@ -22,6 +22,7 @@ public class CommunicationConfig {
     public static final String USER = "user";
     public static final String MEMBERSHIP = "membership";
     public static final String PUBLIC_KEY = "publickey.pem";
+    private static final String ADMIN = "admin";
     private int port;
 
 
@@ -50,6 +51,10 @@ public class CommunicationConfig {
 
     public static String joinClub(long id) {
         return API_URL + ORGANIZATION + "/" +  id + "/" + JOIN;
+    }
+
+    public static String checkHasPaid(long id) {
+        return API_URL + ORGANIZATION + "/" + id + "/" + ADMIN;
     }
 
     private void initializeValues() {

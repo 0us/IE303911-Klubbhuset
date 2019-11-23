@@ -61,7 +61,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         Context context = getApplicationContext();
 
         // Setup the processor for scanning Barcodes
-        cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor(context));
+        cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor(context, this));
         try {
             preview.start(cameraSource, graphicOverlay);
         } catch (IOException e) {
