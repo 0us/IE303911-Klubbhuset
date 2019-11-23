@@ -56,6 +56,10 @@
     <string name="pref_key_live_preview_automl_remote_model_choices" translatable="false">lparmc</string>
     <string name="pref_entries_automl_models_local">Local</string>
     <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
+    <string name="about">About</string>
+    <string name="contact">Contact</string>
+    <string name="member_since">Member since</string>
+    <string name="payment_due">Your next payment is due in </string>
     <string name="invalid_email">Not a valid email</string>
     <string name="organization_name_not_empty">Organization name can not be empty</string>
     <string name="scan_a_new_qr_code">Scan a new QR code</string>

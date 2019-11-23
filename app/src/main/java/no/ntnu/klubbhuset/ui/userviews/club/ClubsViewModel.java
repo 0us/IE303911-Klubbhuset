@@ -13,18 +13,22 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.MEMBERSHIP;
 import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
 
 public class ClubsViewModel extends AndroidViewModel {
@@ -32,11 +36,14 @@ public class ClubsViewModel extends AndroidViewModel {
 
     RequestQueue requestQueue;
     private MutableLiveData<Club> selectedClub = new MutableLiveData<>();
-
+    private MutableLiveData<Member> membership = new MutableLiveData<>();
+    private Club currentClub;
+    private Gson gson;
 
     public ClubsViewModel(Application context) {
         super(context);
         requestQueue = Volley.newRequestQueue(context);
+        gson = new Gson();
     }
 
     public LiveData<List<Club>> getClubs() {
@@ -47,7 +54,9 @@ public class ClubsViewModel extends AndroidViewModel {
         return clubs;
     }
 
-    public LiveData<Club> getSelectedClub() { return selectedClub; }
+    public LiveData<Club> getSelectedClub() {
+        return selectedClub;
+    }
 
     public void setSelectedClub(Club selectedClub) {
         this.selectedClub.setValue(selectedClub);
@@ -74,5 +83,9 @@ public class ClubsViewModel extends AndroidViewModel {
             }
         };
         requestQueue.add(jar);
+    }
+
+    public void joinClub(Club club) {
+
     }
 }

@@ -5,7 +5,7 @@
     android:id="@+id/club_detailed_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.userviews.club.ClubDetailedFragment">
+    tools:context=".ui.userviews.club.detailed.ClubDetailedFragment">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/club_banner"
             android:layout_width="fill_parent"
-            android:layout_height="256dp"
+            android:layout_height="170dp"
             android:background="@drawable/banner_gradient"
             android:scaleType="fitXY"
             tools:src="@tools:sample/backgrounds/scenic" />
@@ -26,7 +26,7 @@
         <ImageView
             android:id="@+id/banner_gradient"
             android:layout_width="fill_parent"
-            android:layout_height="256dp"
+            android:layout_height="170dp"
             android:src="@drawable/banner_gradient" />
 
         <LinearLayout
@@ -67,24 +67,28 @@
 
     </FrameLayout>
 
-    <Button
-        android:id="@+id/club_detailed_joinbtn"
+    <FrameLayout
+        android:id="@+id/club_detailed_fragment_container"
+        android:name="no.ntnu.klubbhuset.ui.userviews.club.ClubDetailedNotMember"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/join_club"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/club_detailed_info_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+        tools:layout="@layout/content_club_detailed_not_member" />
 
     <ScrollView
+        android:id="@+id/club_detailed_info_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/club_detailed_joinbtn">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -104,6 +108,12 @@
                 android:background="?android:attr/listDivider" />
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/club_detailed_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,10 +121,16 @@
                 android:textAlignment="viewStart" />
 
             <TextView
-                android:id="@+id/club_detailed_homepage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:text="@string/contact"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/club_detailed_homepage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="www.ungspiller.no" />
 
             <TextView
