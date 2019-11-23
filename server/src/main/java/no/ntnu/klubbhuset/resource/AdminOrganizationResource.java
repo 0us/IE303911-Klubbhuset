@@ -45,6 +45,6 @@ public class AdminOrganizationResource {
 
     @POST
     public Response hasMemberPaid(User user) {
-        return adminOrganizationService.harMemberPaid(organizationId, user);
+        return adminOrganizationService.hasMemberPaid(organizationId, user);
     }
 }

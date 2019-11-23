@@ -7,7 +7,6 @@ import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -77,8 +76,7 @@ public class AdminOrganizationService {
         return result;
     }
 
-    @PermitAll
-    public Response harMemberPaid(Long organizationId, User user) {
+    public Response hasMemberPaid(Long organizationId, User user) {
         System.out.println("AdminOrganizationService.harMemberPaid");
         Member member;
         Organization organization = entityManager.find(Organization.class, organizationId);
