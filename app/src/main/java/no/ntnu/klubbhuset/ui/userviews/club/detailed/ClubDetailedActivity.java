@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +38,10 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                 .replace(R.id.club_detailed_fragment_container, newFragment);
         transaction.commit();
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
     }
 
 
