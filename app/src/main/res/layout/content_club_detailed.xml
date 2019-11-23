@@ -62,38 +62,6 @@
     </FrameLayout>
 
 
-    <LinearLayout
-        android:id="@+id/club_detailed_button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/frameLayout">
-
-        <Button
-            android:id="@+id/club_detailed_joinbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="32dp"
-            android:text="@string/join_club"
-            android:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/club_detailed_pay_membership_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="@null"
-            android:contentDescription="@string/pay_with_vipps"
-            android:enabled="false"
-            android:src="@drawable/ic_betal_med_vipps___210px"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/frameLayout" />
-    </LinearLayout>
-
     <FrameLayout
         android:id="@+id/club_detailed_fragment_container"
         android:name="no.ntnu.klubbhuset.ui.userviews.club.ClubDetailedNotMember"

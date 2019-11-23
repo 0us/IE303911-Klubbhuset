@@ -28,6 +28,11 @@ public class VippsService {
     private static final String VIPPS_SRING = "vipps";
     private static final String merchantSerialNumber = "";
 
+    // TEMPORARY VALUES SO I CAN COMPILE
+    private static final String callbackPrefix = ""; // todo
+    private static final String fallBack = ""; // todo
+    private static final String transactionText = ""; // todo
+
 
     private RequestQueue queue;
     private Context context; // calling class needs to give context;

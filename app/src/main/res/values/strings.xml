@@ -44,7 +44,9 @@
     <string name="payment_due">Your next payment is due in </string>
     <string name="invalid_email">Not a valid email</string>
     <string name="has_paid">Has paid</string>
-    <string name="next_payment_due">Payment due</string>
+    <string name="payment_status">Payment status</string>
+    <string name="payment_false">Next Payment is due</string>
+    <string name="payment_true">All good!</string>
 
     <string name="contact_email">Contact Email</string>
     <string name="organization_name_not_empty">Organization name can not be empty</string>

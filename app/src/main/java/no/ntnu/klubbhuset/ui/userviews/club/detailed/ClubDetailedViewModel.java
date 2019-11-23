@@ -119,11 +119,14 @@ public class ClubDetailedViewModel extends AndroidViewModel {
 
     /**
      * get users membership status in given organization
+     *
      * @param club
      * @return
      */
     public MutableLiveData<Member> getMembership(Club club) {
-        loadMembership(club);
+        if (membership == null) {
+            loadMembership(club);
+        }
         return membership;
     }
 
@@ -134,6 +137,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
     /**
      * set the currently focused organization, for use with
      * clubDetailedView
+     *
      * @param currentClub
      */
     public static void setCurrentClub(Club currentClub) {
