@@ -20,6 +20,7 @@ public class CommunicationConfig {
     public static final String LOGIN = "auth";
     public static final String JOIN = "join";
     public static final String USER = "user";
+    public static final String PUBLIC_KEY = "publickey.pem";
     private int port;
 
 
