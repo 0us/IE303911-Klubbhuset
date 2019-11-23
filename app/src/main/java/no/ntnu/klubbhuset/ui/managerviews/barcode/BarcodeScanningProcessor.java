@@ -1,17 +1,14 @@
 package no.ntnu.klubbhuset.ui.managerviews.barcode;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -21,19 +18,22 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOption
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 import no.ntnu.klubbhuset.util.mlkit.CameraImageGraphic;
 import no.ntnu.klubbhuset.util.mlkit.FrameMetadata;
 import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
 
 import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
-
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
 
 /**
  * Barcode Detector Demo.
@@ -88,17 +88,29 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
                     Log.e("BarcodeScanner", "No public key to be found");
                     continue;
                 }
+                // Retrieves the public key object from string
+                PublicKey pk = getKey(publickey);
 
                 // Get Barcode
                 FirebaseVisionBarcode barcode = barcodes.get(i);
+                String token = barcode.getDisplayValue();
 
                 // Retrieve claims from QR-Code
-                Jwt<Header, Claims> claims = Jwts.parser().setSigningKey(publickey).parseClaimsJwt(barcode.getDisplayValue());
+                Jws<Claims> jws;
+                String email = "";
+                try {
+                    JwtParser parser = Jwts.parser().setSigningKey(pk);
+                    jws = parser.parseClaimsJws(token);
+                    email = jws.getBody().getSubject();
+                } catch (JwtException je) {
+                    je.printStackTrace();
+                }
 
-                String email = claims.getBody().getIssuer();
+                // Retrieve the membership status of user
                 retrieveMemberShipStatus(email);
 
-                BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode);
+                // Draw graphic onto the screen
+                BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, email);
                 graphicOverlay.add(barcodeGraphic);
             }
         }
@@ -107,10 +119,41 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
 
     private void retrieveMemberShipStatus(String email) {
 
+
     }
 
     @Override
     protected void onFailure(@NonNull Exception e) {
         Log.e(TAG, "Barcode detection failed " + e);
     }
+
+    /**
+     * Creates a PublicKey object from a Base64Encoded string (key), also checking if the key
+     * contains some common unnecessary values. This method converts the given key to a byte[],
+     * creates a new X509EncodedKeySpec of the byte[], retrieves a new KeyFactory instance for
+     * RSA and then generates the Public Key object.
+     *
+     * @param key public key in string format
+     * @return Public Key object
+     */
+    private static PublicKey getKey(String key){
+        if (key.contains("-----BEGIN PUBLIC KEY-----")
+                || key.contains("-----END PUBLIC KEY-----")) {
+            key = key.replace("-----BEGIN PUBLIC KEY-----", "");
+            key = key.replace("-----END PUBLIC KEY-----", "");
+        }
+        try{
+            byte[] byteKey = Base64.decode(key.getBytes(), Base64.DEFAULT);
+            X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+
+            return kf.generatePublic(X509publicKey);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

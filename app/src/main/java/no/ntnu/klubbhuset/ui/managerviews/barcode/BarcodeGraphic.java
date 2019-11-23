@@ -32,11 +32,13 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
   private final Paint rectPaint;
   private final Paint barcodePaint;
   private final FirebaseVisionBarcode barcode;
+  private final String text;
 
-  BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode) {
+  BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode, String text) {
     super(overlay);
 
     this.barcode = barcode;
+    this.text = text;
 
     rectPaint = new Paint();
     rectPaint.setColor(TEXT_COLOR);
@@ -66,6 +68,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     canvas.drawRect(rect, rectPaint);
 
     // Renders the barcode at the bottom of the box.
-    canvas.drawText(barcode.getRawValue(), rect.left, rect.bottom, barcodePaint);
+    canvas.drawText(text, rect.left, rect.bottom, barcodePaint);
   }
 }
