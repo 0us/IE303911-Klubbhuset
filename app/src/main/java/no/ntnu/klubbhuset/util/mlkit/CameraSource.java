@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import no.ntnu.klubbhuset.ui.managerviews.barcode.VisionImageProcessor;
+import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 /**
  * Manages the camera and allows UI updates on top of it (e.g. overlaying extra Graphics or

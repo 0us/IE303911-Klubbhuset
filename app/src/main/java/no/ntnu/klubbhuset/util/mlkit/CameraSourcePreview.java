@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.images.Size;
 import java.io.IOException;
 
+import no.ntnu.klubbhuset.util.PreferenceUtils;
+
 /** Preview the camera image in the screen. */
 public class CameraSourcePreview extends ViewGroup {
   private static final String TAG = "MIDemoApp:Preview";
