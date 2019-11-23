@@ -92,7 +92,7 @@ public class ManagerViewModel extends AndroidViewModel {
     }
 
     private void loadManagedClubs() {
-        String url = API_URL + ORGANIZATION + "/owned";
+        String url = API_URL + ORGANIZATION + "/managed";
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     List<Club> clubs = new ArrayList<>();
