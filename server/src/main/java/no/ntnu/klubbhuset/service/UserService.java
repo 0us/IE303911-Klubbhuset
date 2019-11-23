@@ -82,7 +82,8 @@ public class UserService {
         }
         SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
         user.addSecurityGroup(securityGroup);
-        user.setPassword(hasher.generate(user.getPassword().toCharArray()));
+        String hashedpw = hasher.generate(user.getPassword().toCharArray());
+        user.setPassword(hashedpw);
         entityManager.persist(user);
 
         return Response.status(Response.Status.CREATED).build();

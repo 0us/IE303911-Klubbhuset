@@ -7,13 +7,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.userviews.club.ClubDetailedActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".ui.userviews.club.detailed.ClubDetailedActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.login.LoginActivity"
