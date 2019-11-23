@@ -59,8 +59,13 @@ public class Member implements Serializable {
     private boolean hasPaid;
     private boolean needsToPay;
 
+    public boolean hasPaid() {
+        return hasPaid;
+    }
+
     @Override
     public String toString(){
-        return null;
+        String template = "email: %s, organization: %s and hasPaid: %s";
+        return String.format(template, getUser().getEmail(), getOrganization().getName(), hasPaid());
     }
 }
