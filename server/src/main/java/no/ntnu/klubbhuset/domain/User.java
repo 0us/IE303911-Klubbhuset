@@ -25,6 +25,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +44,7 @@ import java.util.Set;
 public class User implements Serializable {
 
     public void addSecurityGroup(SecurityGroup securityGroup) {
-        if ( securityGroups == null ) {
+        if (securityGroups == null) {
             securityGroups = new ArrayList<>();
         }
         securityGroups.add(securityGroup);
@@ -105,12 +106,12 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        if(getEmail() != null && getFirstName() != null && getLastName() != null) {
+        try {
             String template = "email: %s, firstname: %s and lastname: %s";
             return String.format(template, getEmail(), getFirstName(), getLastName());
+        } catch (NullPointerException ne) {
+            return "User has not been fully initialized";
         }
-
-        return "User has not been fully initialized";
     }
 
 
