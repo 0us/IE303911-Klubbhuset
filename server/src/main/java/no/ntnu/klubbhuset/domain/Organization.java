@@ -1,11 +1,21 @@
 package no.ntnu.klubbhuset.domain;
 
-import lombok.*;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -52,6 +62,11 @@ public class Organization implements Serializable {
 
     @Override
     public String toString() {
-        return "";
+        try {
+            String template = "name: %s, emailcontact: %s and priceofmembership: %s";
+            return String.format(template, getName(), getEmailContact(), getPriceOfMembership());
+        } catch (NullPointerException ne) {
+            return "Organization has not been fully initialized";
+        }
     }
 }

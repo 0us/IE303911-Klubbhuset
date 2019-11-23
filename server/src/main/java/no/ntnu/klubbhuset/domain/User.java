@@ -1,12 +1,38 @@
 package no.ntnu.klubbhuset.domain;
 
-import java.io.Serializable;
-import java.util.*;
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.*;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.validation.constraints.Null;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 @Entity
@@ -18,7 +44,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class User implements Serializable {
 
     public void addSecurityGroup(SecurityGroup securityGroup) {
-        if(securityGroups == null) {
+        if (securityGroups == null) {
             securityGroups = new ArrayList<>();
         }
         securityGroups.add(securityGroup);
@@ -32,9 +58,12 @@ public class User implements Serializable {
     @Id
     private String email;
 
-    @JsonIgnore
-    @JsonbTransient
     private String password;
+
+    @JsonbTransient
+    public String getPassword() {
+        return password;
+    }
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date joined;
@@ -70,13 +99,20 @@ public class User implements Serializable {
 
     @JsonbTransient
     @ManyToMany
-    @JoinTable(name="USERSECURITYROLES",
-            joinColumns = @JoinColumn(name="email", referencedColumnName = "email"),
-            inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
+    @JoinTable(name = "USERSECURITYROLES",
+            joinColumns = @JoinColumn(name = "email", referencedColumnName = "email"),
+            inverseJoinColumns = @JoinColumn(name = "name", referencedColumnName = "name"))
     List<SecurityGroup> securityGroups;
 
     @Override
     public String toString() {
-        return "";
+        try {
+            String template = "email: %s, firstname: %s and lastname: %s";
+            return String.format(template, getEmail(), getFirstName(), getLastName());
+        } catch (NullPointerException ne) {
+            return "User has not been fully initialized";
+        }
     }
+
+
 }

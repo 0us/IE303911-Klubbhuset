@@ -1,13 +1,19 @@
 package no.ntnu.klubbhuset.domain;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.*;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "ORG_GROUP")
@@ -17,18 +23,24 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @NoArgsConstructor
 //@EqualsAndHashCode(exclude = "users")
 public class Group implements Serializable {
+    @JsonbTransient
     public static final String USER = "user";
+    @JsonbTransient
     public static final String ADMIN = "admin";
+    @JsonbTransient
     public static final String[] GROUPS = {USER, ADMIN};
 
     @Id
     @GeneratedValue
+    @JsonIgnore
+    @JsonbTransient
     private Long gid;
 
     private String name;
 
     @JsonIgnore
     @OneToMany(mappedBy = "group")
+    @JsonbTransient
     Set<Member> members;
 
     public Group(String name) {
@@ -37,6 +49,9 @@ public class Group implements Serializable {
 
     @Override
     public String toString() {
-        return "";
+        if(name == null) {
+            name = "no name";
+        }
+        return getClass().getSimpleName() + name;
     }
 }
