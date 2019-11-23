@@ -75,4 +75,29 @@ public class AdminOrganizationService {
 
         return result;
     }
+
+    public Response hasMemberPaid(Long organizationId, User user) {
+        System.out.println("AdminOrganizationService.harMemberPaid");
+        Member member;
+        Organization organization = entityManager.find(Organization.class, organizationId);
+        TypedQuery<Member> query = entityManager.createQuery("SELECT m from Member m "
+                        + "where m.organization = :organization "
+                        + "and m.user = :user"
+                , Member.class
+        );
+        query.setParameter("user", user);
+        query.setParameter("organization", organization);
+        try {
+            member = query.getSingleResult();
+        } catch (NoResultException e) {
+            e.getMessage();
+            return Response.status(Response.Status.NO_CONTENT).entity("Is not a member").build();
+        }
+
+        if ( !member.hasPaid()) {
+            return Response.status(Response.Status.PAYMENT_REQUIRED).entity("Has NOT paid").build();
+        }
+
+        return Response.ok().entity("Has paid").build();
+    }
 }

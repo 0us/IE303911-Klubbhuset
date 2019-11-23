@@ -10,6 +10,7 @@ import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -125,17 +126,17 @@ public class OrganizationService {
      */
     public Response joinOrganization(Long organizationId) {
 
-        //Getting organization
-        Organization organization = entityManager.find(Organization.class, organizationId);
-
         // Getting user
         User user = getUserFromPrincipal();
+
+        //Getting organization
+        Organization organization = entityManager.find(Organization.class, organizationId);
 
         if (isAlreadyMember(organizationId, user)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
-        doJoinOrganization(organization, user, getGroup(Group.USER));
-        return Response.status(Response.Status.CREATED).entity("User was added to organization").build(); // todo return better feedback
+        Member member = doJoinOrganization(organization, user, getGroup(Group.USER));
+        return getMembership(organizationId); // todo return better feedback
     }
 
     /**
@@ -199,6 +200,10 @@ public class OrganizationService {
         coupleImageAndOrganization(org, avatar);
     }
 
+    /**
+     * Fetch all orgs where current user is admin
+     * @return
+     */
     public Response getOwnedOrganizationsForUser() {
         User user = getUserFromPrincipal();
 
@@ -209,6 +214,26 @@ public class OrganizationService {
                 .getResultList();
 
         return Response.ok(organizations).build();
+    }
+
+    /**
+     * get every membership for current user in given org, since users can
+     * for example be both an admin and a user in an organization.
+     * @param oid
+     * @return
+     */
+    public Response getMembership(long oid) {
+        User user = getUserFromPrincipal();
+        Organization organization = entityManager.find(Organization.class, oid);
+        List<Member> memberships = entityManager.createQuery(
+                "select m from Member m where m.user = :user and m.organization = :organization")
+                .setParameter("user", user)
+                .setParameter("organization", organization)
+                .getResultList();
+        if (memberships == null || memberships.isEmpty()) {
+            return Response.noContent().build();
+        }
+        return Response.ok(memberships).build();
     }
 
     // --- Private methods below --- //
@@ -262,7 +287,14 @@ public class OrganizationService {
         return false;
     }
 
-    private void doJoinOrganization(Organization org, User user, Group group) {
+    /**
+     * Creates and persists new member object
+     * @param org
+     * @param user
+     * @param group
+     * @return
+     */
+    private Member doJoinOrganization(Organization org, User user, Group group) {
         Member member = new Member();
         System.out.println(member);
         member.setUser(user);
@@ -271,5 +303,6 @@ public class OrganizationService {
         member.setOrganization(org);
         System.out.println(member);
         entityManager.persist(member);
+        return member;
     }
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.codehaus.jackson.map.annotate.JsonFilter;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.EmbeddedId;
@@ -23,14 +24,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@JsonFilter("beanFilter")
 public class Member implements Serializable {
 
     @EmbeddedId
+    @JsonbTransient
     MemberKey id;
 
     @ManyToOne
     @MapsId("email")
     @JoinColumn(name = "email")
+    @JsonbTransient
     private User user;
 
     @JsonbTransient
@@ -39,7 +43,6 @@ public class Member implements Serializable {
     @JoinColumn(name = "oid")
     private Organization organization;
 
-    @JsonbTransient
     @ManyToOne
     @MapsId("gid")
     @JoinColumn(name = "gid")
@@ -56,8 +59,13 @@ public class Member implements Serializable {
     private boolean hasPaid;
     private boolean needsToPay;
 
+    public boolean hasPaid() {
+        return hasPaid;
+    }
+
     @Override
     public String toString(){
-        return null;
+        String template = "email: %s, organization: %s and hasPaid: %s";
+        return String.format(template, getUser().getEmail(), getOrganization().getName(), hasPaid());
     }
 }
