@@ -56,10 +56,12 @@
     <string name="pref_key_live_preview_automl_remote_model_choices" translatable="false">lparmc</string>
     <string name="pref_entries_automl_models_local">Local</string>
     <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
+    <string name="invalid_email">Not a valid email</string>
+    <string name="organization_name_not_empty">Organization name can not be empty</string>
+    <string name="scan_a_new_qr_code">Scan a new QR code</string>
+    <string name="authenticate_user">Authenticate user</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="contact_email">Contact Email</string>
-    <string name="scan_a_new_qr_code">Scan a new QR code</string>
-    <string name="authenticate_user">Authenticate user</string>
 </resources>
