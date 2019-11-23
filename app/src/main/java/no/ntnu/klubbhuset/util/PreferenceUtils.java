@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.util.mlkit;
+package no.ntnu.klubbhuset.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,9 +13,14 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import com.google.firebase.ml.vision.objects.FirebaseVisionObjectDetectorOptions;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.util.mlkit.CameraSource;
 
 /** Utility class to retrieve shared preferences. */
 public class PreferenceUtils {
+
+    private static final String PREF_FILE_AUTH = "auth";
+    private static final String PREF_PUBLIC_KEY = "public_key";
+    public static final String PREF_NO_FILE_FOUND = "NO_FILE";
 
     static void saveString(Context context, @StringRes int prefKeyId, @Nullable String value) {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -184,5 +189,27 @@ public class PreferenceUtils {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String prefKey = context.getString(R.string.pref_key_camera_live_viewport);
         return sharedPreferences.getBoolean(prefKey, false);
+    }
+
+    /**
+     * Saves public key to shared preferences
+     *
+     * @param publicKey The public key to save
+     */
+    public static void setPublicKey(String publicKey, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_AUTH, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(PREF_PUBLIC_KEY, publicKey).apply();
+    }
+
+    /**
+     * Retrieves the public key from shared preferences, if the public key can't be found
+     * {PREF_NO_FILE_FOUND} will be returned.
+     *
+     * @param context the context
+     * @return The public key or {PREF_NO_FILE_FOUND}
+     */
+    public static String getPublicKey(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_AUTH, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(PREF_PUBLIC_KEY, PREF_NO_FILE_FOUND);
     }
 }
