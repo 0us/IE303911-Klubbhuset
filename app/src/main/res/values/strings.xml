@@ -43,9 +43,9 @@
     <string name="member_since">Member since</string>
     <string name="payment_due">Your next payment is due in </string>
     <string name="invalid_email">Not a valid email</string>
+    <string name="has_paid">Has paid</string>
+    <string name="next_payment_due">Payment due</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="contact_email">Contact Email</string>
     <string name="organization_name_not_empty">Organization name can not be empty</string>
     <string name="pay_with_vipps">Pay with vipps</string>

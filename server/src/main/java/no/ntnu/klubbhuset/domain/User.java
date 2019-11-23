@@ -4,16 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.io.Serializable;
-import java.util.*;
-import javax.json.bind.annotation.JsonbProperty;
-import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.*;
-
-import lombok.*;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
@@ -114,8 +105,12 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        String template = "email: %s, firstname: %s and lastname: %s";
-        return String.format(template, getEmail(), getFirstName(), getLastName());
+        if(getEmail() != null && getFirstName() != null && getLastName() != null) {
+            String template = "email: %s, firstname: %s and lastname: %s";
+            return String.format(template, getEmail(), getFirstName(), getLastName());
+        }
+
+        return "User has not been fully initialized";
     }
 
 
