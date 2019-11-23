@@ -65,7 +65,11 @@ public class Member implements Serializable {
 
     @Override
     public String toString(){
-        String template = "email: %s, organization: %s and hasPaid: %s";
-        return String.format(template, getUser().getEmail(), getOrganization().getName(), hasPaid());
+        if (getUser().getEmail() != null && getOrganization().getName() != null) {
+            String template = "email: %s, organization: %s and hasPaid: %s";
+            return String.format(template, getUser().getEmail(), getOrganization().getName(), hasPaid());
+        }
+
+        return "member not initialized with User, Organization";
     }
 }
