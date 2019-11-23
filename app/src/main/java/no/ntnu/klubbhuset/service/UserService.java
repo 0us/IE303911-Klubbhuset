@@ -17,6 +17,7 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.USER;
 public class UserService {
     private static final String TAG = "UserService";
     RequestQueue queue; // fixme needs context
+
     final String URL =  API_URL + USER;// todo needs other domain
 
     public UserService(Context context) {

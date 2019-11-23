@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import lombok.NoArgsConstructor;
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.ui.login.LoginViewModel;
 
 @NoArgsConstructor
 public class LoginFragment extends Fragment {
@@ -90,7 +88,6 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d(TAG, "afterTextChanged: triggered");
                 loginViewModel.loginDataChanged(username.getText().toString(),
                         password.getText().toString());
             }
