@@ -95,7 +95,7 @@
                 android:id="@+id/profile_manage_orgs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
+                android:background="?android:selectableItemBackground"
                 android:drawableStart="@drawable/ic_work_black_24dp"
                 android:drawablePadding="32dp"
                 android:gravity="start|center_vertical"
@@ -114,12 +114,13 @@
                 android:id="@+id/btn_sign_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
+                android:background="?android:selectableItemBackground"
                 android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
                 android:drawablePadding="32dp"
                 android:gravity="start|center_vertical"
                 android:paddingStart="16dp"
-                android:text="@string/sign_out" />
+                android:text="@string/sign_out"
+                />
 
         </LinearLayout>
     </ScrollView>

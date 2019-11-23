@@ -90,9 +90,11 @@ public class AdminOrganizationService {
         try {
             member = query.getSingleResult();
         } catch (NoResultException e) {
-            e.getMessage();
-            return Response.status(Response.Status.NO_CONTENT).entity("Is not a member").build();
+            System.out.println(e.getMessage());
+            return Response.status(Response.Status.NO_CONTENT.getStatusCode(), "Is not a member").build();
         }
+        System.out.println(member);
+
 
         if ( !member.hasPaid()) {
             return Response.status(Response.Status.PAYMENT_REQUIRED).entity("Has NOT paid").build();
