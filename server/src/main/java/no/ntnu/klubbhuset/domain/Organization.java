@@ -62,7 +62,11 @@ public class Organization implements Serializable {
 
     @Override
     public String toString() {
-        String template = "name: %s, emailcontact: %s and priceofmembership: %s";
-        return String.format(template, getName(), getEmailContact(), getPriceOfMembership());
+        if(getName() != null && getEmailContact() != null && getPriceOfMembership() != null ) {
+            String template = "name: %s, emailcontact: %s and priceofmembership: %s";
+            return String.format(template, getName(), getEmailContact(), getPriceOfMembership());
+        }
+
+        return "Organization has not been fully initialized";
     }
 }
