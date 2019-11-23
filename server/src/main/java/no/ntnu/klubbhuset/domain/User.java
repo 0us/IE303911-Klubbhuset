@@ -2,11 +2,14 @@ package no.ntnu.klubbhuset.domain;
 
 import java.io.Serializable;
 import java.util.*;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 
 import lombok.*;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 
 @Entity
@@ -32,9 +35,12 @@ public class User implements Serializable {
     @Id
     private String email;
 
-    @JsonIgnore
-    @JsonbTransient
     private String password;
+
+    @JsonbTransient
+    public String getPassword() {
+        return password;
+    }
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date joined;
@@ -79,4 +85,6 @@ public class User implements Serializable {
     public String toString() {
         return "";
     }
+
+
 }
