@@ -58,4 +58,7 @@ dependencies {
     }
 
     implementation 'com.github.hardillb:MultiPartVolley:0.0.3'
+
+    // Google gson
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
