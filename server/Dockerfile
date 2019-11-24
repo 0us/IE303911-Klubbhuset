@@ -6,4 +6,4 @@ RUN cp /opt/payara/appserver/mysql-connector-java-5.1.48.jar /opt/payara/appserv
 ENV ADMIN_PASSWORD password
 
 
-COPY ./target/Klubbhuset.war $DEPLOY_DIR/ROOT.war
+COPY ./target/Klubbhuset.war $DEPLOY_DIR
