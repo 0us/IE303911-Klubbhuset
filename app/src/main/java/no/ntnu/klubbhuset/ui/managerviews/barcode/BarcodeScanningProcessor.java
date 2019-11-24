@@ -27,6 +27,7 @@ import no.ntnu.klubbhuset.util.PreferenceUtils;
 import no.ntnu.klubbhuset.util.mlkit.CameraImageGraphic;
 import no.ntnu.klubbhuset.util.mlkit.FrameMetadata;
 import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
+import no.ntnu.klubbhuset.viewmodels.BarcodeViewModel;
 
 import java.io.IOException;
 import java.security.KeyFactory;

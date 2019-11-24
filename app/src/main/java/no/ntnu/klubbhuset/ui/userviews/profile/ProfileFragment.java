@@ -1,12 +1,9 @@
 package no.ntnu.klubbhuset.ui.userviews.profile;
 
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,9 +20,8 @@ import android.widget.TextView;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.User;
-import no.ntnu.klubbhuset.ui.login.LoginActivity;
-import no.ntnu.klubbhuset.ui.login.LoginViewModel;
 import no.ntnu.klubbhuset.ui.managerviews.ManagerActivity;
+import no.ntnu.klubbhuset.viewmodels.ProfileViewModel;
 
 
 public class ProfileFragment extends Fragment {

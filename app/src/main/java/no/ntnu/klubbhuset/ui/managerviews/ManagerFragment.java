@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.ui.managerviews.barcode.BarcodeScannerActivity;
+import no.ntnu.klubbhuset.viewmodels.ManagerViewModel;
 
 
 public class ManagerFragment extends Fragment {

@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
 
 /**
  * Displays information relating to a user who is NOT member of an organization,
@@ -55,7 +56,7 @@ public class ClubDetailedNotMemberFragment extends Fragment {
         Club club = ClubDetailedViewModel.getCurrentClub();
         Button joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
         joinClubBtn.setOnClickListener(click -> {
-            mViewModel.joinClub(club.getOid()).observe(this, response -> {
+            mViewModel.joinClub(club).observe(this, response -> {
                 mListener.onMembershipStatusChanged(response);
             });
         });

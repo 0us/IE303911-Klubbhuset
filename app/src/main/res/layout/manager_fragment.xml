@@ -55,7 +55,7 @@
 
             <fragment
                 android:id="@+id/manager_clubs_recycler_view"
-                android:name="no.ntnu.klubbhuset.ui.managerviews.list.ManagedOrgsListFragment"
+                android:name="no.ntnu.klubbhuset.ui.managerviews.ManagedOrgsListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"

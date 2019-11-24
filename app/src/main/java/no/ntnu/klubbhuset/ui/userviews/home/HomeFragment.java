@@ -19,9 +19,8 @@ import android.widget.ScrollView;
 import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
-import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
-import no.ntnu.klubbhuset.ui.userviews.home.list.MyClubRecyclerViewAdapter;
+import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
+import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
 
 
 public class HomeFragment extends Fragment {
@@ -46,8 +45,8 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(
                         Objects.requireNonNull(this.getActivity())).get(ClubsViewModel.class);
         model.getClubs().observe(this, clubs ->
-                recyclerView.setAdapter(new MyClubRecyclerViewAdapter(clubs,
-                        (ClubFragment.OnListFragmentInteractionListener) this.getActivity())));
+                recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs,
+                        (ClubsListFragment.OnListFragmentInteractionListener) this.getActivity())));
         return root;
     }
 

@@ -29,7 +29,7 @@
             android:name=".ui.managerviews.ManagerActivity"
             android:label="@string/title_activity_manager" />
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MasterAcitvity">

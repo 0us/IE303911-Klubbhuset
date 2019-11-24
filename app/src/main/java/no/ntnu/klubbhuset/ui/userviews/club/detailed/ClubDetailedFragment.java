@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
+import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
 
 
 public class ClubDetailedFragment extends Fragment {
