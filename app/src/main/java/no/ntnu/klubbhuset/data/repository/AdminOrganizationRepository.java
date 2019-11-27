@@ -11,8 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -22,10 +20,8 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Objects;
 
-import lombok.val;
-import no.ntnu.klubbhuset.data.Cache;
+import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
-import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.util.AuthHelper;
@@ -61,17 +57,17 @@ public class AdminOrganizationRepository {
         this.requestQueue = Volley.newRequestQueue(context);
     }
 
-    public Result<Member> getMembers() {
+    public LiveData<Resource<Member>> getMembers() {
         throw new UnsupportedOperationException("TODO: Implement method");
     }
 
-    public Result<Boolean> isAdmin() {
+    public LiveData<Resource<Boolean>> isAdmin() {
         throw new UnsupportedOperationException("TODO: Implement method");
     }
 
     public LiveData<Resource<String>> hasMemberPaid(String email) {
         String url = checkHasPaid(2);
-        MutableLiveData userPaymentStatus = new MutableLiveData<>();
+        MutableLiveData<Resource<String>> userPaymentStatus = new MutableLiveData<>();
         try {
             JSONObject jsonObject = new JSONObject().put("email", email);
             JsonObjectRequest request = new JsonObjectRequest(
@@ -79,12 +75,12 @@ public class AdminOrganizationRepository {
                     url,
                     jsonObject,
                     response -> {
-                        userPaymentStatus.setValue(response.toString());
+                        userPaymentStatus.setValue(Resource.success(response.toString()));
                     },
                     error -> {
                         if (error.networkResponse.statusCode == 402) {
                             String message = new String(error.networkResponse.data);
-                            userPaymentStatus.setValue(message);
+                            userPaymentStatus.setValue(Resource.error(message, error));
                         }
                     }
             ) {

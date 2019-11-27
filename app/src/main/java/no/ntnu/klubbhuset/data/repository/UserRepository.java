@@ -11,13 +11,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.InvalidObjectException;
 import java.util.Map;
 
-import no.ntnu.klubbhuset.data.Cache;
+import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
-import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.util.AuthHelper;
+import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.Json;
 
 import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
@@ -34,8 +35,8 @@ public class UserRepository {
     }
 
     private Application context;
-    private RequestQueue requestQueue;
     private final String ENDPOINT = API_URL + USER;
+    private RequestQueue requestQueue;
 
     private Cache cache = Cache.getInstance();
     private Resource<User> created;
@@ -67,7 +68,29 @@ public class UserRepository {
     }
 
     public LiveData<Resource<User>> get() {
-        throw new UnsupportedOperationException("TODO: Implement method");
+        String url = CommunicationConfig.API_URL + USER;
+        MutableLiveData<Resource<User>> cached = cache.getUser();
+        if (cached.getValue() != null) {
+            return cached;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    User newUser = Json.fromJson(response.toString(), User.class);
+                    cached.setValue(Resource.success(newUser));
+                },
+                error -> {
+                    // error
+                    System.out.println(error.networkResponse);
+                    cached.setValue(Resource.error("Error fetching user", error));
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(context);
+            }
+        };
+        requestQueue.add(request);
+        return cached;
     }
 
     public LiveData<Resource<String>> delete() {

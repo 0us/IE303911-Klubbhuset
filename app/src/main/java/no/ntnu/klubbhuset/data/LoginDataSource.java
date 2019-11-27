@@ -25,8 +25,7 @@ public class LoginDataSource {
     private final String URL = API_URL + LOGIN;
 
     private RequestQueue requestQueue;
-    private Result<LoggedInUser> result;
-    private Object object;
+    private Resource<LoggedInUser> result;
     private Context context;
 
     public LoginDataSource(Context context) {
@@ -34,18 +33,17 @@ public class LoginDataSource {
         requestQueue = Volley.newRequestQueue(context);
     }
 
-    public Result<LoggedInUser> login(String email, String password) {
+    public Resource<LoggedInUser> login(String email, String password) {
 
         StringRequest request = new StringRequest(Request.Method.POST, URL,
                 response -> {
                     Log.d(TAG, "login: response: " + response);
                     LoggedInUser user = new LoggedInUser(email, response);
-                    result = new Result.Success<>(user);
-                    object = new Object();
+                    result = Resource.success(user);
                 },
                 error -> {
                     Log.d(TAG, "login: error: " + error);
-                    result = new Result.Error(error);
+                    result = Resource.error("Unable to log in", error);
                 }) {
             // adding data to the string request
             @Override
@@ -62,5 +60,6 @@ public class LoginDataSource {
 
     public void logout() {
         // TODO: revoke authentication
+        throw new UnsupportedOperationException();
     }
 }

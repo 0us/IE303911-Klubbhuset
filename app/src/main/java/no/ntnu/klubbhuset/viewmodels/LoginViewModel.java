@@ -19,11 +19,9 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.val;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.LoginRepository;
-import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.repository.UserRepository;
@@ -84,8 +82,8 @@ public class LoginViewModel extends AndroidViewModel {
                 response -> {
                     Log.d(TAG, "login: response: " + response);
                     LoggedInUser user = new LoggedInUser(email, response);
-                    Result result = new Result.Success<>(user);
-                    setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+                    Resource<LoggedInUser> result = Resource.success(user);
+                    setLoggedInUser(result.getData());
                     loginResult.setValue(new LoginResult(new LoggedInUserView(user.getDisplayName())));
                     editor.putString(TOKEN, user.getToken());
                     editor.putBoolean(LOGGED_IN, true);
@@ -93,7 +91,7 @@ public class LoginViewModel extends AndroidViewModel {
                 },
                 error -> {
                     Log.d(TAG, "login: error: " + error);
-                    Result result = new Result.Error(error);
+                    Resource result = Resource.error("Login failed", error);
                     loginResult.setValue(new LoginResult(R.string.login_failed));
                     editor.putBoolean(LOGGED_IN, false);
                     editor.apply();

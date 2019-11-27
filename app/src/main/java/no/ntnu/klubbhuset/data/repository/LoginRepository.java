@@ -1,7 +1,8 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import no.ntnu.klubbhuset.data.LoginDataSource;
-import no.ntnu.klubbhuset.data.Result;
+import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 
 /**
@@ -45,11 +46,11 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Resource<LoggedInUser> login(String username, String password) {
         // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+        Resource<LoggedInUser> result = dataSource.login(username, password);
+        if (result.getStatus() == Status.SUCCESS) {
+            setLoggedInUser(result.getData());
         }
         return result;
     }

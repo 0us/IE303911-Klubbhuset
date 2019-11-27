@@ -26,12 +26,12 @@ import com.google.zxing.common.BitMatrix;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-import no.ntnu.klubbhuset.data.CommunicationConfig;
+import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.repository.VippsRepository;
+import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 import static android.graphics.Color.BLACK;
@@ -46,12 +46,12 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
     private static final String TAG = "MyMemberhipsViewModel";
     private RequestQueue requestQueue;
     private MutableLiveData<Bitmap> QRCode;
-    private MutableLiveData<String> token;
-    private MutableLiveData<JSONObject> vippsToken;
+    private VippsRepository vippsRepository;
 
     public MyMemberhipsViewModel(Application context) {
         super(context);
         this.requestQueue = Volley.newRequestQueue(context);
+        this.vippsRepository = VippsRepository.getInstance(context);
     }
 
     public LiveData<Bitmap> getQRCode() {
@@ -112,17 +112,6 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
 
 
     /**
-     * returns a boolean describing whether the token has expired or not
-     *
-     * @param token vippsToken
-     * @return a boolean describing whether the token has expired or not
-     */
-    private boolean tokenIsExpired(JSONObject token) {
-        // TODO: 23.11.2019 Implement
-        return false;
-    }
-
-    /**
      * Tries to retrieve the VippsToken, this is either done by grabbing it from memory as existing
      * object if not then from SharedPreference, but that will only work if the token has been previously
      * placed there and is not expired.
@@ -130,70 +119,9 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
      * @return Returns the vippsToken or null if no vippsToken could be retrieved, check the log
      * for figuring out exactly why.
      */
-    public LiveData<JSONObject> getVippsToken() {
-
-        // Check if vippsToken object exists
-        if (vippsToken == null) {
-            vippsToken = new MutableLiveData<>();
-
-            // try to retrieve the token from prefs
-            String prefToken = PreferenceUtils.getVippsToken(getApplication().getApplicationContext());
-
-            // if token from prefs is null
-            if (prefToken.equals(PREF_NO_FILE_FOUND)) {
-                // send request for new token
-                loadVippsToken();
-
-            } else {
-
-                // Initialize string as JSONObject
-                JSONObject jsonToken;
-                try {
-                    jsonToken = new JSONObject(prefToken);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return vippsToken;
-                }
-
-                // Checks if the token is expired
-                if (tokenIsExpired(jsonToken)) {
-                    loadVippsToken();
-                }
-
-                vippsToken.setValue(jsonToken);
-            }
-        }
-        return vippsToken;
+    public LiveData<Resource<String>> getVippsToken() {
+        return vippsRepository.getToken();
     }
 
 
-    /**
-     * Retrieves the vippsToken from Vipps, saves the value to the MutableLiveData and prefs
-     */
-    private void loadVippsToken() {
-        String url = CommunicationConfig.getVippsTokenURL();
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                response -> {
-                    try {
-                        JSONObject json = new JSONObject(response);
-                        vippsToken.setValue(json);
-                        PreferenceUtils.setVippsToken(getApplication().getApplicationContext(), response);
-                        Log.i(TAG, "Successful fetch");
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Got response from server, but token was empty");
-                    }
-                }, error -> {
-            Log.e(TAG, (String.valueOf(error.networkResponse.statusCode)));
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> map = new HashMap<>();
-                map.put(CLIENT_ID, CommunicationConfig.getInstance().retrieveClientID());
-                map.put(CLIENT_SECRET, CommunicationConfig.getInstance().retrieveClientSecret());
-                map.put(OCP_APIM_SUBSCRIPTION_KEY, CommunicationConfig.getInstance().retrieveOcpApimSubscriptionKey());
-                return map;
-            }
-        };
-        requestQueue.add(request);
-    }
 }

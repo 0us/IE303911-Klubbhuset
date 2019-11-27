@@ -1,7 +1,6 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,15 +19,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import lombok.val;
-import no.ntnu.klubbhuset.data.Cache;
+import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
-import no.ntnu.klubbhuset.data.Result;
-import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Group;
 import no.ntnu.klubbhuset.data.model.Member;

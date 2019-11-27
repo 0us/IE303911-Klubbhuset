@@ -13,10 +13,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class User {
-    public static final String PHONENUMBER = "phonenumber";
-    public static final String EMAIL = "email";
-    public static final String LASTNAME = "lastName";
-    public static final String FIRSTNAME = "firstName";
+    public transient static final String PHONENUMBER = "phonenumber";
+    public transient static final String EMAIL = "email";
+    public transient static final String LASTNAME = "lastName";
+    public transient static final String FIRSTNAME = "firstName";
     private String firstName;
     private String lastName;
     private String email;
