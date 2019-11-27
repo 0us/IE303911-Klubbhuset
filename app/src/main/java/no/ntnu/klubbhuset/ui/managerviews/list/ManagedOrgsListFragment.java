@@ -16,8 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.managerviews.ManagerViewModel;
-import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
-import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
+import no.ntnu.klubbhuset.ui.userviews.home.list.ClubsListFragment;
 
 /**
  * A fragment representing a list of Items.
@@ -43,8 +42,8 @@ public class ManagedOrgsListFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ClubFragment newInstance(int columnCount) {
-        ClubFragment fragment = new ClubFragment();
+    public static ClubsListFragment newInstance(int columnCount) {
+        ClubsListFragment fragment = new ClubsListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
