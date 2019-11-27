@@ -45,6 +45,9 @@ public class AdminOrganizationResource {
 
     @POST
     public Response hasMemberPaid(User user) {
+        if(!adminOrganizationService.isAdminOfOrganization(organizationId)) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("You are not authorized to do this call").build();
+        }
         return adminOrganizationService.hasMemberPaid(organizationId, user);
     }
 }
