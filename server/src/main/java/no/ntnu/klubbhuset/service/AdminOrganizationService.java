@@ -89,7 +89,8 @@ public class AdminOrganizationService {
     }
 
     public Response hasMemberPaid(Long organizationId, User user) {
-        System.out.println("AdminOrganizationService.harMemberPaid");
+        System.out.println("AdminOrganizationService.hasMemberPaid");
+
         Member member;
         Organization organization = entityManager.find(Organization.class, organizationId);
         TypedQuery<Member> query = entityManager.createQuery("SELECT m from Member m "
