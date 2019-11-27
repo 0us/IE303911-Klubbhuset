@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
                     setPublicKey(response, getApplicationContext());
                     Log.i(tag, "Fetch successful!");
                 },
-                error -> Log.e(tag , Objects.requireNonNull(error.getMessage())));
+                error -> Log.e(tag , Objects.requireNonNull(error.toString())));
         requestQueue.add(request);
     }
 

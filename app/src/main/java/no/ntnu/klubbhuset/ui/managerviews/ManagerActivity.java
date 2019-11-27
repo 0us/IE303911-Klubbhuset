@@ -1,19 +1,18 @@
 package no.ntnu.klubbhuset.ui.managerviews;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.ui.managerviews.list.ManagedOrgsListFragment;
-import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
 
 public class
 ManagerActivity extends AppCompatActivity implements
-        ManagedOrgsListFragment.OnListFragmentInteractionListener,
-        CreateOrganizationForm.OnFragmentInteractionListener {
+        ManagedOrgsListFragment.OnListFragmentInteractionListener, CreateOrganizationFormFragment.OnFragmentInteractionListener{
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,9 @@ ManagerActivity extends AppCompatActivity implements
 
     @Override
     public void onListFragmentInteraction(Club item) {
-
+        Intent intent = new Intent(this, ClubAdminActivity.class);
+        intent.putExtra("club", item);
+        startActivity(intent);
     }
 
     @Override

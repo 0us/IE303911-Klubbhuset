@@ -75,7 +75,7 @@ public class ClubsListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getClubs().observe(this, clubs -> {
-                recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs, mListener));
+                recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs.getData(), mListener));
             });
         }
         return view;

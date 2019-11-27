@@ -66,6 +66,9 @@
     <string name="authenticate_user">Authenticate user</string>
     <string name="has_paid">Has paid</string>
     <string name="next_payment_due">Payment due</string>
+    <string name="QR_scanner">QR Scanner</string>
+    <string name="not_a_member">Member not found</string>
 
     <string name="contact_email">Contact Email</string>
+    <string name="title_activity_club_admin">ClubAdminActivity</string>
 </resources>

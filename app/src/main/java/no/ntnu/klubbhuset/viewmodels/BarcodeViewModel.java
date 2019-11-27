@@ -22,6 +22,9 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Objects;
 
+import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.repository.AdminOrganizationRepository;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
 import static no.ntnu.klubbhuset.util.CommunicationConfig.checkHasPaid;
@@ -29,58 +32,15 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.checkHasPaid;
 public class BarcodeViewModel extends AndroidViewModel {
 
     private static final String TAG = "BarcodeViewModel";
-    private final RequestQueue requestQueue;
-    private MutableLiveData<String> userPaymentStatus;
+    private Application context;
 
     public BarcodeViewModel(@NonNull Application context) {
         super(context);
-        requestQueue = Volley.newRequestQueue(context);
-
+        this.context = context;
     }
 
-    public LiveData<String> getUserPaymentStatus(String email) {
-        if (userPaymentStatus == null) {
-            userPaymentStatus = new MutableLiveData<>();
-            loadUserPaymentStatus(email);
-        }
-        return userPaymentStatus;
-
-    }
-
-    /**
-     * Checks wether the user has paid for the membership of a given organization
-     * todo Retrieve the organization to check for, currently a test value is used for request.
-     *
-     * @param email the email of the user to check
-     */
-    private void loadUserPaymentStatus(String email) {
-        String url = checkHasPaid(2);
-        try {
-            JSONObject jsonObject = new JSONObject().put("email", email);
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url,
-                    jsonObject,
-                    response -> userPaymentStatus.setValue(response.toString()),
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            if (error.networkResponse.statusCode == 402) {
-                                String message = new String(error.networkResponse.data);
-                                userPaymentStatus.setValue(message);
-                            }
-                        }
-                    }
-            ) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    return AuthHelper.getAuthHeaders(getApplication());
-                }
-            };
-            requestQueue.add(request);
-        } catch (JSONException e) {
-            Log.e(TAG, Objects.requireNonNull(e.getMessage()));
-        }
+    public LiveData<Resource<String>> getUserPaymentStatus(String email, Club club) {
+        return AdminOrganizationRepository.getInstance(context, club).hasMemberPaid(email);
 
     }
 }

@@ -22,3 +22,5 @@
 
 *.properties
 connection.zip
+
+server/.env

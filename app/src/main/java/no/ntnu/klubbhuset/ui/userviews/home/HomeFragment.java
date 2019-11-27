@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(
                         Objects.requireNonNull(this.getActivity())).get(ClubsViewModel.class);
         model.getClubs().observe(this, clubs ->
-                recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs,
+                recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs.getData(),
                         (ClubsListFragment.OnListFragmentInteractionListener) this.getActivity())));
         return root;
     }

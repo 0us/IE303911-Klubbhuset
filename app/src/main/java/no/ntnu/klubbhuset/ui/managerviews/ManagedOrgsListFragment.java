@@ -75,7 +75,7 @@ public class ManagedOrgsListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getManagedClubs().observe(this, clubs -> {
-                recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs, mListener));
+                recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs.getData(), mListener));
             });
         }
         return view;

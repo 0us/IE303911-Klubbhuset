@@ -19,6 +19,8 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.val;
+import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.LoginRepository;
 import no.ntnu.klubbhuset.data.Result;
@@ -139,13 +141,7 @@ public class LoginViewModel extends AndroidViewModel {
         return password != null && password.trim().length() > 5;
     }
 
-    public MutableLiveData<User> createUser(User user) {
-        Result result = userRepository.create(user);
-        if (result instanceof Result.Success) {
-            registerResult.setValue((User) ((Result.Success) result).getData());
-        } else {
-            registerResult.setValue(null);
-        }
-        return registerResult;
+    public LiveData<Resource<User>> createUser(User user) {
+        return userRepository.create(user);
     }
 }

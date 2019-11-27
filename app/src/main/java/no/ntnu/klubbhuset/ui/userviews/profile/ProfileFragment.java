@@ -53,7 +53,9 @@ public class ProfileFragment extends Fragment {
         initButtons();
 
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-        mViewModel.getUser().observe(this, this::fillUserInfo);
+        mViewModel.getUser().observe(this, result -> {
+            fillUserInfo(result.getData());
+        });
 
     }
 

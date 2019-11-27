@@ -1,9 +1,15 @@
 package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
@@ -29,6 +35,10 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
         ClubDetailedViewModel.setCurrentClub(club);
 
         setContentView(R.layout.activity_club_detailed);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
         /*Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(club.getName());
@@ -60,6 +70,17 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
                     .replace(R.id.club_detailed_fragment_container, newFragment);
             transaction.commit();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

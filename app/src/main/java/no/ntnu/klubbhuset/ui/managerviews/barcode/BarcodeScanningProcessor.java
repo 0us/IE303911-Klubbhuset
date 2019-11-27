@@ -23,6 +23,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 import no.ntnu.klubbhuset.util.mlkit.CameraImageGraphic;
 import no.ntnu.klubbhuset.util.mlkit.FrameMetadata;
@@ -46,9 +47,9 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
     private final Context context;
     private final BarcodeViewModel barcodeViewModel;
     private final BarcodeScannerActivity activity;
-    private MutableLiveData<String> userStatus = new MutableLiveData<>();
+    private Club club;
 
-    public BarcodeScanningProcessor(Context context, BarcodeScannerActivity barcodeScannerActivity) {
+    public BarcodeScanningProcessor(Context context, BarcodeScannerActivity barcodeScannerActivity, Club club) {
         this.context = context;
         this.activity = barcodeScannerActivity;
         FirebaseVisionBarcodeDetectorOptions options =
@@ -56,7 +57,7 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
                         .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_QR_CODE)
                         .build();
         detector = FirebaseVision.getInstance().getVisionBarcodeDetector(options);
-
+        this.club = club;
         barcodeViewModel = ViewModelProviders.of(barcodeScannerActivity).get(BarcodeViewModel.class);
 
     }
@@ -114,9 +115,9 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
                 }
 
                 // Retrieve the membership status of user
-                barcodeViewModel.getUserPaymentStatus(email).observe(activity, s -> {
+                barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, s -> {
                     // Draw graphic onto the screen
-                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, s);
+                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, s.getData());
                     graphicOverlay.add(barcodeGraphic);
                 });
             }
