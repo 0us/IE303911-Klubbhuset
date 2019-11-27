@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.core.Response;
@@ -49,8 +50,11 @@ public class AdminOrganizationService {
         boolean result = false;
 
         User user = entityManager.find(User.class, principal.getName());
+        System.out.println("user = " + user);
         Organization organization = entityManager.find(Organization.class, organizationId);
-        Group role = getAdminRole();
+        System.out.println("organization = " + organization);
+        Group adminRole = getAdminRole();
+        System.out.println("role = " + adminRole);
 
         Member member;
         TypedQuery<Member> query = entityManager
@@ -61,11 +65,19 @@ public class AdminOrganizationService {
                         Member.class)
                 .setParameter("user", user)
                 .setParameter("organization", organization)
-                .setParameter("role", role);
+                .setParameter("role", adminRole);
+
+        System.out.println(query);
+        for( Parameter param : query.getParameters()) {
+            System.out.println(param.getName() + ": " + query.getParameterValue(param));
+        }
 
         try {
             member = query.getSingleResult(); // Throws error if no member is found
+            System.out.println("member = " + member);
         } catch (NoResultException e) {
+            System.out.println("No member found");
+            e.printStackTrace();
             return false;
         }
 
