@@ -17,3 +17,7 @@ MVC file structure in android example https://github.com/MindorksOpenSource/andr
 ## Docker
 
 Setting up docker with payara and postgres https://ralph.blog.imixs.com/2018/03/01/running-payara-and-postgresql-in-docker/ 
+
+## TextView guide
+
+ https://guides.codepath.com/android/Working-with-the-EditText
