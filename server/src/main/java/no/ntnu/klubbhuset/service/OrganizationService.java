@@ -23,6 +23,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.naming.OperationNotSupportedException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
@@ -72,6 +73,7 @@ public class OrganizationService {
 
         return Response.ok(organizations).build();
     }
+
 
 //    public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
 //        Organization organization = new Organization();
