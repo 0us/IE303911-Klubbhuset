@@ -27,6 +27,8 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Objects;
 
+import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.checkHasPaid;
@@ -40,13 +42,12 @@ public class BarcodeViewModel extends AndroidViewModel {
     public BarcodeViewModel(@NonNull Application context) {
         super(context);
         requestQueue = Volley.newRequestQueue(context);
-
     }
 
-    public LiveData<String> getUserPaymentStatus(String email) {
+    public LiveData<String> getUserPaymentStatus(String email, Club club) {
         if (userPaymentStatus == null) {
             userPaymentStatus = new MutableLiveData<>();
-            loadUserPaymentStatus(email);
+            loadUserPaymentStatus(email, club);
         }
         return userPaymentStatus;
 
@@ -58,8 +59,8 @@ public class BarcodeViewModel extends AndroidViewModel {
      *
      * @param email the email of the user to check
      */
-    private void loadUserPaymentStatus(String email) {
-        String url = checkHasPaid(2);
+    private void loadUserPaymentStatus(String email, Club club) {
+        String url = checkHasPaid(club.getOid());
         try {
             JSONObject jsonObject = new JSONObject().put("email", email);
             JsonObjectRequest request = new JsonObjectRequest(
@@ -67,14 +68,16 @@ public class BarcodeViewModel extends AndroidViewModel {
                     url,
                     jsonObject,
                     response -> userPaymentStatus.setValue(response.toString()),
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+                    error -> {
+                        if (error.networkResponse != null) {
                             if (error.networkResponse.statusCode == 402) {
                                 String message = new String(error.networkResponse.data);
                                 userPaymentStatus.setValue(message);
                             }
+                        } else {
+                            userPaymentStatus.setValue("MEMBER NOT FOUND");
                         }
+                        error.printStackTrace();
                     }
             ) {
                 @Override
