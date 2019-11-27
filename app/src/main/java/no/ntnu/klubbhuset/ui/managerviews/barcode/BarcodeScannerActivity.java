@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.util.mlkit.CameraSource;
 import no.ntnu.klubbhuset.util.mlkit.CameraSourcePreview;
 import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
@@ -29,11 +30,14 @@ public class BarcodeScannerActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUESTS = 1;
 
+    private Club club;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_barcode_scanner);
+        this.club = (Club) getIntent().getExtras().get("club");
 
         preview = findViewById(R.id.firePreview);
         if (preview == null) {
@@ -49,6 +53,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         } else {
             getRuntimePermissions();
         }
+
     }
 
     private void createCameraSource () {
@@ -61,7 +66,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         Context context = getApplicationContext();
 
         // Setup the processor for scanning Barcodes
-        cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor(context, this));
+        cameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor(context, this, club));
         try {
             preview.start(cameraSource, graphicOverlay);
         } catch (IOException e) {
