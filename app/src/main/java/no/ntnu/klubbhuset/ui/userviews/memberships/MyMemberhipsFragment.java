@@ -43,7 +43,6 @@ public class MyMemberhipsFragment extends Fragment {
 
         mViewModel.getVippsToken().observe(this, response -> {
             // TODO: 23.11.2019 do stuff when token has been recieved
-            Toast.makeText(getContext(), response.toString(),Toast.LENGTH_LONG).show();
         });
     }
 
