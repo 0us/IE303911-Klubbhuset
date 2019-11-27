@@ -1,0 +1,2 @@
+deploy --contextroot / /opt/payara/deployments/Klubbhuset.war
+set-web-context-param --name=javax.faces.PROJECT_STAGE --value=Production Klubbhuset

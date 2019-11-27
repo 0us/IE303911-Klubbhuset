@@ -38,11 +38,32 @@
     <string name="manageorgs">Manage organzations</string>
     <string name="create_new_user">Create new user</string>
     <string name="create_new_organization">Create new Organization</string>
+    <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
+    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
+    <string name="pref_key_front_camera_preview_size" translatable="false">fcpvs</string>
+    <string name="pref_key_front_camera_picture_size" translatable="false">fcpts</string>
+    <string name="pref_key_still_image_object_detector_enable_multiple_objects" translatable="false">siodemo</string>
+    <string name="pref_key_still_image_object_detector_enable_classification" translatable="false">siodec</string>
+    <string name="pref_key_live_preview_object_detector_enable_multiple_objects" translatable="false">lpodemo</string>
+    <string name="pref_key_live_preview_object_detector_enable_classification" translatable="false">lpodec</string>
+    <string name="pref_key_live_preview_face_detection_landmark_mode" translatable="false">lpfdlm</string>
+    <string name="pref_key_live_preview_face_detection_contour_mode" translatable="false">lpfdcm</string>
+    <string name="pref_key_live_preview_face_detection_classification_mode" translatable="false">lpfdcfm</string>
+    <string name="pref_key_live_preview_face_detection_performance_mode" translatable="false">lpfdpm</string>
+    <string name="pref_key_live_preview_face_detection_face_tracking" translatable="false">lpfdft</string>
+    <string name="pref_key_live_preview_face_detection_min_face_size" translatable="false">lpfdmfs</string>
+    <string name="pref_key_live_preview_automl_remote_model_name" translatable="false">lparmn</string>
+    <string name="pref_key_live_preview_automl_remote_model_choices" translatable="false">lparmc</string>
+    <string name="pref_entries_automl_models_local">Local</string>
+    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
     <string name="about">About</string>
     <string name="contact">Contact</string>
     <string name="member_since">Member since</string>
     <string name="payment_due">Your next payment is due in </string>
     <string name="invalid_email">Not a valid email</string>
+    <string name="organization_name_not_empty">Organization name can not be empty</string>
+    <string name="scan_a_new_qr_code">Scan a new QR code</string>
+    <string name="authenticate_user">Authenticate user</string>
     <string name="has_paid">Has paid</string>
     <string name="payment_status">Payment status</string>
     <string name="payment_false">Next Payment is due</string>
