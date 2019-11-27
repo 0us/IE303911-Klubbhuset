@@ -119,7 +119,8 @@
                 android:drawablePadding="32dp"
                 android:gravity="start|center_vertical"
                 android:paddingStart="16dp"
-                android:text="@string/sign_out" />
+                android:text="@string/sign_out"
+                />
 
         </LinearLayout>
     </ScrollView>
