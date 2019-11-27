@@ -12,7 +12,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
+import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
 import org.json.JSONException;
@@ -25,43 +27,16 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.util.CommunicationConfig.ORGANIZATION;
 
 public class ClubsViewModel extends AndroidViewModel {
-    MutableLiveData<List<Club>> clubs;
 
-    RequestQueue requestQueue;
+    private OrganizationRepository repository;
 
     public ClubsViewModel(Application context) {
         super(context);
-        requestQueue = Volley.newRequestQueue(context);
+        repository = OrganizationRepository.getInstance(context);
     }
 
-    public LiveData<List<Club>> getClubs() {
-        if (clubs == null) {
-            clubs = new MutableLiveData<>();
-            loadClubs();
-        }
-        return clubs;
+    public LiveData<Resource<List<Club>>> getClubs() {
+        return repository.getAll();
     }
 
-    private void loadClubs() {
-        String url = API_URL + ORGANIZATION;
-
-        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    List<Club> clubs = new ArrayList<>();
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            clubs.add(new Club(response.getJSONObject(i)));
-                        }
-                    } catch (JSONException jex) {
-                        System.out.println(jex);
-                    }
-                    this.clubs.setValue(clubs);
-                }, System.out::println) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return AuthHelper.getAuthHeaders(getApplication());
-            }
-        };
-        requestQueue.add(jar);
-    }
 }

@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,14 +12,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.val;
 import no.ntnu.klubbhuset.data.Cache;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Result;
@@ -57,32 +63,75 @@ public class OrganizationRepository {
         this.requestQueue = Volley.newRequestQueue(context);
     }
 
-    public LiveData<Resource<Club>> create(Club club) {
-        throw new UnsupportedOperationException("TODO: Implement method");
+    public LiveData<Resource<Club>> create(Club club, byte[] imageInByte) {
+        JSONObject jsonObject = club.toJson(imageInByte);
+        MutableLiveData res = new MutableLiveData();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ENDPOINT, jsonObject,
+                response -> {
+                    res.setValue(Resource.success(new Club(response)));
+                },
+                error -> {
+                    res.setValue(Resource.error(null, error));
+                    System.out.println("Something went wrong! " + error.getMessage());
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(context);
+            }
+        };
+        requestQueue.add(request);
+        return res;
     }
 
     public LiveData<Resource<List<Club>>> getAll() {
-        throw new UnsupportedOperationException("TODO: Implement method");
-
+        String url = API_URL + ORGANIZATION;
+        val cached = cache.getHomepageClubs();
+        if (cached.getValue() != null) {
+            return cached;
+        }
+        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    List<Club> clubs = new ArrayList<>();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            clubs.add(new Club(response.getJSONObject(i)));
+                        }
+                    } catch (JSONException jex) {
+                        System.out.println(jex);
+                    }
+                    cached.setValue(Resource.success(clubs));
+                },
+                error -> {
+                    cached.setValue(Resource.error(null, error));
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(context);
+            }
+        };
+        requestQueue.add(jar);
+        return cached;
     }
 
-    public Resource<String> delete(Club club) {
+    public LiveData<Resource<String>> delete(Club club) {
         throw new UnsupportedOperationException("TODO: Implement method");
     }
 
-    public Resource<Member> join(Club club) {
+    public LiveData<Resource<Member>> join(Club club) {
         String url = ENDPOINT + "/" + club.getOid() + "/" + JOIN;
         final int[] statusCode = new int[1]; // make variable effectively final to use it inside lambda
+        MutableLiveData res = new MutableLiveData();
+        cache.getMyMemberships().put(club.getOid(), res);
         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                 response -> {
                     int result = statusCode[0];
                     if (result != 0) {
                         Member member = parseMembershipResponse(response);
-                        cache.getMyMemberships().put(club.getOid(), Resource.success(member));
+                        res.setValue(Resource.success(member));
                     }
                 },
                 error -> {
-                    cache.getMyMemberships().put(club.getOid(), Resource.error(null, error));
+                    res.setValue(Resource.error(null, error));
 
                 }) {
             @Override
@@ -111,25 +160,51 @@ public class OrganizationRepository {
 
     }
 
-    public LiveData<Result<List<Club>>> getManaged(long uid) {
-        throw new UnsupportedOperationException("TODO: Implement method");
-
-    }
-
-    public Resource<Member> getMembership(Club club) {
-        String url = ENDPOINT + "/" + club.getOid() + "/" + MEMBERSHIP;
-        Resource<Member> resource = cache.getMyMemberships().get(club.getOid());
-        if (resource != null) {
-            return resource;
+    public LiveData<Resource<List<Club>>> getManaged() {
+        String url = ENDPOINT + "/managed";
+        MutableLiveData cached = cache.getManagedClubs();
+        if (cached.getValue() != null) {
+            return cached;
         }
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
-                    Member received = parseMembershipResponse(response);
-                    cache.getMyMemberships().put(club.getOid(), Resource.success(received));
-                }, error -> {
-            cache.getMyMemberships().put(club.getOid(), Resource.error(null, error));
+                    List<Club> clubs = new ArrayList<>();
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            clubs.add(new Club(response.getJSONObject(i)));
+                        }
 
-        }) {
+                    } catch (JSONException jex) {
+                        System.out.println(jex);
+                    }
+                    cached.setValue(clubs);
+                }, System.out::println) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(context);
+            }
+        };
+        requestQueue.add(jar);
+        return cached;
+    }
+
+    public LiveData<Resource<Member>> getMembership(Club club) {
+        String url = ENDPOINT + "/" + club.getOid() + "/" + MEMBERSHIP;
+        val cached = cache.getMyMemberships().get(club.getOid());
+        if (cached != null) {
+            return cached;
+        }
+        MutableLiveData res = new MutableLiveData<>();
+        cache.getMyMemberships().put(club.getOid(), res);
+        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    Member received = parseMembershipResponse(response);
+                    res.setValue(Resource.success(received));
+                },
+                error -> {
+                    res.setValue(Resource.error(null, error));
+
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return AuthHelper.getAuthHeaders(context);

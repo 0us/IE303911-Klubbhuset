@@ -27,7 +27,9 @@ import java.util.Map;
 
 import no.ntnu.klubbhuset.R;
 
+import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 import no.ntnu.klubbhuset.ui.managerviews.CreateOrganizationFormState;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
@@ -40,74 +42,20 @@ public class ManagerViewModel extends AndroidViewModel {
 
     private final SharedPreferences pref;
     private MutableLiveData<CreateOrganizationFormState> createOrganizationFormState = new MutableLiveData<>();
-    private MutableLiveData<List<Club>> clubs;
-    private MutableLiveData<Club> createdClub;
-    private RequestQueue requestQueue;
+    private OrganizationRepository repository;
 
     public ManagerViewModel(Application context) {
         super(context);
-        requestQueue = Volley.newRequestQueue(context);
         this.pref = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
+        repository = OrganizationRepository.getInstance(getApplication());
     }
 
-    public LiveData<List<Club>> getManagedClubs() {
-        if (clubs == null) {
-            clubs = new MutableLiveData<>();
-            loadManagedClubs();
-        }
-        return clubs;
+    public LiveData<Resource<List<Club>>> getManagedClubs() {
+        return repository.getManaged();
     }
 
-    public LiveData<Club> createNewClub(Club club, byte[] imageInByte) {
-        if (createdClub == null) {
-            createdClub = new MutableLiveData<>();
-        }
-        createClubRequest(club, imageInByte);
-        return createdClub;
-    }
-
-    private void createClubRequest(Club club, byte[] imageInByte) {
-        String url = API_URL + ORGANIZATION;
-        JSONObject jsonObject = club.toJson(imageInByte);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
-                response -> {
-                    createdClub.setValue(new Club(response));
-                    Toast.makeText(
-                            getApplication().getApplicationContext(),
-                            "Organzation got created successfully!",
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }, error -> {
-            System.out.println("Something went wrong! " + error.getMessage());
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return AuthHelper.getAuthHeaders(getApplication());
-            }
-        };
-        requestQueue.add(request);
-    }
-
-    private void loadManagedClubs() {
-        String url = API_URL + ORGANIZATION + "/managed";
-        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    List<Club> clubs = new ArrayList<>();
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            clubs.add(new Club(response.getJSONObject(i)));
-                        }
-                    } catch (JSONException jex) {
-                        System.out.println(jex);
-                    }
-                    this.clubs.setValue(clubs);
-                }, System.out::println){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return AuthHelper.getAuthHeaders(getApplication());
-            }
-        };
-        requestQueue.add(jar);
+    public LiveData<Resource<Club>> createNewClub(Club club, byte[] imageInByte) {
+        return repository.create(club, imageInByte);
     }
 
     public void organizationDataChanged(String email) {

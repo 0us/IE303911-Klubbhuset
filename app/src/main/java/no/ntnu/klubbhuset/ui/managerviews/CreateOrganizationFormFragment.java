@@ -127,6 +127,11 @@ public class CreateOrganizationFormFragment extends Fragment {
         viewModel.createNewClub(club, imageInByte).observe(this, response -> {
             if (mListener != null) {
                 mListener.onOrganizationCreated(club);
+                Toast.makeText(
+                        getActivity().getApplication().getApplicationContext(),
+                        "Organzation got created successfully!",
+                        Toast.LENGTH_SHORT)
+                        .show();
                 navigateBack();
             }
         });
