@@ -1,8 +1,6 @@
 package no.ntnu.klubbhuset.viewmodels;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -13,23 +11,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.MEMBERSHIP;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.ORGANIZATION;
 
 public class ClubsViewModel extends AndroidViewModel {
     MutableLiveData<List<Club>> clubs;

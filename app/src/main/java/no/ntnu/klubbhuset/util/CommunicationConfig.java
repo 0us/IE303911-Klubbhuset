@@ -1,4 +1,4 @@
-package no.ntnu.klubbhuset.data;
+package no.ntnu.klubbhuset.util;
 
 import android.content.Context;
 import android.content.res.AssetManager;

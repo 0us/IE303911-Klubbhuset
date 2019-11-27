@@ -14,8 +14,8 @@ import java.util.Map;
 
 import no.ntnu.klubbhuset.data.model.LoggedInUser;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.LOGIN;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.LOGIN;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -26,6 +26,7 @@ public class LoginDataSource {
 
     private RequestQueue requestQueue;
     private Result<LoggedInUser> result;
+    private Object object;
     private Context context;
 
     public LoginDataSource(Context context) {
@@ -40,6 +41,7 @@ public class LoginDataSource {
                     Log.d(TAG, "login: response: " + response);
                     LoggedInUser user = new LoggedInUser(email, response);
                     result = new Result.Success<>(user);
+                    object = new Object();
                 },
                 error -> {
                     Log.d(TAG, "login: error: " + error);

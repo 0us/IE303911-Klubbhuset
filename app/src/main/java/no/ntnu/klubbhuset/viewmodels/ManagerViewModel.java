@@ -21,13 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import no.ntnu.klubbhuset.adapter.AuthenticationPageAdapter;
-import no.ntnu.klubbhuset.data.CommunicationConfig;
 
 import no.ntnu.klubbhuset.R;
 
@@ -35,8 +31,8 @@ import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.managerviews.CreateOrganizationFormState;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.ORGANIZATION;
 
 
 public class ManagerViewModel extends AndroidViewModel {

@@ -8,17 +8,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.io.InvalidObjectException;
 import java.util.Map;
 
-import no.ntnu.klubbhuset.data.CommunicationConfig;
+import no.ntnu.klubbhuset.data.Cache;
 import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.util.AuthHelper;
 import no.ntnu.klubbhuset.util.Json;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.USER;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
 
 public class UserRepository {
     private static UserRepository ourInstance;
@@ -35,6 +34,8 @@ public class UserRepository {
     private final String ENDPOINT = API_URL + USER;
 
     private Result<User> result;
+    private Cache cache = Cache.getInstance();
+
 
     private UserRepository(Application context) {
         this.context = context;

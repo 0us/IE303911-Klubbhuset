@@ -29,8 +29,8 @@ import no.ntnu.klubbhuset.ui.login.LoggedInUserView;
 import no.ntnu.klubbhuset.ui.login.LoginFormState;
 import no.ntnu.klubbhuset.ui.login.LoginResult;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.LOGIN;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.LOGIN;
 
 public class LoginViewModel extends AndroidViewModel {
 

@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,16 +19,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Objects;
 
 import no.ntnu.klubbhuset.util.AuthHelper;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.checkHasPaid;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.checkHasPaid;
 
 public class BarcodeViewModel extends AndroidViewModel {
 

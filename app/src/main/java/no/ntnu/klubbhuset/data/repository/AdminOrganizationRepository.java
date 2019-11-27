@@ -8,6 +8,7 @@ import androidx.collection.LongSparseArray;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import no.ntnu.klubbhuset.data.Cache;
 import no.ntnu.klubbhuset.data.Result;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
@@ -28,6 +29,9 @@ public class AdminOrganizationRepository {
     private Club club;
     private Application context;
     private RequestQueue requestQueue;
+
+    private Cache cache = Cache.getInstance();
+
 
     private AdminOrganizationRepository(Application context, Club club) {
         this.club = club;

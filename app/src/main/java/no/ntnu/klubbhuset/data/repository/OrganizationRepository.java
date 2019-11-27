@@ -2,6 +2,9 @@ package no.ntnu.klubbhuset.data.repository;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -12,21 +15,24 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import no.ntnu.klubbhuset.data.CommunicationConfig;
+import no.ntnu.klubbhuset.data.Cache;
+import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Result;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Group;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.util.AuthHelper;
 import no.ntnu.klubbhuset.util.Json;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.JOIN;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.MEMBERSHIP;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.JOIN;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.MEMBERSHIP;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.ORGANIZATION;
 
 public class OrganizationRepository {
     private static volatile OrganizationRepository ourInstance;
@@ -42,8 +48,8 @@ public class OrganizationRepository {
     private RequestQueue requestQueue;
     private final String ENDPOINT = API_URL + ORGANIZATION + "/";
 
-    private Result<Member> joinResult;
-    private Result<Member> getMembershipResult;
+
+    private Cache cache = Cache.getInstance();
 
 
     private OrganizationRepository(Application context) {
@@ -51,20 +57,20 @@ public class OrganizationRepository {
         this.requestQueue = Volley.newRequestQueue(context);
     }
 
-    public Result<Club> create(Club club) {
+    public LiveData<Resource<Club>> create(Club club) {
         throw new UnsupportedOperationException("TODO: Implement method");
     }
 
-    public Result<List<Club>> getAll() {
+    public LiveData<Resource<List<Club>>> getAll() {
         throw new UnsupportedOperationException("TODO: Implement method");
 
     }
 
-    public Result<String> delete(Club club) {
+    public Resource<String> delete(Club club) {
         throw new UnsupportedOperationException("TODO: Implement method");
     }
 
-    public Result<Member> join(Club club) {
+    public Resource<Member> join(Club club) {
         String url = ENDPOINT + "/" + club.getOid() + "/" + JOIN;
         final int[] statusCode = new int[1]; // make variable effectively final to use it inside lambda
         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
@@ -72,11 +78,11 @@ public class OrganizationRepository {
                     int result = statusCode[0];
                     if (result != 0) {
                         Member member = parseMembershipResponse(response);
-                        joinResult = new Result.Success<>(member);
+                        cache.getMyMemberships().put(club.getOid(), Resource.success(member));
                     }
                 },
                 error -> {
-                    joinResult = new Result.Error(error);
+                    cache.getMyMemberships().put(club.getOid(), Resource.error(null, error));
 
                 }) {
             @Override
@@ -92,32 +98,36 @@ public class OrganizationRepository {
             }
         };
         requestQueue.add(jsonRequest);
-        return joinResult;
+        return cache.getMyMemberships().get(club.getOid());
     }
 
-    public Result<Club> get(Club club) {
+    public LiveData<Resource<Club>> get(Club club) {
         throw new UnsupportedOperationException("TODO: Implement method");
 
     }
 
-    public Result<List<Member>> getMembers(long oid) {
+    public LiveData<Resource<List<Member>>> getMembers(long oid) {
         throw new UnsupportedOperationException("TODO: Implement method");
 
     }
 
-    public Result<List<Club>> getManaged(long uid) {
+    public LiveData<Result<List<Club>>> getManaged(long uid) {
         throw new UnsupportedOperationException("TODO: Implement method");
 
     }
 
-    public Result<Member> getMembership(Club club) {
+    public Resource<Member> getMembership(Club club) {
         String url = ENDPOINT + "/" + club.getOid() + "/" + MEMBERSHIP;
+        Resource<Member> resource = cache.getMyMemberships().get(club.getOid());
+        if (resource != null) {
+            return resource;
+        }
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     Member received = parseMembershipResponse(response);
-                    getMembershipResult = new Result.Success<>(received);
+                    cache.getMyMemberships().put(club.getOid(), Resource.success(received));
                 }, error -> {
-            getMembershipResult = new Result.Error(error);
+            cache.getMyMemberships().put(club.getOid(), Resource.error(null, error));
 
         }) {
             @Override
@@ -125,8 +135,9 @@ public class OrganizationRepository {
                 return AuthHelper.getAuthHeaders(context);
             }
         };
+
         requestQueue.add(jar);
-        return getMembershipResult;
+        return cache.getMyMemberships().get(club.getOid());
     }
 
 
@@ -145,7 +156,6 @@ public class OrganizationRepository {
                 }
             }
         }
-
         return result;
     }
 }

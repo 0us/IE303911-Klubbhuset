@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.TabsPagerAdapter;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedActivity;
@@ -22,8 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
-import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.data.CommunicationConfig.PUBLIC_KEY;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.PUBLIC_KEY;
 import static no.ntnu.klubbhuset.util.PreferenceUtils.setPublicKey;
 
 public class MainActivity extends AppCompatActivity
