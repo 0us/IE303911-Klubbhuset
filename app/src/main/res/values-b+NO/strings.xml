@@ -14,5 +14,7 @@
     <string name="invalid_password">Passord må være >5 characters</string>
     <string name="login_failed">"Innlogging mislykkest"</string>
     <string name="filter">"Filtrer"</string>
+    <string name="my_memberships">"Mine medlemsskap"</string>
+    <string name="qr_description">"Din personlige QR for alle dine medlemsskap"</string>
 
 </resources>

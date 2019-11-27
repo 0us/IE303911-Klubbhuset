@@ -13,11 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ie303911_medlemsapp.R;
+import com.example.ie303911_medlemsapp.ui.ClubsViewModel;
 
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel mViewModel;
+    private ClubsViewModel mViewModel;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -26,13 +27,15 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_fragment, container, false);
+        View view = inflater.inflate(R.layout.home_fragment, container, false);
+        return view;
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(ClubsViewModel.class);
         // TODO: Use the ViewModel
     }
 
