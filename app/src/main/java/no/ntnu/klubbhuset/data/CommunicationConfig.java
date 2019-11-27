@@ -85,19 +85,19 @@ public class CommunicationConfig {
         return prop.getProperty("host");
     }
 
-    private String retrieveClientID() {
+    public String retrieveClientID() {
      return prop.getProperty("client_id");
     }
 
-    private String retrieveClientSecret() {
+    public String retrieveClientSecret() {
         return prop.getProperty("client_secret");
     }
 
-    private String retrieveOcpApimSubscriptionKey() {
+    public String retrieveOcpApimSubscriptionKey() {
         return prop.getProperty("Ocp-Apim-Subscription-Key");
     }
 
-    private String retrieveMerchantSerialNumber() {
+    public String retrieveMerchantSerialNumber() {
         return prop.getProperty("merchantSerialNumber");
     }
 }
