@@ -50,7 +50,7 @@ public class AdminOrganizationService {
 
         User user = entityManager.find(User.class, principal.getName());
         Organization organization = entityManager.find(Organization.class, organizationId);
-        Group role = entityManager.find(Group.class, 52L); // magic number is the current gid of admin
+        Group role = getAdminRole();
 
         Member member;
         TypedQuery<Member> query = entityManager
@@ -76,6 +76,18 @@ public class AdminOrganizationService {
         return result;
     }
 
+    private Group getAdminRole() {
+        try {
+            TypedQuery<Group> query = entityManager.createQuery("select g from Group g where g.name = :name", Group.class);
+            query.setParameter("name", "admin");
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public Response hasMemberPaid(Long organizationId, User user) {
         System.out.println("AdminOrganizationService.harMemberPaid");
         Member member;
@@ -94,7 +106,7 @@ public class AdminOrganizationService {
             return Response.status(Response.Status.NO_CONTENT).entity("Is not a member").build();
         }
 
-        if ( !member.hasPaid()) {
+        if ( !member.hasPaid() ) {
             return Response.status(Response.Status.PAYMENT_REQUIRED).entity("Has NOT paid").build();
         }
 
