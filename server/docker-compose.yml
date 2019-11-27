@@ -4,6 +4,8 @@ services:
 
   nginx:
     container_name: klubbhuset-nginx
+    depends_on:
+      - appserver
     image: nginx:1.15-alpine
     ports:
       - "80:80"
