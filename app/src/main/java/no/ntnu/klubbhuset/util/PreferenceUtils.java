@@ -21,6 +21,7 @@ public class PreferenceUtils {
     private static final String PREF_FILE_AUTH = "auth";
     private static final String PREF_PUBLIC_KEY = "public_key";
     public static final String PREF_NO_FILE_FOUND = "NO_FILE";
+    private static final String PREF_VIPPS_TOKEN = "vipps_token";
 
     static void saveString(Context context, @StringRes int prefKeyId, @Nullable String value) {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -211,5 +212,15 @@ public class PreferenceUtils {
     public static String getPublicKey(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_AUTH, Context.MODE_PRIVATE);
         return sharedPreferences.getString(PREF_PUBLIC_KEY, PREF_NO_FILE_FOUND);
+    }
+
+    public static String getVippsToken(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_AUTH, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(PREF_VIPPS_TOKEN, PREF_NO_FILE_FOUND);
+    }
+
+    public static void setVippsToken(Context context,String token) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_AUTH, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(PREF_VIPPS_TOKEN ,token).apply();
     }
 }
