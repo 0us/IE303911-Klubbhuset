@@ -124,8 +124,8 @@ public class ClubDetailedMemberFragment extends Fragment {
     }
 
 
-    private void payWithVipps(Object user) {
-        VippsPaymentDetails details = getVippsPaymentDetails();
+    private void payWithVipps(User user) {
+        VippsPaymentDetails details = getVippsPaymentDetails(user);
 
         JSONObject body = null;
         try {
@@ -169,10 +169,10 @@ public class ClubDetailedMemberFragment extends Fragment {
         queue.add(request);
     }
 
-    private VippsPaymentDetails getVippsPaymentDetails() {
+    private VippsPaymentDetails getVippsPaymentDetails(User user) {
 
 
-        String phoneNumber = user.getPhone();
+        String phoneNumber = user.getPhone().substring(user.getPhone().length() - 8); // getting last 8 digits of phone number. This to avoid country code
         String organizationId = String.valueOf(club.getOid());
         String userId = user.getEmail();
         OrderId orderId;
@@ -184,6 +184,7 @@ public class ClubDetailedMemberFragment extends Fragment {
         }
 
         Double amount = club.getPriceOfMembership().doubleValue();
+
         String transactionText = String.format("%s %s %s %s",
                 getResources().getString(R.string.membership_of),
                 club.getName(),
