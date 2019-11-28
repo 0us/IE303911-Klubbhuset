@@ -106,6 +106,7 @@
         <ImageButton
             android:id="@+id/club_detailed_pay_with_vipps"
             android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_betal_med_vipps___250px" />
