@@ -12,6 +12,9 @@ import com.google.android.gms.common.images.Size;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import com.google.firebase.ml.vision.objects.FirebaseVisionObjectDetectorOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.util.mlkit.CameraSource;
 
@@ -217,6 +220,16 @@ public class PreferenceUtils {
     public static String getVippsToken(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_AUTH, Context.MODE_PRIVATE);
         return sharedPreferences.getString(PREF_VIPPS_TOKEN, PREF_NO_FILE_FOUND);
+    }
+
+    public static String getVippsAccessToken(Context context) {
+        try {
+            JSONObject vippsToken = new JSONObject(getVippsToken(context));
+            return vippsToken.get("access_token").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void setVippsToken(Context context,String token) {
