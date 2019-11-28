@@ -21,8 +21,6 @@ public class VippsPaymentDetails {
     String transactionText;
     JsonObject details;
 
-
-
     public VippsPaymentDetails(String mobileNummer, OrderId orderId, double amount, String transactionText, Context context) {
         this.mobileNummer = mobileNummer;
         this.orderId = orderId;
@@ -50,7 +48,7 @@ public class VippsPaymentDetails {
 
         JsonObject transaction = new JsonObject();
         transaction.addProperty("orderId", orderId.toString());
-        transaction.addProperty("amount", amount);
+        transaction.addProperty("amount", Integer.valueOf((int) (amount * 100)));
         transaction.addProperty("transactionText", transactionText);
         transaction.addProperty("skipLandingPage", false);
 
