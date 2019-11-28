@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.Request;
@@ -29,18 +30,20 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.data.model.OrderId;
+import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
+import no.ntnu.klubbhuset.util.UserHelper;
 
 
 /**
@@ -56,9 +59,9 @@ public class ClubDetailedMemberFragment extends Fragment {
     public static final String MINIMUM_REQUIRED_VIPPS_VERSION = "1.8.0";
     private ClubDetailedViewModel mViewModel;
     private Club club;
+    private User user;
     private Member member;
     private RequestQueue queue;
-    private Properties properties = new Properties();
     private View vippsBtn;
     private ImageView paymentStatusImg;
     private TextView paymentStatusText;
@@ -113,14 +116,18 @@ public class ClubDetailedMemberFragment extends Fragment {
             }
         });
 
-        vippsBtn.setOnClickListener(l -> payWithVipps());
-
+        vippsBtn.setOnClickListener((view) -> {
+            mViewModel.getUser().observe(
+                    this,
+                    user -> {
+                        System.out.println("stop");
+                    });
+        });
     }
 
 
-    private void payWithVipps() {
-        OrderId orderId = new OrderId("Org", "User");
-        VippsPaymentDetails details = new VippsPaymentDetails("48059626", orderId, 20000, "test transaction", getActivity()); // fixme
+    private void payWithVipps(Object user) {
+        VippsPaymentDetails details = getVippsPaymentDetails();
 
         JSONObject body = null;
         try {
@@ -162,6 +169,39 @@ public class ClubDetailedMemberFragment extends Fragment {
             }
         };
         queue.add(request);
+    }
+
+    private VippsPaymentDetails getVippsPaymentDetails() {
+        try {
+            user = mViewModel.getUser().observe(l -> {
+
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String phoneNumber = user.getPhone();
+        String organizationId = String.valueOf(club.getOid());
+        String userId = user.getEmail();
+        OrderId orderId;
+
+        if (organizationId.length() > 20 || userId.length() > 20 || (organizationId + userId).trim().length() > 20) {
+            orderId = new OrderId("", ""); // order id can only be 30 charachers long. timestamp is 10 chars long.
+        } else {
+            orderId = new OrderId(organizationId, userId);
+        }
+
+        Double amount = club.getPriceOfMembership().doubleValue();
+        String transactionText = String.format("%s %s %s %s",
+                getResources().getString(R.string.membership_of),
+                club.getName(),
+                getResources().getString(R.string.for_year),
+                Calendar.getInstance().get(Calendar.YEAR));
+
+        return new VippsPaymentDetails(phoneNumber, orderId, amount, transactionText, getActivity());
+    }
+
+    private User getCurrentUser() throws JSONException {
+        return UserHelper.getCurrentUser(getActivity());
     }
 
     private void openVipps(String deepLink) {
