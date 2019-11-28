@@ -18,10 +18,9 @@ public class OrderId {
 
     @Override
     public String toString() {
-        long l = System.currentTimeMillis();
-        return userId + "-" + organizationId + "-" + l;
+        long currentTimeMillis = System.currentTimeMillis();
+        String[] strings = this.userId.split("@");
+        String userId = strings[0];
+        return userId + "-" + organizationId + "-" + currentTimeMillis;
     }
-//    public String toString() {
-//        return String.valueOf(l);
-//    }
 }
