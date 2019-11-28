@@ -22,6 +22,8 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
 
+import static no.ntnu.klubbhuset.ui.managerviews.barcode.BarcodeViewModel.PAYMENT_STATUS_OK;
+
 /** Graphic instance for rendering Barcode position and content information in an overlay view. */
 public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
@@ -43,7 +45,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
     // TextColor is always TEXT_COLOR_FAILURE unless text is "has paid"
     int textColor = TEXT_COLOR_FAILURE;
-    if (text.equals("Has paid")) {
+    if (text.equals(PAYMENT_STATUS_OK)) {
         textColor = TEXT_COLOR_SUCCESS;
     }
 
