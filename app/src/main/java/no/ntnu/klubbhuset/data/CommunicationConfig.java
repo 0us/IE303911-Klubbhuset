@@ -67,6 +67,10 @@ public class CommunicationConfig {
         return API_URL + ORGANIZATION + "/" + id + "/" + ADMIN;
     }
 
+    public String getMerchantSerialNumber() {
+        return merchantSerialNumber;
+    }
+
     private void initializeValues() {
         this.host = retrieveHost();
         this.port = retrievePort();
