@@ -10,12 +10,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.BarcodeFormat;
@@ -26,10 +22,8 @@ import com.google.zxing.common.BitMatrix;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
@@ -118,8 +112,16 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
      * @return a boolean describing whether the token has expired or not
      */
     private boolean tokenIsExpired(JSONObject token) {
-        // TODO: 23.11.2019 Implement
-        return false;
+        String expires_on = null;
+        try {
+            expires_on = token.get("expires_on").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(expires_on == null) {
+            return true;
+        }
+        return System.currentTimeMillis() > Long.valueOf(expires_on);
     }
 
     /**
