@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.AuthFailureError;
@@ -11,20 +12,21 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
-import java.net.HttpURLConnection;
+import java.io.InvalidObjectException;
 import java.util.Map;
 
 import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Group;
 import no.ntnu.klubbhuset.data.model.Member;
+import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.util.AuthHelper;
 
 import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
@@ -38,6 +40,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
     private MutableLiveData<Member> membership;
     private Gson gson;
     private static Club focusedClub;
+    private MutableLiveData<User> user = new MutableLiveData<>();
 
     public ClubDetailedViewModel(@NonNull Application application) {
         super(application);
@@ -51,6 +54,32 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         return membership;
     }
 
+    public LiveData<User> getUser() {
+        if(user == null) {
+            loadUser();
+        }
+        return user;
+    }
+
+
+
+    private void loadUser() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,API_URL, null,
+                response -> {
+                    try {
+                        user.setValue(new User(response));
+                    } catch (InvalidObjectException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {}) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(getApplication());
+            }
+        };
+        requestQueue.add(request);
+    }
 
     private void tryJoinClub(long oid) {
         String url = CommunicationConfig.joinClub(oid);
