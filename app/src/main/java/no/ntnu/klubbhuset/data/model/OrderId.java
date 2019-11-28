@@ -8,7 +8,7 @@ public class OrderId {
     String userId;
     String now;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
     public OrderId(String organizationId, String userId) {
         this.organizationId = organizationId;
@@ -18,6 +18,10 @@ public class OrderId {
 
     @Override
     public String toString() {
-        return userId + "::" + organizationId + "::" + now;
+        long l = System.currentTimeMillis();
+        return userId + "-" + organizationId + "-" + l;
     }
+//    public String toString() {
+//        return String.valueOf(l);
+//    }
 }
