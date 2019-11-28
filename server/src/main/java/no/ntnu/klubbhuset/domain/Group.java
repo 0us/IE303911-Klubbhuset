@@ -52,6 +52,6 @@ public class Group implements Serializable {
         if(name == null) {
             name = "no name";
         }
-        return getClass().getSimpleName() + name;
+        return "Group: gid: " + getGid() + " name: " + name;
     }
 }

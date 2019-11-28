@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -36,6 +37,10 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.checkHasPaid;
 public class BarcodeViewModel extends AndroidViewModel {
 
     private static final String TAG = "BarcodeViewModel";
+    private static final String JSON_MSG = "msg";
+    public static final String PAYMENT_STATUS_OK = "OK!";
+    public static final String PAYMENT_STATUS_NOT_OK = "NOT PAYED!";
+    public static final String MEMBER_NOT_FOUND = "NOT FOUND!";
     private final RequestQueue requestQueue;
     private MutableLiveData<String> userPaymentStatus;
 
@@ -49,6 +54,7 @@ public class BarcodeViewModel extends AndroidViewModel {
             userPaymentStatus = new MutableLiveData<>();
             loadUserPaymentStatus(email, club);
         }
+        loadUserPaymentStatus(email, club);
         return userPaymentStatus;
 
     }
@@ -67,7 +73,13 @@ public class BarcodeViewModel extends AndroidViewModel {
                     Request.Method.POST,
                     url,
                     jsonObject,
-                    response -> userPaymentStatus.setValue(response.toString()),
+                    response -> {
+                        try {
+                            userPaymentStatus.setValue(response.getString(JSON_MSG));
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Someting went wrong with parsing response. Response from server was: " + response.toString());
+                        }
+                    },
                     error -> {
                         if (error.networkResponse != null) {
                             if (error.networkResponse.statusCode == 402) {
@@ -80,6 +92,34 @@ public class BarcodeViewModel extends AndroidViewModel {
                         error.printStackTrace();
                     }
             ) {
+
+                @Override
+                protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        int statusCode = response.statusCode;
+
+                        switch (statusCode) {
+
+                            case 204:
+                                jsonObject.put(JSON_MSG, MEMBER_NOT_FOUND);
+                                break;
+
+                            case 402:
+                                jsonObject.put(JSON_MSG, PAYMENT_STATUS_NOT_OK);
+                                break;
+
+                            case 200:
+                                jsonObject.put(JSON_MSG, PAYMENT_STATUS_OK);
+                                break;
+                        }
+
+                        return Response.success(jsonObject, HttpHeaderParser.parseCacheHeaders(response));
+                    } catch (JSONException e) {
+                        return Response.error(new VolleyError(response));
+                    }
+                }
+
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     return AuthHelper.getAuthHeaders(getApplication());

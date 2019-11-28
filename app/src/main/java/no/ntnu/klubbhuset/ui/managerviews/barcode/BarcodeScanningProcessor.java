@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Base64;
@@ -36,7 +35,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 
 /**
- * Barcode Detector Demo.
+ * This class represents the processor used for processing barcodes.
  */
 public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseVisionBarcode>> {
 
@@ -47,6 +46,10 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
     private final BarcodeViewModel barcodeViewModel;
     private final BarcodeScannerActivity activity;
     private Club club;
+    private PublicKey pk;
+
+    private FirebaseVisionBarcode prevBarCode = null;
+    private String prevBarCodeText;
 
     public BarcodeScanningProcessor(Context context, BarcodeScannerActivity barcodeScannerActivity, Club club) {
         this.context = context;
@@ -59,6 +62,20 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
         this.club = club;
         barcodeViewModel = ViewModelProviders.of(barcodeScannerActivity).get(BarcodeViewModel.class);
 
+        retrievePk();
+    }
+
+    /**
+     * Retrieves the public key of Klubbhuset, and creates a reference to it in this class
+     */
+    private void retrievePk() {
+        // Get public key
+        String publickey = PreferenceUtils.getPublicKey(context);
+        if (publickey.equals(PreferenceUtils.PREF_NO_FILE_FOUND)) {
+            Log.e("BarcodeScanner", "No public key to be found");
+        }
+        // Retrieves the public key object from string
+        pk = getKey(publickey);
     }
 
     @Override
@@ -75,53 +92,101 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
         return detector.detectInImage(image);
     }
 
+    /**
+     * This method is called every time a complete image is retrieved from the camera. This method
+     * will check the image for barcodes, if it finds barcodes in the image, it will start checking
+     * for tokens in the barcode. On successful retrieval of a token, it will be validated against
+     * Klubbhuset public key and a status will be retrieved on payment status.
+     *
+     * @param originalCameraImage hold the original image from camera, used to draw the background
+     * @param barcodes            The list of detected barcodes in the image
+     * @param frameMetadata
+     * @param graphicOverlay      The overlay used on screen to contain graphic elements
+     */
     @Override
     protected void onSuccess(
             @Nullable Bitmap originalCameraImage,
             @NonNull List<FirebaseVisionBarcode> barcodes,
             @NonNull FrameMetadata frameMetadata,
             @NonNull GraphicOverlay graphicOverlay) {
+
         graphicOverlay.clear();
+        // Add orignal image to graphicOverlay
         if (originalCameraImage != null) {
+            // Retrieve image, and add it to the graphicOverlay
             CameraImageGraphic imageGraphic = new CameraImageGraphic(graphicOverlay, originalCameraImage);
             graphicOverlay.add(imageGraphic);
         }
+
+        // Check if there are any barcodes
         if (barcodes.size() > 0) {
             for (int i = 0; i < barcodes.size(); ++i) {
-
-                // Get public key
-                String publickey = PreferenceUtils.getPublicKey(context);
-                if (publickey.equals(PreferenceUtils.PREF_NO_FILE_FOUND)) {
-                    Log.e("BarcodeScanner", "No public key to be found");
-                    continue;
-                }
-                // Retrieves the public key object from string
-                PublicKey pk = getKey(publickey);
 
                 // Get Barcode
                 FirebaseVisionBarcode barcode = barcodes.get(i);
                 String token = barcode.getDisplayValue();
 
-                // Retrieve claims from QR-Code
-                Jws<Claims> jws;
-                String email = "";
-                try {
-                    JwtParser parser = Jwts.parser().setSigningKey(pk);
-                    jws = parser.parseClaimsJws(token);
-                    email = jws.getBody().getSubject();
-                } catch (JwtException je) {
-                    je.printStackTrace();
-                }
+                // If this is the first run
+                if (prevBarCode == null) {
+                    displayTokenValue(token, barcode, graphicOverlay);
 
-                // Retrieve the membership status of user
-                barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, s -> {
-                    // Draw graphic onto the screen
-                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, s);
+                }
+                // If the previous barcode is the same as the new, set the old to display
+                else if (barcode.getDisplayValue().equals(prevBarCode.getDisplayValue())) {
+                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, prevBarCode, prevBarCodeText);
                     graphicOverlay.add(barcodeGraphic);
-                });
+
+                }
+                // If it's a new barcode, retrieve and display it's values
+                else {
+                    displayTokenValue(token, barcode, graphicOverlay);
+
+                }
             }
         }
         graphicOverlay.postInvalidate();
+    }
+
+    /**
+     * Retrieves and displays token value to the screen
+     *
+     * @param token          Token
+     * @param barcode        Barcode
+     * @param graphicOverlay The overlay
+     */
+    private void displayTokenValue(
+            String token,
+            FirebaseVisionBarcode barcode,
+            GraphicOverlay graphicOverlay) {
+
+        // Try to retrieve claims from QR-Code
+        Jws<Claims> jws;
+        String email = "";
+        try {
+            JwtParser parser = Jwts.parser().setSigningKey(pk);
+            jws = parser.parseClaimsJws(token);
+            email = jws.getBody().getSubject();
+
+            // Retrieve the membership status of user
+            barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, s -> {
+                // Draw graphic onto the screen
+                BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, s);
+                graphicOverlay.add(barcodeGraphic);
+
+                prevBarCode = barcode;
+                prevBarCodeText = s;
+            });
+
+        }
+        // If no token can be retrieved, print user feedback and continue parsing barcodes
+        catch (JwtException je) {
+            String msg = "Not Valid!";
+            BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, msg);
+            graphicOverlay.add(barcodeGraphic);
+
+            prevBarCode = barcode;
+            prevBarCodeText = msg;
+        }
     }
 
 

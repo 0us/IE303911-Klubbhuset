@@ -52,7 +52,11 @@ public class Club implements Serializable {
 
     public JSONObject toJson(byte[] imageInByte) {
         JSONObject json = new JSONObject();
-        String base64String = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+      
+        String base64String = null;
+        if (imageInByte != null) {
+            base64String = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+        }
 
         try {
             json.put("name", name);
