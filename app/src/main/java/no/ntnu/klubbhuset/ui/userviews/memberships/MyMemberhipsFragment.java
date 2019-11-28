@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import no.ntnu.klubbhuset.R;
 
@@ -38,6 +39,10 @@ public class MyMemberhipsFragment extends Fragment {
         mViewModel.getQRCode().observe(this, response -> {
             qrView = getView().findViewById(R.id.qrView);
             qrView.setImageBitmap(response);
+        });
+
+        mViewModel.getVippsToken().observe(this, response -> {
+            // TODO: 23.11.2019 do stuff when token has been recieved
         });
     }
 

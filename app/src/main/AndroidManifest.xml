@@ -18,6 +18,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.managerviews.ClubAdminActivity"
+            android:label="@string/title_activity_club_admin"
+            android:parentActivityName=".ui.managerviews.ManagerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="no.ntnu.klubbhuset.ui.managerviews.ManagerActivity" />
+        </activity>
+
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode,face,ocr,ica" />
@@ -38,12 +48,13 @@
         <activity android:name=".MasterAcitvity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.managerviews.barcode.BarcodeScannerActivity"
-            android:label="Scan QR Code">
-        </activity>
+            android:label="Scan QR Code"></activity>
     </application>
+
 </manifest>
