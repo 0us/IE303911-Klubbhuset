@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.Request;
@@ -29,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,7 +59,6 @@ public class ClubDetailedMemberFragment extends Fragment {
     public static final String MINIMUM_REQUIRED_VIPPS_VERSION = "1.8.0";
     private ClubDetailedViewModel mViewModel;
     private Club club;
-    private User user;
     private Member member;
     private RequestQueue queue;
     private View vippsBtn;
@@ -103,7 +102,7 @@ public class ClubDetailedMemberFragment extends Fragment {
 
         mViewModel.getMembership(club).observe(this, response -> {
             this.member = response;
-            if (response.isHasPaid()) {
+            if (response.isHasPaid() || club.getPriceOfMembership() == null || club.getPriceOfMembership().equals(BigDecimal.ZERO)) {
                 vippsBtn.setVisibility(View.GONE);
                 paymentStatusText.setText(getString(R.string.payment_true));
                 paymentDueDate.setText("");
