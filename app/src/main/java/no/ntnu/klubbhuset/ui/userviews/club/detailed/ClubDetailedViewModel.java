@@ -32,6 +32,7 @@ import no.ntnu.klubbhuset.util.AuthHelper;
 import static no.ntnu.klubbhuset.data.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.data.CommunicationConfig.MEMBERSHIP;
 import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
+import static no.ntnu.klubbhuset.data.CommunicationConfig.USER;
 
 
 public class ClubDetailedViewModel extends AndroidViewModel {
@@ -40,7 +41,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
     private MutableLiveData<Member> membership;
     private Gson gson;
     private static Club focusedClub;
-    private MutableLiveData<User> user = new MutableLiveData<>();
+    private MutableLiveData<User> user;
 
     public ClubDetailedViewModel(@NonNull Application application) {
         super(application);
@@ -56,6 +57,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
 
     public LiveData<User> getUser() {
         if(user == null) {
+            user = new MutableLiveData<>();
             loadUser();
         }
         return user;
@@ -64,7 +66,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
 
 
     private void loadUser() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,API_URL, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,API_URL + USER, null,
                 response -> {
                     try {
                         user.setValue(new User(response));

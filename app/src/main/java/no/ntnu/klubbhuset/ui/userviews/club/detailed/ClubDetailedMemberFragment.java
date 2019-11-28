@@ -116,13 +116,12 @@ public class ClubDetailedMemberFragment extends Fragment {
             }
         });
 
-        vippsBtn.setOnClickListener((view) -> {
-            mViewModel.getUser().observe(
-                    this,
-                    user -> {
-                        System.out.println("stop");
-                    });
+        vippsBtn.setOnClickListener(v -> {
+            mViewModel.getUser().observe(this, user -> {
+                payWithVipps(user);
+            });
         });
+
     }
 
 
@@ -172,13 +171,8 @@ public class ClubDetailedMemberFragment extends Fragment {
     }
 
     private VippsPaymentDetails getVippsPaymentDetails() {
-        try {
-            user = mViewModel.getUser().observe(l -> {
 
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
         String phoneNumber = user.getPhone();
         String organizationId = String.valueOf(club.getOid());
         String userId = user.getEmail();
