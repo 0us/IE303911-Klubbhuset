@@ -22,12 +22,15 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 
 import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
 
+import static no.ntnu.klubbhuset.ui.managerviews.barcode.BarcodeViewModel.PAYMENT_STATUS_OK;
+
 /** Graphic instance for rendering Barcode position and content information in an overlay view. */
 public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
-  private static final int TEXT_COLOR = Color.WHITE;
-  private static final float TEXT_SIZE = 54.0f;
-  private static final float STROKE_WIDTH = 4.0f;
+  private static final int TEXT_COLOR_SUCCESS = Color.GREEN;
+  private static final int TEXT_COLOR_FAILURE = Color.RED;
+  private static final float TEXT_SIZE = 144.0f;
+  private static final float STROKE_WIDTH = 16.0f;
 
   private final Paint rectPaint;
   private final Paint barcodePaint;
@@ -40,14 +43,22 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     this.barcode = barcode;
     this.text = text;
 
+    // TextColor is always TEXT_COLOR_FAILURE unless text is "has paid"
+    int textColor = TEXT_COLOR_FAILURE;
+    if (text.equals(PAYMENT_STATUS_OK)) {
+        textColor = TEXT_COLOR_SUCCESS;
+    }
+
     rectPaint = new Paint();
-    rectPaint.setColor(TEXT_COLOR);
+    rectPaint.setColor(textColor);
     rectPaint.setStyle(Paint.Style.STROKE);
     rectPaint.setStrokeWidth(STROKE_WIDTH);
 
     barcodePaint = new Paint();
-    barcodePaint.setColor(TEXT_COLOR);
+    barcodePaint.setColor(textColor);
     barcodePaint.setTextSize(TEXT_SIZE);
+    barcodePaint.setTextAlign(Paint.Align.CENTER);
+    barcodePaint.setShadowLayer(5.0f, 10.0f, 10.0f, Color.BLACK);
   }
 
   /**
@@ -67,7 +78,8 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     rect.bottom = translateY(rect.bottom);
     canvas.drawRect(rect, rectPaint);
 
-    // Renders the barcode at the bottom of the box.
-    canvas.drawText(text, rect.left, rect.bottom, barcodePaint);
+
+    // Renders the barcode at the center-left of the box.
+    canvas.drawText(text, rect.centerX(), rect.centerY(), barcodePaint);
   }
 }
