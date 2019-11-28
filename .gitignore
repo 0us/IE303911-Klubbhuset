@@ -13,4 +13,14 @@
 .externalNativeBuild
 .cxx
 
+
+/app/build/
+
 .idea/
+*/target/
+
+
+*.properties
+connection.zip
+
+server/.env

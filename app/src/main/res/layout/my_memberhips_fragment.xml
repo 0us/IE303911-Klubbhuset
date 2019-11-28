@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ie303911_medlemsapp.ui.userviews.memberships.MyMemberhipsFragment">
+    tools:context="no.ntnu.klubbhuset.ui.userviews.memberships.MyMemberhipsFragment">
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/qrView"
         android:layout_width="100pt"
         android:layout_height="100pt"
         android:layout_marginStart="24dp"
@@ -28,7 +28,7 @@
         android:text="@string/qr_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/qrView" />
 
     <View
         android:id="@+id/divider2"
@@ -72,12 +72,13 @@
 
         <fragment
             android:id="@+id/my_memberships_list"
-            android:name="com.example.ie303911_medlemsapp.ui.userviews.memberships.list.ClubMembershipFragment"
+            android:name="no.ntnu.klubbhuset.ui.userviews.memberships.list.ClubMembershipFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_club_list" />
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

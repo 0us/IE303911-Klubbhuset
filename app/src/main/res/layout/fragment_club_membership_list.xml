@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.ie303911_medlemsapp.ui.userviews.memberships.list.ClubMembershipFragment"
+    tools:context="no.ntnu.klubbhuset.ui.userviews.memberships.list.ClubMembershipFragment"
     tools:listitem="@layout/fragment_club_membership" />

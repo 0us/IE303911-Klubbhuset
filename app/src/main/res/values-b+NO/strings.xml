@@ -16,5 +16,6 @@
     <string name="filter">"Filtrer"</string>
     <string name="my_memberships">"Mine medlemsskap"</string>
     <string name="qr_description">"Din personlige QR for alle dine medlemsskap"</string>
+    <string name="username">Brukernavn</string>
 
 </resources>

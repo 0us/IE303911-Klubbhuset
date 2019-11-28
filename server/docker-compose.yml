@@ -1,0 +1,76 @@
+version: '3.7'
+
+services:
+
+  nginx:
+    container_name: klubbhuset-nginx
+    depends_on:
+      - appserver
+    image: nginx:1.15-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app.conf:/etc/nginx/nginx.conf
+#    volumes:
+#      - ./data/nginx:/etc/nginx/conf.d
+#      - ./data/certbot/conf:/etc/letsencrypt
+#      - ./data/certbot/www:/var/www/certbot
+#    certbot:
+#      image: certbot/certbot
+#      volumes:
+#        - ./data/certbot/conf:/etc/letsencrypt
+#        - ./data/certbot/www:/var/www/certbot
+
+  db:
+    container_name: klubbhuset-db
+    image: mysql:5.7.28
+    # todo add all necessary inputs
+    restart: always
+    environment:
+      # Name of database
+      MYSQL_DATABASE: ${DATABASENAME}
+      # So you don't have to use root
+      MYSQL_USER: ${MYSQLUSER}
+      # User password
+      MYSQL_PASSWORD: ${MYSQLUSERPASSWORD}
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: ${MYSQLROOTPASSWORD}
+#    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      # - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - my-db:/var/lib/mysql
+      - type: bind
+        source: ./mysqlconf
+        target: /etc/mysql/conf.d
+  # Names our volume
+
+  appserver:
+    depends_on:
+      - db
+    container_name: klubbhuset-appserv
+#    image: klubbhuset/server
+    build:
+      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#      - "4848:4848"
+#      - "8181:8181"
+    expose:
+      - '8080'
+
+    environment:
+      - DEPLOY_PROPS= --contextroot / / # setting contextroot to /
+
+        # For mounting the $DEPLOY_DIR to local folder
+#    volumes:
+#      - ~/Klubbhuset/deployments:/opt/payara/deployments
+
+volumes:
+  my-db:
