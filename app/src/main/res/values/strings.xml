@@ -76,4 +76,6 @@
     <string name="organization_name_not_empty">Organization name can not be empty</string>
     <string name="pay_with_vipps">Pay with vipps</string>
     <string name="latest_vipps_ver">You must update to latest Vipps version</string>
+    <string name="membership_of">Membership of</string>
+    <string name="for_year">for year</string>
 </resources>
