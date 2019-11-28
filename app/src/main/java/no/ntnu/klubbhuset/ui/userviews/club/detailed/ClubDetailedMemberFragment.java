@@ -9,9 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,21 +29,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.data.model.OrderId;
-import no.ntnu.klubbhuset.data.model.User;
-import no.ntnu.klubbhuset.service.VippsService;
-import no.ntnu.klubbhuset.ui.userviews.profile.UserViewModel;
-import no.ntnu.klubbhuset.data.model.OrderId;
 import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
+import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 
 /**
@@ -148,7 +141,7 @@ public class ClubDetailedMemberFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                String vippsToken = ""; //todo TEMPORARY TOKEN SO I CAN COMPILE@!!@!!@!!
+                String vippsToken = PreferenceUtils.getVippsToken(getActivity()); //todo TEMPORARY TOKEN SO I CAN COMPILE@!!@!!@!!
                 headers.put("Authorization", "Bearer " + vippsToken);
                 headers.put("Content-Type", "application/json");
                 headers.put("Ocp-Apim-Subscription-Key", properties.getProperty("Ocp-Apim-Subscription-Key"));
