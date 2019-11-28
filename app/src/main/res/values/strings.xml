@@ -61,7 +61,6 @@
     <string name="member_since">Member since</string>
     <string name="payment_due">Your next payment is due in </string>
     <string name="invalid_email">Not a valid email</string>
-    <string name="organization_name_not_empty">Organization name can not be empty</string>
     <string name="scan_a_new_qr_code">Scan a new QR code</string>
     <string name="authenticate_user">Authenticate user</string>
     <string name="has_paid">Has paid</string>
