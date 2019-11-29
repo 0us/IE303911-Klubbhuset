@@ -56,8 +56,8 @@ public class ManagerViewModel extends AndroidViewModel {
     public LiveData<List<Club>> getManagedClubs() {
         if (clubs == null) {
             clubs = new MutableLiveData<>();
-            loadManagedClubs();
         }
+        loadManagedClubs();
         return clubs;
     }
 
