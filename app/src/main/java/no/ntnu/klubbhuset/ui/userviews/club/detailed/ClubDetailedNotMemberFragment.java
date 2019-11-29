@@ -13,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
 
@@ -57,7 +59,11 @@ public class ClubDetailedNotMemberFragment extends Fragment {
         Button joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
         joinClubBtn.setOnClickListener(click -> {
             mViewModel.joinClub(club).observe(this, response -> {
-                mListener.onMembershipStatusChanged(response);
+                if (response.getStatus() == Status.SUCCESS) {
+                    mListener.onMembershipStatusChanged(response.getData());
+                } else {
+                    Toast.makeText(getContext(), "Error joining", Toast.LENGTH_SHORT).show();
+                }
             });
         });
     }

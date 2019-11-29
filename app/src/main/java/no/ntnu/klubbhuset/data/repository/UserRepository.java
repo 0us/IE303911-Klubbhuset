@@ -39,7 +39,6 @@ public class UserRepository {
     private RequestQueue requestQueue;
 
     private Cache cache = Cache.getInstance();
-    private Resource<User> created;
 
 
     private UserRepository(Application context) {

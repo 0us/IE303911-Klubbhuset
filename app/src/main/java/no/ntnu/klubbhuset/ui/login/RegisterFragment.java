@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.UserRepository;
 import no.ntnu.klubbhuset.viewmodels.LoginViewModel;
@@ -52,9 +53,9 @@ public class RegisterFragment extends Fragment {
                     mPhonenumber.getText().toString(),
                     mPassword.getText().toString()))
                     .observe(this, response -> {
-                        if (response != null) {
+                        if (response.getStatus() == Status.SUCCESS) {
                             // user created
-                        } else {
+                        } else if (response.getStatus() == Status.ERROR){
                             // user not created
                         }
             });

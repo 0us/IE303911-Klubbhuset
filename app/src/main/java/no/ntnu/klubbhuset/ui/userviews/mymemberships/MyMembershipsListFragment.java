@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ClubMembershipRecyclerViewAdapter;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
 import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
@@ -77,7 +78,11 @@ public class MyMembershipsListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getClubs().observe(this, clubs -> {
-                recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
+                if (clubs.getStatus() == Status.SUCCESS) {
+                    recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
+                } else {
+                    //todo handle error
+                }
             });
         }
         return view;

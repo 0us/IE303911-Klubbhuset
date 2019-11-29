@@ -37,7 +37,6 @@ public class LoginViewModel extends AndroidViewModel {
     private final RequestQueue requestQueue;
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private MutableLiveData<User> registerResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
     private SharedPreferences pref;
     private UserRepository userRepository;

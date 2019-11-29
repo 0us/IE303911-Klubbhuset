@@ -80,12 +80,11 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<List<Club>>> getAll() {
-        String url = API_URL + ORGANIZATION;
         val cached = cache.getHomepageClubs();
         if (cached.getValue() != null) {
             return cached;
         }
-        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, ENDPOINT, null,
                 response -> {
                     List<Club> clubs = new ArrayList<>();
                     try {
@@ -114,7 +113,7 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<Member>> join(Club club) {
-        String url = ENDPOINT + "/" + club.getOid() + "/" + JOIN;
+        String url = ENDPOINT + club.getOid() + "/" + JOIN;
         final int[] statusCode = new int[1]; // make variable effectively final to use it inside lambda
         MutableLiveData res = new MutableLiveData();
         cache.getMyMemberships().put(club.getOid(), res);
@@ -157,7 +156,7 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<List<Club>>> getManaged() {
-        String url = ENDPOINT + "/managed";
+        String url = ENDPOINT + "managed";
         MutableLiveData cached = cache.getManagedClubs();
         if (cached.getValue() != null) {
             return cached;
@@ -185,7 +184,7 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<Member>> getMembership(Club club) {
-        String url = ENDPOINT + "/" + club.getOid() + "/" + MEMBERSHIP;
+        String url = ENDPOINT + club.getOid() + "/" + MEMBERSHIP;
         val cached = cache.getMyMemberships().get(club.getOid());
         if (cached != null) {
             return cached;

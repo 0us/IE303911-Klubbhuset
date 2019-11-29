@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ManagerViewModel;
 
@@ -126,13 +127,21 @@ public class CreateOrganizationFormFragment extends Fragment {
        
         viewModel.createNewClub(club, imageInByte).observe(this, response -> {
             if (mListener != null) {
-                mListener.onOrganizationCreated(club);
-                Toast.makeText(
-                        getActivity().getApplication().getApplicationContext(),
-                        "Organzation got created successfully!",
-                        Toast.LENGTH_SHORT)
-                        .show();
-                navigateBack();
+                if (response.getStatus() == Status.SUCCESS) {
+                    mListener.onOrganizationCreated(club);
+                    Toast.makeText(
+                            getActivity().getApplication().getApplicationContext(),
+                            "Organzation got created successfully!",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                    navigateBack();
+                } else if (response.getStatus() == Status.ERROR) {
+                    Toast.makeText(
+                            getActivity().getApplication().getApplicationContext(),
+                            "Error creating organization!",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
 

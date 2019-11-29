@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
@@ -65,7 +66,11 @@ public class ClubDetailedFragment extends Fragment {
 
         // decide what content to show based on membership status
         mViewModel.getMembership(club).observe(this, response -> {
-                mListener.onMembershipStatusChanged(response);
+            if (response.getStatus() == Status.SUCCESS) {
+                mListener.onMembershipStatusChanged(response.getData());
+            } else {
+                //todo handle error
+            }
         });
 
 

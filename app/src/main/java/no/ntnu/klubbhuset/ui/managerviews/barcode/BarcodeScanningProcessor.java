@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -23,6 +24,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 import no.ntnu.klubbhuset.util.mlkit.CameraImageGraphic;
@@ -115,10 +117,15 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
                 }
 
                 // Retrieve the membership status of user
-                barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, s -> {
+                barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, response -> {
                     // Draw graphic onto the screen
-                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, s.getData());
-                    graphicOverlay.add(barcodeGraphic);
+                    if (response.getStatus() == Status.SUCCESS) {
+                        BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, response.getData());
+                        graphicOverlay.add(barcodeGraphic);
+                    } else if (response.getStatus() == Status.ERROR) {
+                        Log.e(TAG, response.getData().toString());
+                    }
+
                 });
             }
         }

@@ -41,6 +41,5 @@ public class BarcodeViewModel extends AndroidViewModel {
 
     public LiveData<Resource<String>> getUserPaymentStatus(String email, Club club) {
         return AdminOrganizationRepository.getInstance(context, club).hasMemberPaid(email);
-
     }
 }

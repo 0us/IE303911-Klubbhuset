@@ -1,5 +1,7 @@
 package no.ntnu.klubbhuset.data.repository;
 
+import android.widget.Toast;
+
 import no.ntnu.klubbhuset.data.LoginDataSource;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Status;
@@ -51,6 +53,8 @@ public class LoginRepository {
         Resource<LoggedInUser> result = dataSource.login(username, password);
         if (result.getStatus() == Status.SUCCESS) {
             setLoggedInUser(result.getData());
+        } else if (result.getStatus() == Status.ERROR){
+            // todo handle error
         }
         return result;
     }

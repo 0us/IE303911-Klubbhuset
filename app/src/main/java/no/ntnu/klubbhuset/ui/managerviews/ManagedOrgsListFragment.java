@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ManagedOrgsRecyclerViewAdapter;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ManagerViewModel;
 import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
@@ -75,7 +76,11 @@ public class ManagedOrgsListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getManagedClubs().observe(this, clubs -> {
-                recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs.getData(), mListener));
+                if (clubs.getStatus() == Status.SUCCESS) {
+                    recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs.getData(), mListener));
+                } else {
+                    // todo handle error
+                }
             });
         }
         return view;

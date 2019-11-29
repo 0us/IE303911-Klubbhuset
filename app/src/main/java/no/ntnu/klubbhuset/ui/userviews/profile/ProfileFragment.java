@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.icu.lang.UScript;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.ui.managerviews.ManagerActivity;
 import no.ntnu.klubbhuset.viewmodels.ProfileViewModel;
@@ -54,7 +56,11 @@ public class ProfileFragment extends Fragment {
 
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         mViewModel.getUser().observe(this, result -> {
-            fillUserInfo(result.getData());
+            if (result.getStatus() == Status.SUCCESS) {
+                fillUserInfo(result.getData());
+            } else if (result.getStatus() == Status.ERROR) {
+                //todo handle error
+            }
         });
 
     }
