@@ -10,6 +10,7 @@ import org.codehaus.jackson.map.annotate.JsonFilter;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -31,19 +32,19 @@ public class Member implements Serializable {
     @JsonbTransient
     MemberKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("email")
     @JoinColumn(name = "email")
     @JsonbTransient
     private User user;
 
     @JsonbTransient
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("oid")
     @JoinColumn(name = "oid")
     private Organization organization;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("gid")
     @JoinColumn(name = "gid")
     private Group group;

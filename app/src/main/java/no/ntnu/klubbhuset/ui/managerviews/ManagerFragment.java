@@ -22,9 +22,6 @@ import no.ntnu.klubbhuset.ui.managerviews.barcode.BarcodeScannerActivity;
 
 public class ManagerFragment extends Fragment {
 
-    private static final int TAKE_PICTURE = 1;
-    private ManagerViewModel mViewModel;
-
     public static ManagerFragment newInstance() {
         return new ManagerFragment();
     }
@@ -44,10 +41,5 @@ public class ManagerFragment extends Fragment {
             Navigation.findNavController(getView()).navigate(R.id.action_managerFragment_to_createOrganizationForm);
         });
 
-        Button scanQrCodeBtn = Objects.requireNonNull(getView()).findViewById(R.id.manage_scan_qr_code);
-        scanQrCodeBtn.setOnClickListener(l -> {
-            Intent intent = new Intent(getActivity(), BarcodeScannerActivity.class);
-            startActivity(intent);
-        });
     }
 }

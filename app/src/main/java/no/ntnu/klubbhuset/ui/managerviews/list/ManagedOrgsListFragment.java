@@ -2,10 +2,12 @@ package no.ntnu.klubbhuset.ui.managerviews.list;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -32,6 +34,7 @@ public class ManagedOrgsListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private ManagerViewModel mViewModel;
+    private ManagedOrgsRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -74,7 +77,8 @@ public class ManagedOrgsListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getManagedClubs().observe(this, clubs -> {
-                recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs, mListener));
+                adapter = new ManagedOrgsRecyclerViewAdapter(clubs, mListener);
+                recyclerView.setAdapter(adapter);
             });
         }
         return view;
@@ -116,5 +120,15 @@ public class ManagedOrgsListFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Club item);
+    }
+
+    @Override
+    public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs, @Nullable Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+        if (adapter != null) {
+            mViewModel.getManagedClubs().observe(this, clubs -> {
+                adapter.notifyDataSetChanged();
+            });
+        }
     }
 }
