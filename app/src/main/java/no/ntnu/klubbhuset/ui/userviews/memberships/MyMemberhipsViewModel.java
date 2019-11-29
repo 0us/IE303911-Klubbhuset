@@ -30,9 +30,9 @@ import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
 import static no.ntnu.klubbhuset.util.PreferenceUtils.PREF_NO_FILE_FOUND;
 
 
@@ -190,9 +190,9 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                map.put(CLIENT_ID, CommunicationConfig.getInstance().retrieveClientID());
-                map.put(CLIENT_SECRET, CommunicationConfig.getInstance().retrieveClientSecret());
-                map.put(OCP_APIM_SUBSCRIPTION_KEY, CommunicationConfig.getInstance().retrieveOcpApimSubscriptionKey());
+                map.put(CLIENT_ID_STRING, CommunicationConfig.getInstance().retrieveClientID());
+                map.put(CLIENT_SECRET_STRING, CommunicationConfig.getInstance().retrieveClientSecret());
+                map.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance().retrieveOcpApimSubscriptionKey());
                 return map;
             }
         };

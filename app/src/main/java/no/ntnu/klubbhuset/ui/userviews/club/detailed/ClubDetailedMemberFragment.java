@@ -41,9 +41,20 @@ import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.data.model.OrderId;
 import no.ntnu.klubbhuset.data.model.User;
+import no.ntnu.klubbhuset.data.model.VippsJsonProperties;
 import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 import no.ntnu.klubbhuset.util.UserHelper;
+
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.APPLICATION_JSON;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AUTHORIZATION;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CONTENT_TYPE;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ECOMM_V_2_PAYMENTS;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MINIMUM_REQUIRED_VIPPS_VERSION;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.NO_DNB_VIPPS_PACKAGE;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.UTF_8;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.VIPPS_URL;
 
 
 /**
@@ -51,12 +62,10 @@ import no.ntnu.klubbhuset.util.UserHelper;
  * payment-information etc
  */
 public class ClubDetailedMemberFragment extends Fragment {
-    private static final String TAG = "ClubDetailedMemberFragm";
+    private static final String TAG = "ClubDetailedMemberFragment";
 
-    public static final String MERCHANT_SERIAL_NUMBER = "merchantSerialNumber";
-    private static final String VIPPS_URL = "https://apitest.vipps.no";
+    public static final String MEMBER_STRING = "member";
     private static final int REQUEST_CODE = 100; // Success code https://github.com/vippsas/vipps-ecom-api/blob/master/vipps-ecom-api.md#error-codes-for-deeplinking
-    public static final String MINIMUM_REQUIRED_VIPPS_VERSION = "1.8.0";
     private ClubDetailedViewModel mViewModel;
     private Club club;
     private Member member;
@@ -70,7 +79,7 @@ public class ClubDetailedMemberFragment extends Fragment {
 
     public static ClubDetailedMemberFragment newInstance(Member member) {
         Bundle args = new Bundle();
-        args.putSerializable("member", member);
+        args.putSerializable(MEMBER_STRING, member);
         ClubDetailedMemberFragment newInstance = new ClubDetailedMemberFragment();
         newInstance.setArguments(args);
 
@@ -82,7 +91,7 @@ public class ClubDetailedMemberFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_club_detailed_member, container, false);
         this.club = ClubDetailedViewModel.getCurrentClub();
-        this.member = (Member) getArguments().getSerializable("member");
+        this.member = (Member) getArguments().getSerializable(MEMBER_STRING);
 
         vippsBtn = view.findViewById(R.id.club_detailed_pay_with_vipps);
         paymentStatusImg = view.findViewById(R.id.club_detailed_paid_status_img);
@@ -133,7 +142,7 @@ public class ClubDetailedMemberFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, VIPPS_URL + "/ecomm/v2/payments", body,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, VIPPS_URL + ECOMM_V_2_PAYMENTS, body,
                 response -> {
                     try {
                         String deepLink = (String) response.get("url");
@@ -149,7 +158,7 @@ public class ClubDetailedMemberFragment extends Fragment {
             //get response body and parse with appropriate encoding
             if (error.networkResponse.data != null) {
                 try {
-                    responseBody = new String(error.networkResponse.data, "UTF-8");
+                    responseBody = new String(error.networkResponse.data, UTF_8);
                     Log.d(TAG, "payWithVipps: responsebody: " + responseBody);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -160,9 +169,9 @@ public class ClubDetailedMemberFragment extends Fragment {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String vippsToken = PreferenceUtils.getVippsAccessToken(getActivity());
-                headers.put("Authorization", "Bearer " + vippsToken);
-                headers.put("Content-Type", "application/json");
-                headers.put("Ocp-Apim-Subscription-Key", CommunicationConfig.getInstance(getActivity()).retrieveOcpApimSubscriptionKey());
+                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + vippsToken);
+                headers.put(CONTENT_TYPE, APPLICATION_JSON);
+                headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance(getActivity()).retrieveOcpApimSubscriptionKey());
                 return headers;
             }
         };
@@ -201,7 +210,7 @@ public class ClubDetailedMemberFragment extends Fragment {
     private void openVipps(String deepLink) {
         try {
             PackageManager pm = getActivity().getPackageManager();
-            PackageInfo info = pm.getPackageInfo("no.dnb.vipps", PackageManager.GET_ACTIVITIES);
+            PackageInfo info = pm.getPackageInfo(NO_DNB_VIPPS_PACKAGE, PackageManager.GET_ACTIVITIES);
 
             boolean higherThan = new Version(info.versionName).isHigherThan(MINIMUM_REQUIRED_VIPPS_VERSION);
             if (higherThan) {

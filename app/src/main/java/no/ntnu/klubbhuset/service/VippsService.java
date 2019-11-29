@@ -14,29 +14,19 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.*;
 
 public class VippsService {
     private static final String TAG = "VippsService";
     private static final String CLIENT_ID = ""; // todo get id
     private static final String CLIENT_SECRET = ""; // todo
     private static final String OCP_APIM_SUBSCRIPTION_KEY = ""; //todo
-    private static final String VIPPS_API_URL = "https://apitest.vipps.no";
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String OCP_APIM_SUBSCRIPTION_KEY_STRING = "Ocp-Apim-Subscription-Key";
-    private static final String APPLICATION_JSON = "application/json";
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String VIPPS_SRING = "vipps";
-    private static final String merchantSerialNumber = "";
-
-    // TEMPORARY VALUES SO I CAN COMPILE
-    private static final String callbackPrefix = ""; // todo
-    private static final String fallBack = ""; // todo
     private static final String transactionText = ""; // todo
 
 
     private RequestQueue queue;
     private Context context; // calling class needs to give context;
-    SharedPreferences preferences = context.getSharedPreferences(VIPPS_SRING, Context.MODE_PRIVATE);
+    SharedPreferences preferences = context.getSharedPreferences(VIPPS_STRING, Context.MODE_PRIVATE);
     String authToken = preferences.getString("token", null);
 
     public VippsService(Context context) {
@@ -59,8 +49,8 @@ public class VippsService {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("client_id", CLIENT_ID);
-                headers.put("client_secret", CLIENT_SECRET);
+                headers.put(CLIENT_ID_STRING, CLIENT_ID);
+                headers.put(CLIENT_SECRET_STRING, CLIENT_SECRET);
                 headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, OCP_APIM_SUBSCRIPTION_KEY);
                 return headers;
             }
@@ -70,30 +60,30 @@ public class VippsService {
     }
 
     public void initiatePayment(double amount, long mobileNumber, String transactionText, String orderId) {
-        final String METHOD_URL = VIPPS_API_URL + "/ecomm/v2/payments/";
+        final String METHOD_URL = VIPPS_API_URL + ECOMM_V_2_PAYMENTS;
         JSONObject details = new JSONObject();
 
         if (authToken != null) {
             try {
                 JSONObject merchantInfo = new JSONObject();
-                merchantInfo.put("merchantSerialNumber", merchantSerialNumber);
-                merchantInfo.put("callbackPrefix", callbackPrefix);
-                merchantInfo.put("fallBack", fallBack);
-                merchantInfo.put("authToken", authToken);
-                merchantInfo.put("isApp", true);
+                merchantInfo.put(MERCHANT_SERIAL_NUMBER_STRING, merchantSerialNumber);
+                merchantInfo.put(CALLBACK_PREFIX_STRING, callbackPrefix);
+                merchantInfo.put(FALL_BACK_STRING, fallBack);
+                merchantInfo.put(AUTH_TOKEN, authToken);
+                merchantInfo.put(IS_APP, true);
 
                 JSONObject customerInfo = new JSONObject();
-                customerInfo.put("mobileNumber", mobileNumber);
+                customerInfo.put(MOBILE_NUMBER_STRING, mobileNumber);
 
                 JSONObject transaction = new JSONObject();
                 transaction.put("orderId", orderId);
-                transaction.put("amount", amount);
-                transaction.put("transactionText", transactionText);
-                transaction.put("skipLandingPage", false);
+                transaction.put(AMOUNT_STRING, amount);
+                transaction.put(TRANSACTION_TEXT_STRING, transactionText);
+                transaction.put(SKIP_LANDING_PAGE_STRING, false);
 
-                details.put("merchantInfo", merchantInfo);
-                details.put("customerInfo", customerInfo);
-                details.put("transaction", transaction);
+                details.put(MERCHANT_INFO_STRING, merchantInfo);
+                details.put(CUSTOMER_INFO_STRING, customerInfo);
+                details.put(TRANSACTION_STRING, transaction);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,7 +102,7 @@ public class VippsService {
                 public Map<String, String> getHeaders() {
                     Map<String, String> headers = new HashMap<>();
                     headers.put(CONTENT_TYPE, APPLICATION_JSON);
-                    headers.put("Ocp-Apim-Subscription-Key", OCP_APIM_SUBSCRIPTION_KEY);
+                    headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, OCP_APIM_SUBSCRIPTION_KEY);
                     headers.put(AUTHORIZATION, "Bearer " + authToken);
                     return headers;
                 }
@@ -126,22 +116,22 @@ public class VippsService {
 
         try {
             JSONObject merchantInfo = new JSONObject();
-            merchantInfo.put("merchantSerialNumber", merchantSerialNumber);
+            merchantInfo.put(MERCHANT_SERIAL_NUMBER_STRING, merchantSerialNumber);
 
             JSONObject transaction = new JSONObject();
-            transaction.put("amount", amount);
-            transaction.put("transactionText", transactionText);
-            transaction.put("skipLandingPage", true);
+            transaction.put(AMOUNT_STRING, amount);
+            transaction.put(TRANSACTION_TEXT_STRING, transactionText);
+            transaction.put(SKIP_LANDING_PAGE_STRING, true);
 
-            body.put("merchantInfo", merchantInfo);
-            body.put("transaction", transaction);
+            body.put(MERCHANT_INFO_STRING, merchantInfo);
+            body.put(TRANSACTION_STRING, transaction);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
 
-        final String METHOD_URL = VIPPS_API_URL + "/ecomm/v2/payments/" + orderId + "/capture";
+        final String METHOD_URL = VIPPS_API_URL + ECOMM_V_2_PAYMENTS + orderId + CAPTURE;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, METHOD_URL, body,
                 response -> {
                     Log.d(TAG, "capturePayment: response: " + response);
@@ -163,7 +153,7 @@ public class VippsService {
     }
 
     public void getPaymentStatus(String orderId) {
-        final String METHOD_URL = VIPPS_API_URL + "/ecomm/v2/payments/" + orderId + "/details";
+        final String METHOD_URL = VIPPS_API_URL + ECOMM_V_2_PAYMENTS + orderId + DETAILS;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, METHOD_URL, null,
                 response -> {
                     Log.d(TAG, "getPaymentStatus: response: " + response);
