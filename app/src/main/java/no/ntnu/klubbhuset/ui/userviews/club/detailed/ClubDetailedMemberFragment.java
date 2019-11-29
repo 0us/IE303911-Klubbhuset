@@ -28,7 +28,6 @@ import java.util.Date;
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
-import no.ntnu.klubbhuset.service.VippsService;
 
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MINIMUM_REQUIRED_VIPPS_VERSION;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.NO_DNB_VIPPS_PACKAGE;
@@ -53,7 +52,6 @@ public class ClubDetailedMemberFragment extends Fragment {
     private TextView paymentDueDate;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
-    private VippsService vippsService;
 
 
     public static ClubDetailedMemberFragment newInstance(Member member) {
@@ -71,8 +69,6 @@ public class ClubDetailedMemberFragment extends Fragment {
         View view = inflater.inflate(R.layout.content_club_detailed_member, container, false);
         this.club = ClubDetailedViewModel.getCurrentClub();
         this.member = (Member) getArguments().getSerializable(MEMBER_STRING);
-
-        vippsService = new VippsService(getActivity());
 
         vippsBtn = view.findViewById(R.id.club_detailed_pay_with_vipps);
         paymentStatusImg = view.findViewById(R.id.club_detailed_paid_status_img);
@@ -107,7 +103,9 @@ public class ClubDetailedMemberFragment extends Fragment {
 
         vippsBtn.setOnClickListener(v -> {
             mViewModel.getUser().observe(this, user -> {
-                vippsService.payWithVipps(user, club, this);
+                mViewModel.getDeeplink(user).observe(this, deeplink -> {
+                    openVipps(deeplink);
+                });
             });
         });
 
