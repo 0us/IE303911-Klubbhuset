@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.fragment.app.Fragment;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,15 +14,20 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.OrderId;
 import no.ntnu.klubbhuset.data.model.User;
+import no.ntnu.klubbhuset.data.model.VippsJsonProperties;
 import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
+import no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedMemberFragment;
+import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AMOUNT_STRING;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.APPLICATION_JSON;
@@ -43,8 +50,10 @@ import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRI
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.SKIP_LANDING_PAGE_STRING;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.TRANSACTION_STRING;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.TRANSACTION_TEXT_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.UTF_8;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.VIPPS_API_URL;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.VIPPS_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.VIPPS_URL;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.callbackPrefix;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.fallBack;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.merchantSerialNumber;
@@ -229,5 +238,50 @@ public class VippsService {
                 Calendar.getInstance().get(Calendar.YEAR));
 
         return new VippsPaymentDetails(phoneNumber, orderId, amount, transactionText, context);
+    }
+
+    public void payWithVipps(User user, Club club) {
+        VippsPaymentDetails details = getVippsPaymentDetails(user, club);
+
+        JSONObject body = null;
+        try {
+            body = details.getBody();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, VIPPS_URL + ECOMM_V_2_PAYMENTS, body,
+                response -> {
+                    try {
+                        String deepLink = (String) response.get("url");
+                        openVipps(deepLink);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            Log.d(TAG, "payWithVipps: error: " + error);
+            String responseBody;
+            //get status code here
+            String statusCode = String.valueOf(error.networkResponse.statusCode);
+            //get response body and parse with appropriate encoding
+            if (error.networkResponse.data != null) {
+                try {
+                    responseBody = new String(error.networkResponse.data, UTF_8);
+                    Log.d(TAG, "payWithVipps: responsebody: " + responseBody);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String vippsToken = PreferenceUtils.getVippsAccessToken(context);
+                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + vippsToken);
+                headers.put(CONTENT_TYPE, APPLICATION_JSON);
+                headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance(context).retrieveOcpApimSubscriptionKey());
+                return headers;
+            }
+        };
+        queue.add(request);
     }
 }

@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,41 +17,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.g00fy2.versioncompare.Version;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.data.CommunicationConfig;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
-import no.ntnu.klubbhuset.data.model.User;
-import no.ntnu.klubbhuset.data.model.VippsJsonProperties;
-import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 import no.ntnu.klubbhuset.service.VippsService;
-import no.ntnu.klubbhuset.util.PreferenceUtils;
 
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.APPLICATION_JSON;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AUTHORIZATION;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CONTENT_TYPE;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ECOMM_V_2_PAYMENTS;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MINIMUM_REQUIRED_VIPPS_VERSION;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.NO_DNB_VIPPS_PACKAGE;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.UTF_8;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.VIPPS_URL;
 
 
 /**
@@ -128,57 +107,12 @@ public class ClubDetailedMemberFragment extends Fragment {
 
         vippsBtn.setOnClickListener(v -> {
             mViewModel.getUser().observe(this, user -> {
-                payWithVipps(user, club);
+                vippsService.payWithVipps(user, club, this);
             });
         });
 
     }
 
-
-    private void payWithVipps(User user, Club club) {
-        VippsPaymentDetails details = vippsService.getVippsPaymentDetails(user, club);
-
-        JSONObject body = null;
-        try {
-            body = details.getBody();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, VIPPS_URL + ECOMM_V_2_PAYMENTS, body,
-                response -> {
-                    try {
-                        String deepLink = (String) response.get("url");
-                        openVipps(deepLink);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> {
-            Log.d(TAG, "payWithVipps: error: " + error);
-            String responseBody;
-            //get status code here
-            String statusCode = String.valueOf(error.networkResponse.statusCode);
-            //get response body and parse with appropriate encoding
-            if (error.networkResponse.data != null) {
-                try {
-                    responseBody = new String(error.networkResponse.data, UTF_8);
-                    Log.d(TAG, "payWithVipps: responsebody: " + responseBody);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String vippsToken = PreferenceUtils.getVippsAccessToken(getActivity());
-                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + vippsToken);
-                headers.put(CONTENT_TYPE, APPLICATION_JSON);
-                headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance(getActivity()).retrieveOcpApimSubscriptionKey());
-                return headers;
-            }
-        };
-        queue.add(request);
-    }
 
     private void openVipps(String deepLink) {
         try {
