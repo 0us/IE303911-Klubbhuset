@@ -1,16 +1,14 @@
 package no.ntnu.klubbhuset.ui.main;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedActivity;
-import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
+import no.ntnu.klubbhuset.ui.userviews.home.list.ClubsListFragment;
 import no.ntnu.klubbhuset.ui.userviews.memberships.list.ClubMembershipFragment;
-import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,7 +26,7 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.PUBLIC_KEY;
 import static no.ntnu.klubbhuset.util.PreferenceUtils.setPublicKey;
 
 public class MainActivity extends AppCompatActivity
-        implements ClubFragment.OnListFragmentInteractionListener, ClubMembershipFragment.OnListFragmentInteractionListener {
+        implements ClubsListFragment.OnListFragmentInteractionListener, ClubMembershipFragment.OnListFragmentInteractionListener {
 
 
     private RequestQueue requestQueue;
