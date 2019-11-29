@@ -10,14 +10,14 @@ import android.widget.TextView;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.ui.userviews.mymemberships.MyMemberhipsFragment;
 import no.ntnu.klubbhuset.ui.userviews.mymemberships.MyMembershipsListFragment;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Club} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
+ * specified {@link MyMembershipsListFragment.OnListFragmentInteractionListener}.
  */
 public class ClubMembershipRecyclerViewAdapter extends RecyclerView.Adapter<ClubMembershipRecyclerViewAdapter.ViewHolder> {
 

@@ -32,6 +32,10 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.checkHasPaid;
 public class BarcodeViewModel extends AndroidViewModel {
 
     private static final String TAG = "BarcodeViewModel";
+    private static final String JSON_MSG = "msg";
+    public static final String PAYMENT_STATUS_OK = "OK!";
+    public static final String PAYMENT_STATUS_NOT_OK = "NOT PAYED!";
+    public static final String MEMBER_NOT_FOUND = "NOT FOUND!";
     private Application context;
 
     public BarcodeViewModel(@NonNull Application context) {
@@ -40,6 +44,6 @@ public class BarcodeViewModel extends AndroidViewModel {
     }
 
     public LiveData<Resource<String>> getUserPaymentStatus(String email, Club club) {
-        return AdminOrganizationRepository.getInstance(context, club).hasMemberPaid(email);
+        return AdminOrganizationRepository.getInstance(context, club).hasMemberPaid(email, club);
     }
 }

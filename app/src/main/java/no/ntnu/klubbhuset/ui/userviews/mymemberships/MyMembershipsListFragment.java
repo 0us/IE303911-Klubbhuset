@@ -17,10 +17,9 @@ import android.view.ViewGroup;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ClubMembershipRecyclerViewAdapter;
-import no.ntnu.klubbhuset.data.Status;
+import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
-import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
 
 /**
  * A fragment representing a list of Items.
@@ -44,20 +43,10 @@ public class MyMembershipsListFragment extends Fragment {
     public MyMembershipsListFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static ClubsListFragment newInstance(int columnCount) {
-        ClubsListFragment fragment = new ClubsListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -78,11 +67,7 @@ public class MyMembershipsListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getClubs().observe(this, clubs -> {
-                if (clubs.getStatus() == Status.SUCCESS) {
-                    recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
-                } else {
-                    //todo handle error
-                }
+                recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
             });
         }
         return view;

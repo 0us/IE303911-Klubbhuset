@@ -9,6 +9,7 @@ import android.os.Bundle;
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
 
+
 public class
 ManagerActivity extends AppCompatActivity implements
         ManagedOrgsListFragment.OnListFragmentInteractionListener, CreateOrganizationFormFragment.OnFragmentInteractionListener{

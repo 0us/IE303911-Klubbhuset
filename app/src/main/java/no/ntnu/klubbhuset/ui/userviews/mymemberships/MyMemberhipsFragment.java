@@ -18,7 +18,7 @@ import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.viewmodels.MyMemberhipsViewModel;
 
 
-public class MyMemberhipsFragment extends Fragment {
+public class MyMemberhipsFragment extends Fragment{
 
     private MyMemberhipsViewModel mViewModel;
     private ImageView qrView;

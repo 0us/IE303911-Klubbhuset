@@ -172,7 +172,7 @@ public class OrganizationRepository {
                     } catch (JSONException jex) {
                         System.out.println(jex);
                     }
-                    cached.setValue(clubs);
+                    cached.setValue(Resource.success(clubs));
                 }, System.out::println) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

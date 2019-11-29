@@ -20,7 +20,7 @@ public class Club implements Serializable {
     private String url;
     private long oid;
     private String name;
-    private transient byte[] image;
+    private String image;
 
     public Club(String description, BigDecimal priceOfMembership, String emailContact, String url, String name) {
         this.description = description;
@@ -48,8 +48,11 @@ public class Club implements Serializable {
     }
 
     public JSONObject toJson(byte[] imageInByte) {
-        JSONObject json  = new JSONObject();
-        String base64String = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+        JSONObject json = new JSONObject();
+        String base64String = null;
+        if (imageInByte != null) {
+            base64String = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+        }
 
         try {
             json.put("name", name);
@@ -65,7 +68,7 @@ public class Club implements Serializable {
     }
 
     public JSONObject toJson() {
-        JSONObject json  = new JSONObject();
+        JSONObject json = new JSONObject();
 
         try {
             json.put("name", name);

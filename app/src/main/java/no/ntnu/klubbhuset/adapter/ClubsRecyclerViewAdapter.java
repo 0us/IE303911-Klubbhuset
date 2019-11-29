@@ -4,6 +4,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +54,16 @@ public class ClubsRecyclerViewAdapter extends RecyclerView.Adapter<ClubsRecycler
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mMembercountView.setText("0"); // TODO
+        if (holder.mItem.getImage() == null || holder.mItem.getImage().isEmpty()) {
+            // set placeholder
+            holder.mLogo.setImageResource(R.drawable.ic_broken_image_black_24dp);
+        } else {
+            String encodedString = holder.mItem.getImage();
+
+            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            holder.mLogo.setImageBitmap(bitmap);
+        }
 
         holder.view.setOnClickListener(v -> {
             mListener.onListFragmentInteraction(holder.mItem);
