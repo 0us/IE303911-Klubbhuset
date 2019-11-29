@@ -48,7 +48,7 @@ public class VippsPaymentDetails {
 
         JsonObject transaction = new JsonObject();
         transaction.addProperty("orderId", orderId.toString());
-        transaction.addProperty("amount", Integer.valueOf((int) (amount * 100)));
+        transaction.addProperty("amount", Integer.valueOf((int) (amount * 100))); // The Vipps API does only accept amount as int, representing øre.
         transaction.addProperty("transactionText", transactionText);
         transaction.addProperty("skipLandingPage", false);
 
