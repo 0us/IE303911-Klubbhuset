@@ -1,12 +1,10 @@
 package no.ntnu.klubbhuset.ui.userviews.profile;
 
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.icu.lang.UScript;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,10 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.User;
-import no.ntnu.klubbhuset.ui.login.LoginActivity;
-import no.ntnu.klubbhuset.ui.login.LoginViewModel;
 import no.ntnu.klubbhuset.ui.managerviews.ManagerActivity;
+import no.ntnu.klubbhuset.viewmodels.ProfileViewModel;
 
 import static no.ntnu.klubbhuset.ui.main.MainActivity.LOGOUT;
 
@@ -59,7 +57,13 @@ public class ProfileFragment extends Fragment {
         initButtons();
 
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-        mViewModel.getUser().observe(this, this::fillUserInfo);
+        mViewModel.getUser().observe(this, result -> {
+            if (result.getStatus() == Status.SUCCESS) {
+                fillUserInfo(result.getData());
+            } else if (result.getStatus() == Status.ERROR) {
+                //todo handle error
+            }
+        });
 
     }
 

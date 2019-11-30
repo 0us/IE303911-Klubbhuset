@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import lombok.NoArgsConstructor;
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.viewmodels.LoginViewModel;
 
 @NoArgsConstructor
 public class LoginFragment extends Fragment {

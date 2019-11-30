@@ -10,9 +10,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import no.ntnu.klubbhuset.data.CommunicationConfig;
+import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.ui.login.LoginActivity;
-import no.ntnu.klubbhuset.ui.main.MainActivity;
 
 import static no.ntnu.klubbhuset.ui.main.MainActivity.FINISHED;
 import static no.ntnu.klubbhuset.ui.main.MainActivity.LOGOUT;

@@ -24,7 +24,7 @@ public class AuthHelper {
      * @return a Map containing necessary headers for authorization
      * @throws AuthFailureError
      */
-    public static Map<String, String> getAuthHeaders(Application context) throws AuthFailureError {
+    public static Map<String, String> getAuthHeaders(Context context) throws AuthFailureError {
 
         String token = getStoredToken(context);
 
@@ -40,7 +40,7 @@ public class AuthHelper {
         return headers;
     }
 
-    private static String getStoredToken(Application context) {
+    private static String getStoredToken(Context context) {
         SharedPreferences pref = context.getSharedPreferences("login", Context.MODE_PRIVATE);
         return pref.getString("token", "");
     }

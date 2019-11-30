@@ -121,7 +121,7 @@ public class AdminOrganizationService {
         System.out.println(member);
 
 
-        if ( !member.hasPaid() ) {
+        if (!member.hasPaid() ) {
             return Response.status(Response.Status.PAYMENT_REQUIRED).entity("Has NOT paid").build();
         }
 
