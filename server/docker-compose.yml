@@ -3,7 +3,8 @@ version: '3.7'
 services:
 
   nginx:
-    container_name: klubbhuset-nginx
+    container_name: nginx
+    hostname: nginx
     depends_on:
       - appserver
     image: nginx:1.15-alpine
