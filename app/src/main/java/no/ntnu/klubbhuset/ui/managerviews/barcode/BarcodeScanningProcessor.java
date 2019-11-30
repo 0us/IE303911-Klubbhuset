@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -22,11 +24,14 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import no.ntnu.klubbhuset.data.Status;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 import no.ntnu.klubbhuset.util.mlkit.CameraImageGraphic;
 import no.ntnu.klubbhuset.util.mlkit.FrameMetadata;
 import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
+import no.ntnu.klubbhuset.viewmodels.BarcodeViewModel;
 
 import java.io.IOException;
 import java.security.KeyFactory;
@@ -168,17 +173,27 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
             email = jws.getBody().getSubject();
 
             // Retrieve the membership status of user
-            barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, s -> {
+            barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, response -> {
                 // Draw graphic onto the screen
-                BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, s);
-                graphicOverlay.add(barcodeGraphic);
+                if (response.getStatus() == Status.SUCCESS) {
+                    String textResult = response.getData();
+                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, textResult);
+                    graphicOverlay.add(barcodeGraphic);
 
-                prevBarCode = barcode;
-                prevBarCodeText = s;
+                    prevBarCode = barcode;
+                    prevBarCodeText = textResult;
+
+                } else if (response.getStatus() == Status.ERROR) {
+                    String textResult = response.getError();
+                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, response.getError());
+                    graphicOverlay.add(barcodeGraphic);
+
+                    prevBarCode = barcode;
+                    prevBarCodeText = textResult;
+                }
             });
-
-        }
-        // If no token can be retrieved, print user feedback and continue parsing barcodes
+            graphicOverlay.postInvalidate();
+        } // If no token can be retrieved, print user feedback and continue parsing barcodes
         catch (JwtException je) {
             String msg = "Not Valid!";
             BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, msg);
