@@ -61,7 +61,6 @@ public class BarcodeViewModel extends AndroidViewModel {
 
     /**
      * Checks wether the user has paid for the membership of a given organization
-     * todo Retrieve the organization to check for, currently a test value is used for request.
      *
      * @param email the email of the user to check
      */

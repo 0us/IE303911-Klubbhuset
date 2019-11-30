@@ -28,9 +28,7 @@ import no.ntnu.klubbhuset.ui.userviews.home.list.ClubsListFragment;
  */
 public class ManagedOrgsListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private ManagerViewModel mViewModel;
@@ -43,8 +41,6 @@ public class ManagedOrgsListFragment extends Fragment {
     public ManagedOrgsListFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static ClubsListFragment newInstance(int columnCount) {
         ClubsListFragment fragment = new ClubsListFragment();
         Bundle args = new Bundle();
@@ -118,7 +114,6 @@ public class ManagedOrgsListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Club item);
     }
 

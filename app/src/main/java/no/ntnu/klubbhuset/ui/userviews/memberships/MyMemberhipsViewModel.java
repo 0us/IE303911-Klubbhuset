@@ -63,7 +63,6 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
     }
 
     private String getIdToken() {
-        // TODO get token from loggedinuser
         SharedPreferences preferences = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
         return preferences.getString("token", null);
     }

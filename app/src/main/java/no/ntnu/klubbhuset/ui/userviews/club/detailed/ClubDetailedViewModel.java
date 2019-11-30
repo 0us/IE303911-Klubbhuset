@@ -33,7 +33,6 @@ import static no.ntnu.klubbhuset.data.CommunicationConfig.ORGANIZATION;
 
 
 public class ClubDetailedViewModel extends AndroidViewModel {
-    // TODO: Implement the ViewModel
     private RequestQueue requestQueue;
     private MutableLiveData<Member> membership;
     private Gson gson;

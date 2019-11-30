@@ -50,7 +50,6 @@ public class ClubDetailedNotMemberFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: Use the ViewModel
         mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
         Club club = ClubDetailedViewModel.getCurrentClub();
         Button joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
