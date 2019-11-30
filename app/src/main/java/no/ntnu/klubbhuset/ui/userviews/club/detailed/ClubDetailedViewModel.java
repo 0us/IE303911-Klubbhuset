@@ -98,6 +98,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,API_URL + USER, null,
                 response -> {
                     try {
+                        Log.i(TAG, "loadUser: Got response " + response);
                         user.setValue(new User(response));
                     } catch (InvalidObjectException e) {
                         e.printStackTrace();
