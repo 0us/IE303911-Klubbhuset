@@ -3,7 +3,8 @@ version: '3.7'
 services:
 
   nginx:
-    container_name: klubbhuset-nginx
+    container_name: nginx
+    hostname: nginx
     depends_on:
       - appserver
     image: nginx:1.15-alpine
@@ -12,7 +13,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./app.conf:/etc/nginx/nginx.conf
+      - ./nginx/app.conf:/etc/nginx/nginx.conf
+      - ./nginx/configs:/etc/nginx/
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
