@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,7 @@ public class AdminOrganizationRepository {
 
     private static volatile LongSparseArray<AdminOrganizationRepository> instances = new LongSparseArray<>();
 
-    public static AdminOrganizationRepository getInstance(Application context, @NonNull Club club) {
+    public static AdminOrganizationRepository getInstance(Context context, @NonNull Club club) {
         AdminOrganizationRepository instance;
         long oid = club.getOid();
         if ((instance = instances.get(oid)) == null) {
@@ -50,7 +51,7 @@ public class AdminOrganizationRepository {
     }
 
     private Club club;
-    private Application context;
+    private Context context;
     private RequestQueue requestQueue;
 
     private final String TAG = "AdminOrganizationRepository";
@@ -58,7 +59,7 @@ public class AdminOrganizationRepository {
     private Cache cache = Cache.getInstance();
 
 
-    private AdminOrganizationRepository(Application context, Club club) {
+    private AdminOrganizationRepository(Context context, Club club) {
         this.club = club;
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);

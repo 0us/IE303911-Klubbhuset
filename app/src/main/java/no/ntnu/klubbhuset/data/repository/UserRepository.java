@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,7 +12,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.io.InvalidObjectException;
 import java.util.Map;
 
 import no.ntnu.klubbhuset.data.cache.Cache;
@@ -34,14 +34,14 @@ public class UserRepository {
         return ourInstance;
     }
 
-    private Application context;
+    private Context context;
     private final String ENDPOINT = API_URL + USER;
     private RequestQueue requestQueue;
 
     private Cache cache = Cache.getInstance();
 
 
-    private UserRepository(Application context) {
+    private UserRepository(Context context) {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
     }

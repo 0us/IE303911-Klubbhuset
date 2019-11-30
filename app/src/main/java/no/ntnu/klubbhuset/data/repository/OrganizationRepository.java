@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -46,7 +47,7 @@ public class OrganizationRepository {
         return ourInstance;
     }
 
-    private Application context;
+    private Context context;
     private RequestQueue requestQueue;
     private final String ENDPOINT = API_URL + ORGANIZATION + "/";
 
@@ -54,7 +55,7 @@ public class OrganizationRepository {
     private Cache cache = Cache.getInstance();
 
 
-    private OrganizationRepository(Application context) {
+    private OrganizationRepository(Context context) {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
     }

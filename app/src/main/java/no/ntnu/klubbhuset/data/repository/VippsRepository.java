@@ -1,6 +1,6 @@
 package no.ntnu.klubbhuset.data.repository;
 
-import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -10,9 +10,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,20 +29,20 @@ public class VippsRepository {
     private static VippsRepository ourInstance;
     private RequestQueue requestQueue;
     private static final String TAG = "VippsRepository";
-    private Application context;
+    private Context context;
 
 
     private Cache cache = Cache.getInstance();
     private VippsCache vippsCache = VippsCache.getInstance();
 
-    public static VippsRepository getInstance(Application context) {
+    public static VippsRepository getInstance(Context context) {
         if (ourInstance == null) {
             ourInstance = new VippsRepository(context);
         }
         return ourInstance;
     }
 
-    private VippsRepository(Application context) {
+    private VippsRepository(Context context) {
         this.requestQueue = Volley.newRequestQueue(context);
         this.context = context;
     }
