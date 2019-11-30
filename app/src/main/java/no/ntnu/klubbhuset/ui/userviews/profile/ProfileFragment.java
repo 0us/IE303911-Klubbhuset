@@ -2,9 +2,7 @@ package no.ntnu.klubbhuset.ui.userviews.profile;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.icu.lang.UScript;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -78,7 +76,7 @@ public class ProfileFragment extends Fragment {
             firstname.setText(user.getFirstName());
             lastname.setText(user.getLastName());
             email.setText(user.getEmail());
-            phone.setText(user.getPhone());
+            phone.setText(user.getPhonenumber());
         } else {
             Log.e("Tag test 123", "User is null");
             // show error

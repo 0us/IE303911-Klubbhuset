@@ -34,8 +34,12 @@ public class Club implements Serializable {
         try {
             this.oid = json.getLong("oid");
             this.name = json.getString("name");
-            this.url = json.getString("url");
-            this.emailContact = json.getString("emailContact");
+            if (json.has("url")) {
+                this.url = json.getString("url");
+            }
+            if (json.has("emailContact")) {
+                this.emailContact = json.getString("emailContact");
+            }
             if (json.getString("priceOfMembership").equals("null")) {
                 this.priceOfMembership = BigDecimal.valueOf(0);
             } else {
@@ -49,6 +53,7 @@ public class Club implements Serializable {
 
     public JSONObject toJson(byte[] imageInByte) {
         JSONObject json = new JSONObject();
+      
         String base64String = null;
         if (imageInByte != null) {
             base64String = Base64.encodeToString(imageInByte, Base64.DEFAULT);

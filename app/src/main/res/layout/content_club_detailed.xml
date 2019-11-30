@@ -33,7 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-
             android:orientation="vertical">
 
             <TextView
@@ -51,7 +50,6 @@
                 android:id="@+id/club_detailed_membercount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_gravity="bottom|center_horizontal"
                 android:alpha="1"
                 android:text="xxx MEMBERS"
@@ -60,12 +58,9 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:typeface="normal" />
-
-
         </LinearLayout>
-
-
     </FrameLayout>
+
 
     <FrameLayout
         android:id="@+id/club_detailed_fragment_container"

@@ -14,17 +14,27 @@ import com.google.gson.Gson;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
+import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
+import no.ntnu.klubbhuset.data.repository.UserRepository;
+import no.ntnu.klubbhuset.data.repository.VippsRepository;
+
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
 
 
 public class ClubDetailedViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
     private static Club focusedClub;
     private OrganizationRepository organizationRepository;
+    private VippsRepository vippsRepository;
+    private UserRepository userRepository;
 
     public ClubDetailedViewModel(@NonNull Application application) {
         super(application);
         organizationRepository = OrganizationRepository.getInstance(application);
+        vippsRepository = VippsRepository.getInstance(application);
+        userRepository = UserRepository.getInstance(application);
     }
 
     public LiveData<Resource<Member>> joinClub(Club club) {
@@ -54,4 +64,11 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         focusedClub = currentClub;
     }
 
+    public LiveData<Resource<String>> getDeeplink(Resource<User> user) {
+        return vippsRepository.getDeepLink(user, focusedClub);
+    }
+
+    public LiveData<Resource<User>> getUser() {
+        return userRepository.get();
+    }
 }
