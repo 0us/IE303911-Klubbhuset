@@ -27,6 +27,8 @@ import no.ntnu.klubbhuset.ui.login.LoginActivity;
 import no.ntnu.klubbhuset.ui.login.LoginViewModel;
 import no.ntnu.klubbhuset.ui.managerviews.ManagerActivity;
 
+import static no.ntnu.klubbhuset.ui.main.MainActivity.LOGOUT;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -90,8 +92,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void signOut() {
-        Intent result = new Intent("logout");
-        getActivity().setResult(Activity.RESULT_OK, result);
+        getActivity().setResult(LOGOUT);
         getActivity().finish();
     }
 
