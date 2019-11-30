@@ -148,12 +148,10 @@ public class OrganizationRepository {
 
     public LiveData<Resource<Club>> get(Club club) {
         throw new UnsupportedOperationException("TODO: Implement method");
-
     }
 
     public LiveData<Resource<List<Member>>> getMembers(long oid) {
         throw new UnsupportedOperationException("TODO: Implement method");
-
     }
 
     public LiveData<Resource<List<Club>>> getManaged() {

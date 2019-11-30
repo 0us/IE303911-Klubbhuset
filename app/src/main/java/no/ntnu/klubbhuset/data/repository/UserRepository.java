@@ -2,6 +2,7 @@ package no.ntnu.klubbhuset.data.repository;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -26,7 +27,7 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
 
 public class UserRepository {
     private static UserRepository ourInstance;
-
+    private final String TAG = "UserRepository";
     public static UserRepository getInstance(Application context) {
         if (ourInstance == null) {
             ourInstance = new UserRepository(context);
@@ -67,20 +68,19 @@ public class UserRepository {
     }
 
     public LiveData<Resource<User>> get() {
-        String url = CommunicationConfig.API_URL + USER;
         MutableLiveData<Resource<User>> cached = cache.getUser();
         if (cached.getValue() != null) {
             return cached;
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, ENDPOINT, null,
                 response -> {
                     User newUser = Json.fromJson(response.toString(), User.class);
                     cached.setValue(Resource.success(newUser));
                 },
                 error -> {
                     // error
-                    System.out.println(error.networkResponse);
+                    Log.e(TAG, error.networkResponse.toString());
                     cached.setValue(Resource.error("Error fetching user", error));
                 }) {
             @Override
