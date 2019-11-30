@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
@@ -177,15 +178,13 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
                     BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, response.getData());
                     graphicOverlay.add(barcodeGraphic);
                 } else if (response.getStatus() == Status.ERROR) {
-                    String msg = "Not Valid!";
-                    Log.e(TAG, response.getData().toString());
-                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, msg);
+                    String msg = "Not Valid!";BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, response.getError());
+
                     graphicOverlay.add(barcodeGraphic);
 
                     prevBarCode = barcode;
                     prevBarCodeText = msg;
                 }
-
             });
         graphicOverlay.postInvalidate();
     }

@@ -83,7 +83,11 @@ public class AdminOrganizationRepository {
                     url,
                     jsonObject,
                     response -> {
-                        userPaymentStatus.setValue(Resource.success(response.toString()));
+                        try {
+                            userPaymentStatus.setValue(Resource.success(response.getString(JSON_MSG)));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     },
                     error -> {
                         if (error.networkResponse.statusCode == 402) {
