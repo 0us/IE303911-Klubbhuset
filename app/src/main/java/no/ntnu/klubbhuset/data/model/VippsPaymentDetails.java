@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import no.ntnu.klubbhuset.data.CommunicationConfig;
+import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.*;

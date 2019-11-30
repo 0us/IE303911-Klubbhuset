@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
+import no.ntnu.klubbhuset.data.cache.Cache;
+import no.ntnu.klubbhuset.data.cache.VippsCache;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
+import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
 
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MINIMUM_REQUIRED_VIPPS_VERSION;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.NO_DNB_VIPPS_PACKAGE;
@@ -87,8 +92,8 @@ public class ClubDetailedMemberFragment extends Fragment {
         memberSince.setText(dateFormat.format(member.getCreated()));
 
         mViewModel.getMembership(club).observe(this, response -> {
-            this.member = response;
-            if (response.isHasPaid() || club.getPriceOfMembership() == null || club.getPriceOfMembership().equals(BigDecimal.ZERO)) {
+            this.member = response.getData();
+            if (member.isHasPaid() || club.getPriceOfMembership() == null || club.getPriceOfMembership().equals(BigDecimal.ZERO)) {
                 vippsBtn.setVisibility(View.GONE);
                 paymentStatusText.setText(getString(R.string.payment_true));
                 paymentDueDate.setText("");
@@ -104,7 +109,11 @@ public class ClubDetailedMemberFragment extends Fragment {
         vippsBtn.setOnClickListener(v -> {
             mViewModel.getUser().observe(this, user -> {
                 mViewModel.getDeeplink(user).observe(this, deeplink -> {
-                    openVipps(deeplink);
+                    if (deeplink.getStatus() == Status.SUCCESS) {
+                        openVipps(deeplink.getData());
+                    } else if (deeplink.getStatus() == Status.ERROR) {
+                        Log.e(TAG, "Couldn't get deeplink, please contact your personal sysadmin");
+                    }
                 });
             });
         });

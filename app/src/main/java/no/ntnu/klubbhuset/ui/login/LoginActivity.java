@@ -12,7 +12,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.AuthenticationPageAdapter;
-import no.ntnu.klubbhuset.fragments.RegisterFragment;
+import no.ntnu.klubbhuset.viewmodels.LoginViewModel;
+import no.ntnu.klubbhuset.viewmodels.LoginViewModelFactory;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showHome() {
+    void showHome() {
         setResult(Activity.RESULT_OK);
         finish();
     }
