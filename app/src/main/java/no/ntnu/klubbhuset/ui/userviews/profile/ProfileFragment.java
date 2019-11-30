@@ -25,7 +25,7 @@ import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.ui.managerviews.ManagerActivity;
 import no.ntnu.klubbhuset.viewmodels.ProfileViewModel;
 
-import static no.ntnu.klubbhuset.ui.main.MainActivity.LOGOUT;
+import static no.ntnu.klubbhuset.MainActivity.LOGOUT;
 
 
 public class ProfileFragment extends Fragment {

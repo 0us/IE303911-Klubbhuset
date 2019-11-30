@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.ui.login.LoginActivity;
 
-import static no.ntnu.klubbhuset.ui.main.MainActivity.FINISHED;
-import static no.ntnu.klubbhuset.ui.main.MainActivity.LOGOUT;
+import static no.ntnu.klubbhuset.MainActivity.FINISHED;
+import static no.ntnu.klubbhuset.MainActivity.LOGOUT;
 
 public class MasterAcitvity extends AppCompatActivity {
 
