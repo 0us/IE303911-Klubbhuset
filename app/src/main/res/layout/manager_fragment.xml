@@ -13,17 +13,6 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/manage_scan_qr_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:drawableStart="@drawable/ic_add_black_24dp"
-            android:text="@string/scan_a_new_qr_code" />
-
-        <Button
             android:id="@+id/manage_create_new_org"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +44,7 @@
 
             <fragment
                 android:id="@+id/manager_clubs_recycler_view"
-                android:name="no.ntnu.klubbhuset.ui.managerviews.list.ManagedOrgsListFragment"
+                android:name="no.ntnu.klubbhuset.ui.managerviews.ManagedOrgsListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
