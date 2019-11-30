@@ -167,6 +167,7 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
         // Try to retrieve claims from QR-Code
         Jws<Claims> jws;
         String email = "";
+        try {
             JwtParser parser = Jwts.parser().setSigningKey(pk);
             jws = parser.parseClaimsJws(token);
             email = jws.getBody().getSubject();
@@ -175,18 +176,32 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
             barcodeViewModel.getUserPaymentStatus(email, club).observe(activity, response -> {
                 // Draw graphic onto the screen
                 if (response.getStatus() == Status.SUCCESS) {
-                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, response.getData());
-                    graphicOverlay.add(barcodeGraphic);
-                } else if (response.getStatus() == Status.ERROR) {
-                    String msg = "Not Valid!";BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, response.getError());
-
+                    String textResult = response.getData();
+                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, textResult);
                     graphicOverlay.add(barcodeGraphic);
 
                     prevBarCode = barcode;
-                    prevBarCodeText = msg;
+                    prevBarCodeText = textResult;
+
+                } else if (response.getStatus() == Status.ERROR) {
+                    String textResult = response.getError();
+                    BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, response.getError());
+                    graphicOverlay.add(barcodeGraphic);
+
+                    prevBarCode = barcode;
+                    prevBarCodeText = textResult;
                 }
             });
-        graphicOverlay.postInvalidate();
+            graphicOverlay.postInvalidate();
+        } // If no token can be retrieved, print user feedback and continue parsing barcodes
+        catch (JwtException je) {
+            String msg = "Not Valid!";
+            BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, msg);
+            graphicOverlay.add(barcodeGraphic);
+
+            prevBarCode = barcode;
+            prevBarCodeText = msg;
+        }
     }
 
 
