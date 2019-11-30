@@ -25,7 +25,7 @@ import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ClubFragment extends Fragment {
+public class ClubsListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -38,13 +38,13 @@ public class ClubFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ClubFragment() {
+    public ClubsListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ClubFragment newInstance(int columnCount) {
-        ClubFragment fragment = new ClubFragment();
+    public static ClubsListFragment newInstance(int columnCount) {
+        ClubsListFragment fragment = new ClubsListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

@@ -63,7 +63,6 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     // multipart/form-data request volley
-    
     repositories {
         maven { url 'https://jitpack.io' }
         maven { url 'http://repo1.maven.org/maven2' }

@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.ui.userviews.club.ClubsViewModel;
-import no.ntnu.klubbhuset.ui.userviews.home.list.ClubFragment;
+import no.ntnu.klubbhuset.ui.userviews.home.list.ClubsListFragment;
 import no.ntnu.klubbhuset.ui.userviews.home.list.MyClubRecyclerViewAdapter;
 
 
@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
                         Objects.requireNonNull(this.getActivity())).get(ClubsViewModel.class);
         model.getClubs().observe(this, clubs ->
                 recyclerView.setAdapter(new MyClubRecyclerViewAdapter(clubs,
-                        (ClubFragment.OnListFragmentInteractionListener) this.getActivity())));
+                        (ClubsListFragment.OnListFragmentInteractionListener) this.getActivity())));
         return root;
     }
 

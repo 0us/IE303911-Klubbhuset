@@ -4,6 +4,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +21,17 @@ import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Club} and makes a call to the
- * specified {@link ClubFragment.OnListFragmentInteractionListener}.
+ * specified {@link ClubsListFragment.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecyclerViewAdapter.ViewHolder> {
 
     private final List<Club> mValues;
-    private final ClubFragment.OnListFragmentInteractionListener mListener;
+    private final ClubsListFragment.OnListFragmentInteractionListener mListener;
     private ClubsViewModel model;
 
     public MyClubRecyclerViewAdapter(List<Club> items,
-                                     ClubFragment.OnListFragmentInteractionListener listener) {
+                                     ClubsListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -47,6 +50,16 @@ public class MyClubRecyclerViewAdapter extends RecyclerView.Adapter<MyClubRecycl
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mMembercountView.setText("0"); // TODO
+        if (holder.mItem.getImage() == null || holder.mItem.getImage().isEmpty()) {
+            // set placeholder
+            holder.mLogo.setImageResource(R.drawable.ic_broken_image_black_24dp);
+        } else {
+            String encodedString = holder.mItem.getImage();
+
+            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            holder.mLogo.setImageBitmap(bitmap);
+        }
 
         holder.view.setOnClickListener(v -> {
             mListener.onListFragmentInteraction(holder.mItem);
