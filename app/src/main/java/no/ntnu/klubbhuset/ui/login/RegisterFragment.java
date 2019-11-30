@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.adapter.AuthenticationPageAdapter;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.UserRepository;
@@ -54,9 +56,24 @@ public class RegisterFragment extends Fragment {
                     mPassword.getText().toString()))
                     .observe(this, response -> {
                         if (response.getStatus() == Status.SUCCESS) {
-                            // user created
+                            Toast.makeText(getContext(),
+                                    "Success!",
+                                    Toast.LENGTH_SHORT).show();
+
                         } else if (response.getStatus() == Status.ERROR){
-                            // user not created
+
+                            if (response.getData(). statusCode == 403) {
+                                Toast.makeText(
+                                        getContext(),
+                                        "Something went wrong, please contact system administrator",
+                                        Toast.LENGTH_SHORT).show();
+                            } else if (response.getData().statusCode == 500) {
+                                Toast.makeText(
+                                        getContext(),
+                                        "I'm terribly sorry, this is not even your fault, the " +
+                                                "server is trying to make coffee in a teapot ..",
+                                        Toast.LENGTH_LONG).show();
+                            }
                         }
             });
         });
