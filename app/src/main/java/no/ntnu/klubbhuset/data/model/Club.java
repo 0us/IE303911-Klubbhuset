@@ -20,6 +20,7 @@ public class Club implements Serializable {
     private String url;
     private long oid;
     private String name;
+    private String image;
 
     public Club(String description, BigDecimal priceOfMembership, String emailContact, String url, String name) {
         this.description = description;

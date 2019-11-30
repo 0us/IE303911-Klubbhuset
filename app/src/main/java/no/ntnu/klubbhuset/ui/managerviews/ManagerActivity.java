@@ -11,6 +11,7 @@ import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.managerviews.list.ManagedOrgsListFragment;
 import no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedViewModel;
 
+
 public class
 ManagerActivity extends AppCompatActivity implements
         ManagedOrgsListFragment.OnListFragmentInteractionListener,

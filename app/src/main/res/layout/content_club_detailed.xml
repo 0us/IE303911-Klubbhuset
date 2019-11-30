@@ -16,11 +16,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/club_banner"
+            android:id="@+id/club_detailed_banner"
             android:layout_width="fill_parent"
             android:layout_height="170dp"
             android:background="@drawable/banner_gradient"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <ImageView

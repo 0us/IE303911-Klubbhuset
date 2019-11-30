@@ -1,7 +1,5 @@
 package no.ntnu.klubbhuset.data.model;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.Date;
 
