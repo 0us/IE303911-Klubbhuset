@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/createOrganizationForm"
-        android:name="no.ntnu.klubbhuset.ui.managerviews.CreateOrganizationForm"
+        android:name="no.ntnu.klubbhuset.ui.managerviews.CreateOrganizationFormFragment"
         android:label="fragment_create_new_organization"
         tools:layout="@layout/fragment_create_new_organization" />
 </navigation>
