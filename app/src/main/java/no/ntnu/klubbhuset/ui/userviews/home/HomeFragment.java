@@ -41,18 +41,6 @@ public class HomeFragment extends Fragment {
         ScrollView scrollView = (ScrollView) root.getViewById(R.id.scrollView2);
         RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-
-        ClubsViewModel model =
-                ViewModelProviders.of(
-                        Objects.requireNonNull(this.getActivity())).get(ClubsViewModel.class);
-        model.getClubs(this).observe(this, clubs -> {
-            if (clubs.getStatus() == Status.SUCCESS) {
-                recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs.getData(),
-                        (ClubsListFragment.OnListFragmentInteractionListener) this.getActivity()));
-            } else {
-                //todo handle error
-            }
-        });
         return root;
     }
 
