@@ -1,10 +1,7 @@
 package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,15 +81,11 @@ public class ClubDetailedFragment extends Fragment {
         url = getView().findViewById(R.id.club_detailed_homepage);
         email = getView().findViewById(R.id.club_detailed_email);
         image = getView().findViewById(R.id.club_detailed_banner);
-        if (club.getImage() == null || club.getImage().isEmpty()) {
+        if (club.getOrgImages() == null || club.getOrgImages().length == 0) {
             // set placeholder
-            image.setImageResource(R.drawable.ic_landscape_black_24dp);
+            image.setImageResource(R.drawable.ic_broken_image_black_24dp);
         } else {
-            String encodedString = club.getImage();
-
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            image.setImageBitmap(bitmap);
+            image.setImageBitmap(club.getOrgImages()[0].getImage());
         }
 
         name.setText(club.getName());

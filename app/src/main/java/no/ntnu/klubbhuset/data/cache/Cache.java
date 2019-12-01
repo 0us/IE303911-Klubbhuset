@@ -23,6 +23,7 @@ public class Cache {
 
     private static volatile Cache ourInstance;
 
+
     public static Cache getInstance() {
         if (ourInstance == null) {
             ourInstance = new Cache();

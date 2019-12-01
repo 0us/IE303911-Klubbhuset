@@ -5,11 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;

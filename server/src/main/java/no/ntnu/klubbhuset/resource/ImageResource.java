@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 
 @Stateless
 @Path("image")
-@RolesAllowed({SecurityGroup.USER})
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ImageResource {
@@ -24,7 +23,7 @@ public class ImageResource {
     @GET
     @Path("{oid}/{iid}")
     @Produces("image/jpeg")
-    public Response getImages(@PathParam("oid") long oid, @PathParam("iid") long iid) {
+    public Response getImage(@PathParam("oid") long oid, @PathParam("iid") long iid) {
         return imageService.getImages(oid, iid);
     }
 }

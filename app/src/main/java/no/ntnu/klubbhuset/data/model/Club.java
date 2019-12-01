@@ -1,5 +1,6 @@
 package no.ntnu.klubbhuset.data.model;
 
+import android.graphics.Bitmap;
 import android.util.Base64;
 
 import org.json.JSONException;
@@ -20,7 +21,7 @@ public class Club implements Serializable {
     private String url;
     private long oid;
     private String name;
-    private String image;
+    private Image[] orgImages;
 
     public Club(String description, BigDecimal priceOfMembership, String emailContact, String url, String name) {
         this.description = description;
@@ -81,4 +82,5 @@ public class Club implements Serializable {
         }
         return json;
     }
+
 }
