@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
@@ -29,17 +31,23 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
 
         Intent intent = getIntent();
-        Club club = (Club) intent.getExtras().get("club");
-        ClubDetailedViewModel.setCurrentClub(club);
+        long oid = (intent.getExtras().getLong("club"));
+        mViewModel.setCurrentClub(oid).observe(this, result -> {
+            if (result.getStatus() == Status.SUCCESS) {
+                // success
+            } else {
+                Toast.makeText(this, "Error: failed to load selected club", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         setContentView(R.layout.activity_club_detailed);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
         /*Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(club.getName());
         setSupportActionBar(toolbar);*/

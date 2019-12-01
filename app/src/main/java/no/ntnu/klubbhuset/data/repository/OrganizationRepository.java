@@ -21,8 +21,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import lombok.val;
 import no.ntnu.klubbhuset.data.Status;
@@ -149,8 +151,24 @@ public class OrganizationRepository {
         return cache.getMyMemberships().get(club.getOid());
     }
 
-    public LiveData<Resource<Club>> get(Club club) {
-        throw new UnsupportedOperationException("TODO: Implement method");
+    public LiveData<Resource<Club>> get(long oid) {
+        MutableLiveData result = new MutableLiveData();
+        String url = ENDPOINT + oid;
+        val cached = cache.getHomepageClubs();
+        if (cached.getValue() != null) {
+            if (cached.getValue().getStatus() == Status.SUCCESS) {
+                val list = cached.getValue().getData();
+                Optional<Club> item = list.stream()
+                        .filter(p -> p.getOid() == oid)
+                        .findFirst();
+                if (item.isPresent()) {
+                    result.setValue(Resource.success(item));
+                    return result;
+                }
+            }
+
+        }
+        return result;
     }
 
     public LiveData<Resource<List<Member>>> getMembers(long oid) {

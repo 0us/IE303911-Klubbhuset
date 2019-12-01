@@ -28,7 +28,6 @@ import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
 public class ClubDetailedMemberFragment extends Fragment {
 
     private ClubDetailedViewModel mViewModel;
-    private Club club;
     private Member member;
 
     public static ClubDetailedMemberFragment newInstance(Member member) {
@@ -43,7 +42,6 @@ public class ClubDetailedMemberFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_club_detailed_member, container, false);
-        this.club = ClubDetailedViewModel.getCurrentClub();
         this.member = (Member) getArguments().getSerializable("member");
         return view;
     }
