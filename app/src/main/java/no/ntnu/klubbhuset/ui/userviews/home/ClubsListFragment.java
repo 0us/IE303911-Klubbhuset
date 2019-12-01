@@ -20,8 +20,6 @@ import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.data.repository.ImageRepository;
-import no.ntnu.klubbhuset.util.ImgHelper;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
 
 /**

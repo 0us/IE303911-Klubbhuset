@@ -151,24 +151,21 @@ public class OrganizationRepository {
         return cache.getMyMemberships().get(club.getOid());
     }
 
-    public LiveData<Resource<Club>> get(long oid) {
-        MutableLiveData result = new MutableLiveData();
+    public Resource<Club> get(long oid) {
         String url = ENDPOINT + oid;
         val cached = cache.getHomepageClubs();
         if (cached.getValue() != null) {
             if (cached.getValue().getStatus() == Status.SUCCESS) {
-                val list = cached.getValue().getData();
-                Optional<Club> item = list.stream()
-                        .filter(p -> p.getOid() == oid)
-                        .findFirst();
-                if (item.isPresent()) {
-                    result.setValue(Resource.success(item));
-                    return result;
+                    val list = cached.getValue().getData();
+                    Optional<Club> item = list.stream()
+                            .filter(p -> p.getOid() == oid)
+                            .findFirst();
+                    if (item.isPresent()) {
+                        return Resource.success(item.get());
+                    }
                 }
-            }
-
         }
-        return result;
+        return Resource.error(null, null);
     }
 
     public LiveData<Resource<List<Member>>> getMembers(long oid) {

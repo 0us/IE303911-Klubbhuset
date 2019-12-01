@@ -5,10 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import lombok.val;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
@@ -17,11 +15,12 @@ import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 
 public class ClubDetailedViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
-    private MediatorLiveData<Resource<Club>> focusedClub = new MediatorLiveData<>();
+    private MutableLiveData<Resource<Club>> focusedClub;
     private OrganizationRepository organizationRepository;
 
     public ClubDetailedViewModel(@NonNull Application application) {
         super(application);
+        focusedClub = new MutableLiveData<>(Resource.loading());
         organizationRepository = OrganizationRepository.getInstance(application);
     }
 
@@ -40,10 +39,6 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         return organizationRepository.getMembership(club);
     }
 
-    public LiveData<Resource<Club>> get(long oid) {
-        return organizationRepository.get(oid);
-    }
-
     public LiveData<Resource<Club>> getCurrentClub() {
         return focusedClub;
     }
@@ -54,11 +49,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
      *
      * @param currentClub
      */
-    public LiveData<Resource<Club>> setCurrentClub(long currentClub) {
-        focusedClub.addSource(organizationRepository.get(currentClub), clubResource -> {
-            focusedClub.setValue(clubResource);
-        });
-        return focusedClub;
+    public void setCurrentClub(long currentClub) {
+        focusedClub.setValue(organizationRepository.get(currentClub));
     }
-
 }

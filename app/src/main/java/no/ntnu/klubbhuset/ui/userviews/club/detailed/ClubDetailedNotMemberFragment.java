@@ -53,7 +53,7 @@ public class ClubDetailedNotMemberFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ClubDetailedViewModel.class);
         Button joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
         mViewModel.getCurrentClub().observe(this, response -> {
             joinClubBtn.setOnClickListener(click -> {

@@ -35,13 +35,7 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
 
         Intent intent = getIntent();
         long oid = (intent.getExtras().getLong("club"));
-        mViewModel.setCurrentClub(oid).observe(this, result -> {
-            if (result.getStatus() == Status.SUCCESS) {
-                // success
-            } else {
-                Toast.makeText(this, "Error: failed to load selected club", Toast.LENGTH_SHORT).show();
-            }
-        });
+        mViewModel.setCurrentClub(oid);
 
         setContentView(R.layout.activity_club_detailed);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);

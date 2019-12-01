@@ -63,7 +63,7 @@ public class ClubDetailedFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ClubDetailedViewModel.class);
 
         name = getView().findViewById(R.id.club_detailed_name);
         description = getView().findViewById(R.id.club_detailed_description);
@@ -73,7 +73,10 @@ public class ClubDetailedFragment extends Fragment {
 
         mViewModel.getCurrentClub().observe(this, clubResource -> {
             if (clubResource.getStatus() == Status.SUCCESS) {
+                this.club = clubResource.getData();
                 setData();
+            } else if (clubResource.getStatus() == Status.LOADING){
+                // loading
             } else {
                 Toast.makeText(getContext(), "Error loading club", Toast.LENGTH_SHORT).show();;
             }
