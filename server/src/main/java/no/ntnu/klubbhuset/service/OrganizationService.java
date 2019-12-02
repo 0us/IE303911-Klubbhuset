@@ -17,10 +17,9 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionRolledbackLocalException;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
@@ -125,7 +124,11 @@ public class OrganizationService {
         if (isAlreadyMember(organizationId, user)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
-        Member member = doJoinOrganization(organization, user, getGroup(Group.USER));
+        try {
+            doJoinOrganization(organization, user, getGroup(Group.USER));
+        } catch (Exception e) {
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries").build();
+        }
         return getMembership(organizationId); // todo return better feedback
     }
 
@@ -227,6 +230,8 @@ public class OrganizationService {
         } catch (NonUniqueResultException nure) {
             System.out.println(user.getEmail() + " Should not have two memberships in the same org! Bad DBA!");
             return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries, please contact system administrator").build();
+        } catch (NoResultException nre) {
+            System.out.println("No membership found");
         }
 
         if (membership == null) {
@@ -293,7 +298,7 @@ public class OrganizationService {
      * @param group
      * @return
      */
-    private Member doJoinOrganization(Organization org, User user, Group group) {
+    private Member doJoinOrganization(Organization org, User user, Group group) throws EntityExistsException {
         Member member = new Member();
         System.out.println(member);
         member.setUser(user);
@@ -302,6 +307,7 @@ public class OrganizationService {
         member.setOrganization(org);
         System.out.println(member);
         entityManager.persist(member);
+        entityManager.flush();
         return member;
     }
 }
