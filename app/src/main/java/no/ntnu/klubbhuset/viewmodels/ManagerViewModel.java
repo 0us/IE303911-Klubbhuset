@@ -73,5 +73,7 @@ public class ManagerViewModel extends AndroidViewModel {
 
     public void refreshOrganizations(LifecycleOwner owner) {
         repository.getAll(owner, true);
+        repository.getManaged(owner, true);
+        repository.getOrgsWhereUserIsMember(owner, true);
     }
 }

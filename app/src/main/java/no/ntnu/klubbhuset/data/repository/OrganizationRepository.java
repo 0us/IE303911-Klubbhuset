@@ -86,8 +86,12 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(LifecycleOwner owner) {
+        return getOrgsWhereUserIsMember(owner, false);
+    }
+
+    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(LifecycleOwner owner, boolean forceRefresh) {
         val cached = cache.getMyMembershipsClubs();
-        if (cached.getValue() != null) {
+        if (cached.getValue() != null &&!forceRefresh) {
             return cached;
         }
         String url = ENDPOINT + "member";
@@ -191,9 +195,13 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<List<Club>>> getManaged(LifecycleOwner owner) {
+        return getManaged(owner, false);
+    }
+
+    public LiveData<Resource<List<Club>>> getManaged(LifecycleOwner owner, boolean forceRefresh) {
         String url = ENDPOINT + "managed";
         MutableLiveData cached = cache.getManagedClubs();
-        if (cached.getValue() != null) {
+        if (cached.getValue() != null && !forceRefresh) {
             return cached;
         }
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
