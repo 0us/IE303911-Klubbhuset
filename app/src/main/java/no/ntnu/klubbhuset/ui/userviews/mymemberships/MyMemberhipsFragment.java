@@ -46,5 +46,4 @@ public class MyMemberhipsFragment extends Fragment{
             // TODO: 23.11.2019 do stuff when token has been recieved
         });
     }
-
 }
