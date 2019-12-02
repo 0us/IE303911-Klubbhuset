@@ -17,6 +17,7 @@ public class CommunicationConfig {
     private final Context context;
 
     private String host;
+    private String protocol;
     public static String API_URL;
     public static String ORGANIZATION = "organization";
     public static final String LOGIN = "auth";
@@ -76,12 +77,16 @@ public class CommunicationConfig {
 
     private void initializeValues() {
         this.host = retrieveHost();
+        this.protocol = retriveProtocol();
         this.port = retrievePort();
         this.clientID = retrieveClientID();
         this.clientSecret = retrieveClientSecret();
         this.ocpApimSubscriptionKey = retrieveOcpApimSubscriptionKey();
         this.merchantSerialNumber = retrieveMerchantSerialNumber();
-        API_URL = "http://" + host + ":" + port + "/api/";
+        API_URL = protocol + "://" + host + ":" + port + "/api/";
+    }
+
+    private String retriveProtocol() {return prop.getProperty("protocol");
     }
 
     private int retrievePort() {
