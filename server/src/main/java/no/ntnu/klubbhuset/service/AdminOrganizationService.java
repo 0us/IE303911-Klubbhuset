@@ -31,8 +31,8 @@ public class AdminOrganizationService {
     /**
      * Getting all members of an organization
      *
-     * @param organizationId
-     * @return
+     * @param organizationId The org id
+     * @return response
      */
     public Response getAllMembers(Long organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);

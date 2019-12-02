@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,10 +43,17 @@ public class CreateOrganizationFormFragment extends Fragment {
     private static final int UPLOAD_IMAGE_CODE = 1;
     private OnFragmentInteractionListener mListener;
 
-    ImageView imageView;
-    TextView email;
-    TextView organizationName;
-    ManagerViewModel viewModel;
+    /**
+     * Input fields
+     */
+    private ImageView imageView;
+    private TextView organizationName;
+    private TextView email;
+    private EditText price;
+    private EditText description;
+
+    private Button registerBtn;
+    private ManagerViewModel viewModel;
 
     public CreateOrganizationFormFragment() {
         // Required empty public constructor
@@ -60,14 +68,20 @@ public class CreateOrganizationFormFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_new_organization, container, false);
-        Button registerBtn = view.findViewById(R.id.register_organization);
+        registerBtn = view.findViewById(R.id.register_organization);
         Button cancelBtn = view.findViewById(R.id.cancel_registration);
         imageView = view.findViewById(R.id.organization_profile_picture);
-        email = view.findViewById(R.id.contact_email);
         organizationName = view.findViewById(R.id.organization_name);
+        email = view.findViewById(R.id.contact_email);
+        price = view.findViewById(R.id.membership_price);
+        description = view.findViewById(R.id.organization_description);
 
-        email.addTextChangedListener(textWatcher);
         organizationName.addTextChangedListener(textWatcher);
+        email.addTextChangedListener(textWatcher);
+        price.addTextChangedListener(textWatcher);
+        description.addTextChangedListener(textWatcher);
+
+        registerBtn.setEnabled(false);
 
         imageView.setOnClickListener(l -> onUploadImageButtonPressed());
         registerBtn.setOnClickListener(l -> onCreateButtonPressed());
@@ -81,8 +95,6 @@ public class CreateOrganizationFormFragment extends Fragment {
 
     private void onCreateButtonPressed() {
         View view = getView();
-        TextView description = view.findViewById(R.id.organization_description);
-        TextView price = view.findViewById(R.id.membership_price);
 
         byte[] imageInByte = null;
         Drawable drawable = imageView.getDrawable();
@@ -211,7 +223,10 @@ public class CreateOrganizationFormFragment extends Fragment {
         void onOrganizationCreated(Club club);
     }
 
-    TextWatcher textWatcher = new TextWatcher() {
+    /**
+     * Watches for changes to the text in the forms field.
+     */
+    private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -221,15 +236,63 @@ public class CreateOrganizationFormFragment extends Fragment {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
+        /**
+         * Will be called every time a character has been inserted to the form.
+         *
+         * @param editable
+         */
         @Override
         public void afterTextChanged(Editable editable) {
             viewModel.organizationDataChanged(email.getText().toString());
-            if (!viewModel.getCreateOrganizationFormState().getValue().isDataValid()) {
-                email.setError(getText(R.string.invalid_email));
-            }
-            if (organizationName.getText().toString().trim().isEmpty()) {
-                organizationName.setError(getText(R.string.organization_name_not_empty));
+
+            if (fieldsAreValid()) {
+                registerBtn.setEnabled(true);
+            } else {
+                registerBtn.setEnabled(false);
             }
         }
     };
+
+
+    private boolean fieldsAreValid() {
+        boolean name = false;
+        boolean price = false;
+        boolean email = false;
+        boolean orgDes = false;
+
+        try {
+            name = !(this.organizationName.getText().toString().isEmpty());
+            email = viewModel.getCreateOrganizationFormState().getValue().isDataValid();
+            price = !(this.price.getText().toString().isEmpty());
+            orgDes = !(this.description.getText().toString().isEmpty());
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        if (!name) {
+            this.organizationName.setError(getText(R.string.organization_name_not_empty));
+        } else {
+            this.organizationName.setError(null);
+        }
+
+        if (!email) {
+            this.email.setError(getText(R.string.invalid_email));
+        } else {
+            this.email.setError(null);
+        }
+
+        if (!price) {
+            this.price.setError(getText(R.string.price_not_empty));
+        } else {
+            this.price.setError(null);
+        }
+
+        if (!orgDes) {
+            this.description.setError(getText(R.string.description_not_empty));
+        } else {
+            this.description.setError(null);
+        }
+
+        return name & price & email & orgDes;
+    }
 }

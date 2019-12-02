@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showHome() {
+    void showHome() {
         setResult(Activity.RESULT_OK);
         finish();
     }

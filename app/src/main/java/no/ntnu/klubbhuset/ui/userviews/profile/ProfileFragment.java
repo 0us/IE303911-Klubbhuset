@@ -2,9 +2,7 @@ package no.ntnu.klubbhuset.ui.userviews.profile;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.icu.lang.UScript;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +22,8 @@ import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.ui.managerviews.ManagerActivity;
 import no.ntnu.klubbhuset.viewmodels.ProfileViewModel;
+
+import static no.ntnu.klubbhuset.MainActivity.LOGOUT;
 
 
 public class ProfileFragment extends Fragment {
@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
             firstname.setText(user.getFirstName());
             lastname.setText(user.getLastName());
             email.setText(user.getEmail());
-            phone.setText(user.getPhone());
+            phone.setText(user.getPhonenumber());
         } else {
             Log.e("Tag test 123", "User is null");
             // show error
@@ -94,8 +94,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void signOut() {
-        Intent result = new Intent("logout");
-        getActivity().setResult(Activity.RESULT_OK, result);
+        getActivity().setResult(LOGOUT);
         getActivity().finish();
     }
 

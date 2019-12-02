@@ -129,7 +129,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void showHome() {
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
+        ((LoginActivity) getActivity()).showHome();
     }
 }

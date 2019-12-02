@@ -10,18 +10,28 @@ import androidx.lifecycle.MutableLiveData;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
+import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
+import no.ntnu.klubbhuset.data.repository.UserRepository;
+import no.ntnu.klubbhuset.data.repository.VippsRepository;
+
+import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
+import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
 
 
 public class ClubDetailedViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
     private MutableLiveData<Resource<Club>> focusedClub;
     private OrganizationRepository organizationRepository;
+    private VippsRepository vippsRepository;
+    private UserRepository userRepository;
 
     public ClubDetailedViewModel(@NonNull Application application) {
         super(application);
         focusedClub = new MutableLiveData<>(Resource.loading());
         organizationRepository = OrganizationRepository.getInstance(application);
+        vippsRepository = VippsRepository.getInstance(application);
+        userRepository = UserRepository.getInstance(application);
     }
 
     public LiveData<Resource<Member>> joinClub(Club club) {
@@ -43,13 +53,16 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         return focusedClub;
     }
 
-    /**
-     * set the currently focused organization, for use with
-     * clubDetailedView
-     *
-     * @param currentClub
-     */
     public void setCurrentClub(long currentClub) {
         focusedClub.setValue(organizationRepository.get(currentClub));
+    }
+
+
+    public LiveData<Resource<String>> getDeeplink(Resource<User> user) {
+        return vippsRepository.getDeepLink(user, focusedClub);
+    }
+
+    public LiveData<Resource<User>> getUser() {
+        return userRepository.get();
     }
 }

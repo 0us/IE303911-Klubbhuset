@@ -1,5 +1,5 @@
-package no.ntnu.klubbhuset.viewmodels;
 
+package no.ntnu.klubbhuset.viewmodels;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,12 +10,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.BarcodeFormat;
@@ -36,9 +32,9 @@ import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
 import static no.ntnu.klubbhuset.util.PreferenceUtils.PREF_NO_FILE_FOUND;
 
 
@@ -112,6 +108,25 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
 
 
     /**
+     * returns a boolean describing whether the token has expired or not
+     *
+     * @param token vippsToken
+     * @return a boolean describing whether the token has expired or not
+     */
+    private boolean tokenIsExpired(JSONObject token) {
+        String expires_on = null;
+        try {
+            expires_on = token.get("expires_on").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(expires_on == null) {
+            return true;
+        }
+        return System.currentTimeMillis() > Long.valueOf(expires_on);
+    }
+
+    /**
      * Tries to retrieve the VippsToken, this is either done by grabbing it from memory as existing
      * object if not then from SharedPreference, but that will only work if the token has been previously
      * placed there and is not expired.
@@ -122,6 +137,4 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
     public LiveData<Resource<String>> getVippsToken() {
         return vippsRepository.getToken();
     }
-
-
 }

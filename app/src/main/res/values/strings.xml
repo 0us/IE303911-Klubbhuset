@@ -60,15 +60,27 @@
     <string name="contact">Contact</string>
     <string name="member_since">Member since</string>
     <string name="payment_due">Your next payment is due in </string>
-    <string name="invalid_email">Not a valid email</string>
-    <string name="organization_name_not_empty">Organization name can not be empty</string>
     <string name="scan_a_new_qr_code">Scan a new QR code</string>
     <string name="authenticate_user">Authenticate user</string>
     <string name="has_paid">Has paid</string>
     <string name="next_payment_due">Payment due</string>
     <string name="QR_scanner">QR Scanner</string>
     <string name="not_a_member">Member not found</string>
+    <string name="payment_status">Payment status</string>
+    <string name="payment_false">Next Payment is due</string>
+    <string name="payment_true">All good!</string>
 
     <string name="contact_email">Contact Email</string>
     <string name="title_activity_club_admin">ClubAdminActivity</string>
+    <string name="pay_with_vipps">Pay with vipps</string>
+    <string name="latest_vipps_ver">You must update to latest Vipps version</string>
+    <string name="membership_of">Membership of</string>
+    <string name="for_year">for year</string>
+
+    <!--Create new org - Validation responses-->
+    <string name="organization_name_not_empty">Organization name can not be empty!</string>
+    <string name="invalid_email">Not a valid email!</string>
+    <string name="price_not_empty">The price can\'t be empty!</string>
+    <string name="description_not_empty">Description can\'t be empty!</string>
+
 </resources>

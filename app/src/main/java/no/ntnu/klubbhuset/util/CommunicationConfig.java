@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.*;
+
+
 public class CommunicationConfig {
 
     private final Properties prop = new Properties();
@@ -14,6 +17,7 @@ public class CommunicationConfig {
     private final Context context;
 
     private String host;
+    private String protocol;
     public static String API_URL;
     public static String IMAGE = "image";
     public static String ORGANIZATION = "organization";
@@ -68,14 +72,22 @@ public class CommunicationConfig {
         return API_URL + ORGANIZATION + "/" + id + "/" + ADMIN;
     }
 
+    public String getMerchantSerialNumber() {
+        return merchantSerialNumber;
+    }
+
     private void initializeValues() {
         this.host = retrieveHost();
+        this.protocol = retriveProtocol();
         this.port = retrievePort();
         this.clientID = retrieveClientID();
         this.clientSecret = retrieveClientSecret();
         this.ocpApimSubscriptionKey = retrieveOcpApimSubscriptionKey();
         this.merchantSerialNumber = retrieveMerchantSerialNumber();
-        API_URL = "http://" + host + ":" + port + "/api/";
+        API_URL = protocol + "://" + host + ":" + port + "/api/";
+    }
+
+    private String retriveProtocol() {return prop.getProperty("protocol");
     }
 
     private int retrievePort() {
@@ -87,18 +99,18 @@ public class CommunicationConfig {
     }
 
     public String retrieveClientID() {
-     return prop.getProperty("client_id");
+     return prop.getProperty(CLIENT_ID_STRING);
     }
 
     public String retrieveClientSecret() {
-        return prop.getProperty("client_secret");
+        return prop.getProperty(CLIENT_SECRET_STRING);
     }
 
     public String retrieveOcpApimSubscriptionKey() {
-        return prop.getProperty("Ocp-Apim-Subscription-Key");
+        return prop.getProperty(OCP_APIM_SUBSCRIPTION_KEY_STRING);
     }
 
     public String retrieveMerchantSerialNumber() {
-        return prop.getProperty("merchantSerialNumber");
+        return prop.getProperty(MERCHANT_SERIAL_NUMBER_STRING);
     }
 }

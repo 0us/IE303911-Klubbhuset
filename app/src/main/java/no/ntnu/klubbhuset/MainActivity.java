@@ -31,6 +31,13 @@ public class MainActivity extends AppCompatActivity
 
     private RequestQueue requestQueue;
 
+    /**
+     * Activity result codes
+     */
+    public static final int FINISHED = 1;
+    public static final int LOGOUT = 2;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +75,14 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+        } else {
+            setResult(FINISHED);
+            finish();
+        }
+    }
 }
 

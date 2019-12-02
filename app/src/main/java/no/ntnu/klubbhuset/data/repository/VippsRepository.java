@@ -8,21 +8,39 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.cache.VippsCache;
+import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.model.OrderId;
+import no.ntnu.klubbhuset.data.model.User;
+import no.ntnu.klubbhuset.data.model.VippsJsonProperties;
+import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.APPLICATION_JSON;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AUTHORIZATION;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CONTENT_TYPE;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ECOMM_V_2_PAYMENTS;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.UTF_8;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.VIPPS_URL;
 import static no.ntnu.klubbhuset.util.PreferenceUtils.PREF_NO_FILE_FOUND;
 
 public class VippsRepository {
@@ -34,6 +52,7 @@ public class VippsRepository {
 
     private Cache cache = Cache.getInstance();
     private VippsCache vippsCache = VippsCache.getInstance();
+    private MutableLiveData<Resource<String>> deeplink;
 
     public static VippsRepository getInstance(Context context) {
         if (ourInstance == null) {
@@ -84,9 +103,9 @@ public class VippsRepository {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> map = new HashMap<>();
-                map.put(CLIENT_ID, CommunicationConfig.getInstance().retrieveClientID());
-                map.put(CLIENT_SECRET, CommunicationConfig.getInstance().retrieveClientSecret());
-                map.put(OCP_APIM_SUBSCRIPTION_KEY, CommunicationConfig.getInstance().retrieveOcpApimSubscriptionKey());
+                map.put(CLIENT_ID_STRING, CommunicationConfig.getInstance().retrieveClientID());
+                map.put(CLIENT_SECRET_STRING, CommunicationConfig.getInstance().retrieveClientSecret());
+                map.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance().retrieveOcpApimSubscriptionKey());
                 return map;
             }
         };
@@ -103,5 +122,84 @@ public class VippsRepository {
     private boolean tokenIsExpired(String token) {
         // TODO: 23.11.2019 Implement
         return false;
+    }
+
+
+    public LiveData<Resource<String>> getDeepLink(Resource<User> user, Club focusedClub) {
+        if (deeplink == null) {
+            deeplink = new MutableLiveData<>();
+            loadDeepLink(user, focusedClub);
+        }
+        return deeplink;
+    }
+
+    private void loadDeepLink(Resource<User> user, Club focusedClub) {
+        VippsPaymentDetails details = getVippsPaymentDetails(user.getData(), focusedClub);
+
+        JSONObject body = null;
+        try {
+            body = details.getBody();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, VIPPS_URL + ECOMM_V_2_PAYMENTS, body,
+                response -> {
+                    try {
+                        String vippsDeepLink = (String) response.get("url");
+                        deeplink.setValue(Resource.success(vippsDeepLink));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            Log.d(TAG, "retriveDeepLink: error: " + error);
+            String responseBody;
+            //get status code here
+            String statusCode = String.valueOf(error.networkResponse.statusCode);
+            //get response body and parse with appropriate encoding
+            if (error.networkResponse.data != null) {
+                try {
+                    responseBody = new String(error.networkResponse.data, UTF_8);
+                    Log.d(TAG, "retriveDeepLink: responsebody: " + responseBody);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String vippsToken = PreferenceUtils.getVippsAccessToken(context);
+                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + vippsToken);
+                headers.put(CONTENT_TYPE, APPLICATION_JSON);
+                headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance(context).retrieveOcpApimSubscriptionKey());
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    public VippsPaymentDetails getVippsPaymentDetails(User user, Club club) {
+
+
+        String phoneNumber = user.getPhonenumber().substring(user.getPhonenumber().length() - 8); // getting last 8 digits of phonenumber number. This to avoid country code
+        String organizationId = String.valueOf(club.getOid());
+        String userId = user.getEmail();
+        OrderId orderId;
+
+        if (organizationId.length() > 20 || userId.length() > 20 || (organizationId + userId).trim().length() > 20) {
+            orderId = new OrderId("", ""); // order id can only be 30 charachers long. timestamp is 10 chars long.
+        } else {
+            orderId = new OrderId(organizationId, userId);
+        }
+
+        Double amount = club.getPriceOfMembership().doubleValue();
+
+        String transactionText = String.format("%s %s %s %s",
+                context.getResources().getString(R.string.membership_of),
+                club.getName(),
+                context.getResources().getString(R.string.for_year),
+                Calendar.getInstance().get(Calendar.YEAR));
+
+        return new VippsPaymentDetails(phoneNumber, orderId, amount, transactionText, context);
     }
 }
