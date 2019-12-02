@@ -36,9 +36,11 @@ import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.model.VippsJsonProperties;
 import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
+import no.ntnu.klubbhuset.util.Json;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 import static no.ntnu.klubbhuset.data.Resource.loading;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ACCESS_TOKEN;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.APPLICATION_JSON;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AUTHORIZATION;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
@@ -142,9 +144,21 @@ public class VippsRepository {
         return deeplink;
     }
 
-    private LiveData<Resource<String>> loadDeepLink(Resource<User> user, Club focusedClub, Resource<String> bearer) {
-        VippsPaymentDetails details = getVippsPaymentDetails(user.getData(), focusedClub);
+    private LiveData<Resource<String>> loadDeepLink(Resource<User> user, Club focusedClub, Resource<String> token) {
         MutableLiveData returnValue = new MutableLiveData(Resource.loading());
+
+        String bearer = null;
+        try {
+            bearer = new JSONObject(token.getData()).getString(ACCESS_TOKEN);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (bearer == null) {
+            returnValue.setValue(Resource.error("Error getting access token", null));
+            return returnValue;
+        }
+        String finalBearer = bearer;
+        VippsPaymentDetails details = getVippsPaymentDetails(user.getData(), focusedClub);
         JSONObject body = null;
         try {
             body = details.getBody();
@@ -160,24 +174,28 @@ public class VippsRepository {
                         e.printStackTrace();
                     }
                 }, error -> {
+            error.printStackTrace();
             Log.d(TAG, "retriveDeepLink: error: " + error);
             String responseBody;
             //get status code here
-            String statusCode = String.valueOf(error.networkResponse.statusCode);
-            //get response body and parse with appropriate encoding
-            if (error.networkResponse.data != null) {
-                try {
-                    responseBody = new String(error.networkResponse.data, UTF_8);
-                    Log.d(TAG, "retriveDeepLink: responsebody: " + responseBody);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+            if (error.networkResponse != null) {
+                String statusCode = String.valueOf(error.networkResponse.statusCode);
+                //get response body and parse with appropriate encoding
+                if (error.networkResponse.data != null) {
+                    try {
+                        responseBody = new String(error.networkResponse.data, UTF_8);
+                        Log.d(TAG, "retriveDeepLink: responsebody: " + responseBody);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
         }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + bearer.getData());
+                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + finalBearer);
                 headers.put(CONTENT_TYPE, APPLICATION_JSON);
                 headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance(context).retrieveOcpApimSubscriptionKey());
                 return headers;
