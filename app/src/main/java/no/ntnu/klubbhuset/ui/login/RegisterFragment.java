@@ -70,8 +70,7 @@ public class RegisterFragment extends Fragment {
                             } else if (response.getData().statusCode == 500) {
                                 Toast.makeText(
                                         getContext(),
-                                        "I'm terribly sorry, this is not even your fault, the " +
-                                                "server is trying to make coffee in a teapot ..",
+                                        R.string.userfeedback_cant_be_resolved,
                                         Toast.LENGTH_LONG).show();
                             }
                         }

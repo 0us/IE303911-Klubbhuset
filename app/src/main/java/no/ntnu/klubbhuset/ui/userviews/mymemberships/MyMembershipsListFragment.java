@@ -78,6 +78,8 @@ public class MyMembershipsListFragment extends Fragment {
                     recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.ERROR) {
                     Toast.makeText(context, "Couldn't retrieve any organizations", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, R.string.userfeedback_cant_be_resolved, Toast.LENGTH_LONG).show();
                 }
             });
         }
