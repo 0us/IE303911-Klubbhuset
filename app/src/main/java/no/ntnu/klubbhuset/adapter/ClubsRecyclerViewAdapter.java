@@ -47,7 +47,7 @@ public class ClubsRecyclerViewAdapter extends RecyclerView.Adapter<ClubsRecycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
-        holder.mMembercountView.setText("0"); // TODO
+//        holder.mMembercountView.setText("0"); TODO Count Dracula
         if (holder.mItem.getOrgImages() == null || holder.mItem.getOrgImages().length == 0) {
             // set placeholder
             holder.mLogo.setImageResource(R.drawable.ic_broken_image_black_24dp);
@@ -78,7 +78,7 @@ public class ClubsRecyclerViewAdapter extends RecyclerView.Adapter<ClubsRecycler
             super(v);
             view = v;
             mNameView = v.findViewById(R.id.club_name);
-            mMembercountView = v.findViewById(R.id.club_member_count);
+//            mMembercountView = v.findViewById(R.id.club_member_count); TODO Count Dracula
             mLogo = v.findViewById(R.id.club_logo);
         }
 

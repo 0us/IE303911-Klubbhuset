@@ -78,8 +78,8 @@ public class ClubDetailedMemberFragment extends Fragment {
         this.member = (Member) getArguments().getSerializable(MEMBER_STRING);
         vippsBtn = view.findViewById(R.id.club_detailed_pay_with_vipps);
         paymentStatusImg = view.findViewById(R.id.club_detailed_paid_status_img);
-        paymentStatusText = view.findViewById(R.id.club_detailed_payment_status_description);
-        paymentDueDate = view.findViewById(R.id.club_detailed_due_date);
+//        paymentStatusText = view.findViewById(R.id.club_detailed_payment_status_description); TODO Real due date
+//        paymentDueDate = view.findViewById(R.id.club_detailed_due_date); TODO Real due date
         queue = Volley.newRequestQueue(getActivity());
         return view;
     }
@@ -127,7 +127,7 @@ public class ClubDetailedMemberFragment extends Fragment {
     private void showVipps() {
         vippsBtn.setVisibility(View.VISIBLE);
         paymentStatusText.setText(getString(R.string.payment_false));
-        paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
+//        paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
         paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
     }
 
