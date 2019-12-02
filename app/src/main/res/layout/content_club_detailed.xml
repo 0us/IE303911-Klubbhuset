@@ -47,18 +47,18 @@
                 android:textColor="@android:color/holo_orange_light"
                 android:textSize="34sp" />
 
-            <TextView
-                android:id="@+id/club_detailed_membercount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:alpha="1"
-                android:text="xxx MEMBERS"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:typeface="normal" />
+<!--            <TextView TODO Count Dracula-->
+<!--                android:id="@+id/club_detailed_membercount"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom|center_horizontal"-->
+<!--                android:alpha="1"-->
+<!--                android:text="xxx MEMBERS"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="12sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:typeface="normal" />-->
         </LinearLayout>
     </FrameLayout>
 

@@ -15,14 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
-import android.widget.Toast;
-
-import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
-import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
 
 
 public class HomeFragment extends Fragment {
@@ -39,7 +34,7 @@ public class HomeFragment extends Fragment {
         ConstraintLayout root = (ConstraintLayout) inflater.inflate(
                 R.layout.home_fragment, container, false);
 
-        ScrollView scrollView = (ScrollView) root.getViewById(R.id.scrollView2);
+        ScrollView scrollView = (ScrollView) root.getViewById(R.id.home_club_scrollview);
         RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         return root;
