@@ -85,15 +85,14 @@ public class UserService {
         }
         if (entityManager.find(User.class, user.getEmail()) != null) {
             return Response.status(Response.Status.FORBIDDEN).entity("User already exits").build();
-        } else {
-            SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
-            user.addSecurityGroup(securityGroup);
-            String hashedpw = hashPassword(user.getPassword());
-            user.setPassword(hashedpw);
-            entityManager.persist(user);
-
-            return Response.status(Response.Status.CREATED).build();
         }
+        SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
+        user.addSecurityGroup(securityGroup);
+        String hashedpw = hashPassword(user.getPassword());
+        user.setPassword(hashedpw);
+        entityManager.persist(user);
+
+        return Response.status(Response.Status.CREATED).build();
     }
 
     private String hashPassword(String password) {
