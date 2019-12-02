@@ -10,11 +10,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Parameter;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.ws.rs.core.Response;
 import java.util.Set;
 
@@ -77,7 +73,6 @@ public class AdminOrganizationService {
             System.out.println("member = " + member);
         } catch (NoResultException e) {
             System.out.println("No member found");
-            e.printStackTrace();
             return false;
         }
 
@@ -116,9 +111,11 @@ public class AdminOrganizationService {
             member = query.getSingleResult();
         } catch (NoResultException e) {
             System.out.println(e.getMessage());
-            return Response.status(Response.Status.NO_CONTENT.getStatusCode(), "Is not a member").build();
+            return Response.status(Response.Status.NO_CONTENT.getStatusCode()).entity("Is not a member").build();
+        } catch (NonUniqueResultException nure) {
+            System.out.println(user.getEmail() + " Should not have two memberships in the same org! Bad DBA!");
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries, please contact system administrator").build();
         }
-        System.out.println(member);
 
 
         if (!member.hasPaid() ) {
