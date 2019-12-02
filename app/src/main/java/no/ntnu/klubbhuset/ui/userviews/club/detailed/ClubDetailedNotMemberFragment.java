@@ -53,7 +53,6 @@ public class ClubDetailedNotMemberFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: Use the ViewModel
         mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
         Club club = ClubDetailedViewModel.getCurrentClub();
         Button joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
@@ -61,8 +60,8 @@ public class ClubDetailedNotMemberFragment extends Fragment {
             mViewModel.joinClub(club).observe(this, response -> {
                 if (response.getStatus() == Status.SUCCESS) {
                     mListener.onMembershipStatusChanged(response.getData());
-                } else {
-                    Toast.makeText(getContext(), "Error joining", Toast.LENGTH_SHORT).show();
+                } else if (response.getStatus() == Status.ERROR){
+                    Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
                 }
             });
         });

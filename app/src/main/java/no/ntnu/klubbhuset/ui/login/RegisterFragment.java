@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,7 +57,7 @@ public class RegisterFragment extends Fragment {
                         if (response.getStatus() == Status.SUCCESS) {
                             // user created
                         } else if (response.getStatus() == Status.ERROR){
-                            // user not created
+                            Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
                         }
             });
         });

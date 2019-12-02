@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import no.ntnu.klubbhuset.R;
@@ -29,9 +30,7 @@ import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
  */
 public class ClubsListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private ClubsViewModel mViewModel;
@@ -78,8 +77,8 @@ public class ClubsListFragment extends Fragment {
             mViewModel.getClubs().observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs.getData(), mListener));
-                } else {
-                    //todo handle error
+                } else if (clubs.getStatus() == Status.SUCCESS) {
+                    Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -120,7 +119,6 @@ public class ClubsListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Club item);
     }
 }

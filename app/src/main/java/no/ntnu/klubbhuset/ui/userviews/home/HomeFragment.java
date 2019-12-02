@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -49,8 +50,8 @@ public class HomeFragment extends Fragment {
             if (clubs.getStatus() == Status.SUCCESS) {
                 recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs.getData(),
                         (ClubsListFragment.OnListFragmentInteractionListener) this.getActivity()));
-            } else {
-                //todo handle error
+            } else if (clubs.getStatus() == Status.ERROR){
+                Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
             }
         });
         return root;

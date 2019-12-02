@@ -24,7 +24,6 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
 
 
 public class ClubDetailedViewModel extends AndroidViewModel {
-    // TODO: Implement the ViewModel
     private static Club focusedClub;
     private OrganizationRepository organizationRepository;
     private VippsRepository vippsRepository;

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,8 +74,8 @@ public class ClubDetailedFragment extends Fragment {
         mViewModel.getMembership(club).observe(this, response -> {
             if (response.getStatus() == Status.SUCCESS) {
                 mListener.onMembershipStatusChanged(response.getData());
-            } else {
-                //todo handle error
+            } else if (response.getStatus() == Status.ERROR){
+                Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
             }
         });
 

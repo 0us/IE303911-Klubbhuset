@@ -83,4 +83,6 @@
     <string name="price_not_empty">The price can\'t be empty!</string>
     <string name="description_not_empty">Description can\'t be empty!</string>
 
+    <string name="generic_error_response">Sorry, something went wrong. Please try again later</string>
+
 </resources>
