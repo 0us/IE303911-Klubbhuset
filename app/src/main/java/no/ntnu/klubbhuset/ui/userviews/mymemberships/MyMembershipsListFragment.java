@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,22 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ClubMembershipRecyclerViewAdapter;
-import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
-import no.ntnu.klubbhuset.data.Resource;
-import no.ntnu.klubbhuset.data.Status;
-import no.ntnu.klubbhuset.data.Status;
-
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
 import no.ntnu.klubbhuset.viewmodels.MyMemberhipsViewModel;
 
 /**
@@ -76,7 +65,7 @@ public class MyMembershipsListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getClubs(this).observe(this, clubs -> {
+            mViewModel.getClubs().observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.ERROR) {
