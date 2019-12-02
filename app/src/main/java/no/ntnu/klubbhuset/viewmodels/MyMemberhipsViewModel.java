@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -55,8 +56,8 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
         this.organizationRepository = OrganizationRepository.getInstance(context);
     }
 
-    public LiveData<Resource<List<Club>>> getClubs() {
-        return organizationRepository.getOrgsWhereUserIsMember();
+    public LiveData<Resource<List<Club>>> getClubs(LifecycleOwner owner) {
+        return organizationRepository.getOrgsWhereUserIsMember(owner);
     }
 
     public LiveData<Bitmap> getQRCode() {
