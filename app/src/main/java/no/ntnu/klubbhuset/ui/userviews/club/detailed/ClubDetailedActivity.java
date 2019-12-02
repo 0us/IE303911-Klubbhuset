@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
@@ -30,10 +32,11 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
 
         Intent intent = getIntent();
-        Club club = (Club) intent.getExtras().get("club");
-        ClubDetailedViewModel.setCurrentClub(club);
+        long oid = (intent.getExtras().getLong("club"));
+        mViewModel.setCurrentClub(oid);
 
         setContentView(R.layout.activity_club_detailed);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -43,7 +46,6 @@ public class ClubDetailedActivity extends AppCompatActivity implements ClubDetai
             supportActionBar.setTitle("");
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
         /*Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(club.getName());
         setSupportActionBar(toolbar);*/

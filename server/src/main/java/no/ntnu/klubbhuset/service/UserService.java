@@ -21,6 +21,8 @@ import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
@@ -83,11 +85,15 @@ public class UserService {
         }
         SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
         user.addSecurityGroup(securityGroup);
-        String hashedpw = hasher.generate(user.getPassword().toCharArray());
+        String hashedpw = hashPassword(user.getPassword());
         user.setPassword(hashedpw);
         entityManager.persist(user);
 
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    private String hashPassword(String password) {
+        return hasher.generate(password.toCharArray());
     }
 
     public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
@@ -144,7 +150,7 @@ public class UserService {
         TypedQuery<Member> query = entityManager.createQuery("delete from Member m where m.user = :user", Member.class);
         query.setParameter("user", user);
         query.executeUpdate();
-        
+
         entityManager.remove(user);
         return Response.ok("User removed from system").build();
     }
@@ -157,5 +163,31 @@ public class UserService {
         String query = "update auser set iid = " + iid + " where email = " + email;
         System.out.println("query = " + query);
         entityManager.createNativeQuery(query).executeUpdate();
+    }
+
+    public Response updateUser(User newUser) {
+        User oldUser = entityManager.find(User.class, principal.getName());
+        if(oldUser == null ) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("No user found").build();
+        }
+
+        if(newUser.getFirstName() != null) {
+            oldUser.setFirstName(newUser.getFirstName());
+        }
+
+        if(newUser.getLastName() != null) {
+            oldUser.setLastName(newUser.getLastName());
+        }
+
+        if(newUser.getPassword() != null) {
+            String hashedPassword = hashPassword(newUser.getPassword());
+            oldUser.setPassword(hashedPassword);
+        }
+
+        if(newUser.getPhonenumber() != null) {
+            oldUser.setPhonenumber(newUser.getPhonenumber());
+        }
+
+        return Response.ok(oldUser).build();
     }
 }

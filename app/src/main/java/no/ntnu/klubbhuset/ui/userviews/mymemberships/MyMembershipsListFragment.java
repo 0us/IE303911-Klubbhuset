@@ -13,8 +13,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ClubMembershipRecyclerViewAdapter;
+import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
+import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.Status;
+import no.ntnu.klubbhuset.data.Status;
+
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
@@ -64,9 +75,15 @@ public class MyMembershipsListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getClubs().observe(this, clubs -> {
-                if(clubs.getStatus() == Status.SUCCESS) {
+            mViewModel.getClubs(this).observe(this, clubs -> {
+                if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
+                } else if (clubs.getStatus() == Status.ERROR) {
+                    Toast.makeText(context, "Couldn't retrieve any organizations", Toast.LENGTH_SHORT).show();
+                } else if (clubs.getStatus() == Status.LOADING){
+                    // loading
+                } else {
+                    Toast.makeText(context, R.string.userfeedback_cant_be_resolved, Toast.LENGTH_LONG).show();
                 }
             });
         }
