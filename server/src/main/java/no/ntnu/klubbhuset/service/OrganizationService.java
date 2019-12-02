@@ -19,6 +19,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
@@ -216,15 +217,22 @@ public class OrganizationService {
     public Response getMembership(long oid) {
         User user = getUserFromPrincipal();
         Organization organization = entityManager.find(Organization.class, oid);
-        List<Member> memberships = entityManager.createQuery(
-                "select m from Member m where m.user = :user and m.organization = :organization")
-                .setParameter("user", user)
-                .setParameter("organization", organization)
-                .getResultList();
-        if (memberships == null || memberships.isEmpty()) {
+        Member membership = null;
+        try {
+            membership = (Member) entityManager.createQuery(
+                    "select m from Member m where m.user = :user and m.organization = :organization")
+                    .setParameter("user", user)
+                    .setParameter("organization", organization)
+                    .getSingleResult();
+        } catch (NonUniqueResultException nure) {
+            System.out.println(user.getEmail() + " Should not have two memberships in the same org! Bad DBA!");
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries, please contact system administrator").build();
+        }
+
+        if (membership == null) {
             return Response.noContent().build();
         }
-        return Response.ok(memberships).build();
+        return Response.ok(membership).build();
     }
 
     // --- Private methods below --- //
