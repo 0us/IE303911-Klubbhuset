@@ -82,16 +82,18 @@ public class ImageRepository {
         val clubsList = data.getValue().getData();
         for (Club club : clubsList) {
             val images = club.getOrgImages();
-            for (int i = 0; i < images.length; i++) {
-                val image = images[i];
-                getImage(image.getUrl()).observe(owner, response -> {
-                    if (response.getStatus() == Status.SUCCESS) {
-                        if (data != null) {
-                            image.setImage(response.getData());
-                            data.setValue(Resource.success(clubsList));
+            if (images != null) {
+                for (int i = 0; i < images.length; i++) {
+                    val image = images[i];
+                    getImage(image.getUrl()).observe(owner, response -> {
+                        if (response.getStatus() == Status.SUCCESS) {
+                            if (data != null) {
+                                image.setImage(response.getData());
+                                data.setValue(Resource.success(clubsList));
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
     }
