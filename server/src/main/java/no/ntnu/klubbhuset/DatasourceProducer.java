@@ -17,9 +17,9 @@ import static no.ntnu.klubbhuset.DatasourceProducer.JNDI_NAME;
 //        databaseName = "klubbhuset",
 //        portNumber = 3306,
 //        url = "jdbc:mysql://klubbhusetdb:3306/klubbhuset?useSSL=false",
-        url = "jdbc:mysql://localhost:3306/klubbhuset?serverTimezone=Europe/Oslo&useSSL=false&allowPublicKeyRetrieval=true",
-        user = "lars",
-        password = "ganymedes"
+        url = "jdbc:mysql://klubbhuset-db:3306/klubbhuset?serverTimezone=Europe/Oslo&useSSL=false&allowPublicKeyRetrieval=true",
+        user = "user",
+        password = "password"
 )
 public class DatasourceProducer {
     public static final String JNDI_NAME = "java:app/jdbc/klubbhuset";
