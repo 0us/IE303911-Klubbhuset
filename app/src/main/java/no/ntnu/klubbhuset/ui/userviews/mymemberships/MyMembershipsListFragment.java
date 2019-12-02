@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -39,9 +40,7 @@ import no.ntnu.klubbhuset.viewmodels.MyMemberhipsViewModel;
  */
 public class MyMembershipsListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private MyMemberhipsViewModel mViewModel;
@@ -76,11 +75,11 @@ public class MyMembershipsListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getClubs(this).observe(this, clubs -> {
+            mViewModel.getClubs().observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.ERROR) {
-                    Toast.makeText(context, "Couldn't retrieve any organizations", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.generic_error_response, Toast.LENGTH_SHORT).show();
                 } else if (clubs.getStatus() == Status.LOADING){
                     // loading
                 } else {
@@ -125,7 +124,6 @@ public class MyMembershipsListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Club item);
     }
 }
