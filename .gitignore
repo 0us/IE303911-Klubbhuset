@@ -24,3 +24,5 @@
 connection.zip
 
 server/.env
+
+server/certbot/

@@ -3,7 +3,6 @@ package no.ntnu.klubbhuset.service;
 import lombok.extern.java.Log;
 import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
-import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Image;
 import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
@@ -18,14 +17,14 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.File;
 import java.io.InputStream;
-import java.sql.SQLDataException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,11 +81,15 @@ public class UserService {
         }
         SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
         user.addSecurityGroup(securityGroup);
-        String hashedpw = hasher.generate(user.getPassword().toCharArray());
+        String hashedpw = hashPassword(user.getPassword());
         user.setPassword(hashedpw);
         entityManager.persist(user);
 
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    private String hashPassword(String password) {
+        return hasher.generate(password.toCharArray());
     }
 
     public Response createNewUser(String firstname, String lastname, String email, String password, String phonenumber, FormDataMultiPart multiPart) {
@@ -152,5 +155,31 @@ public class UserService {
         String query = "update auser set iid = " + iid + " where email = " + email;
         System.out.println("query = " + query);
         entityManager.createNativeQuery(query).executeUpdate();
+    }
+
+    public Response updateUser(User newUser) {
+        User oldUser = entityManager.find(User.class, principal.getName());
+        if(oldUser == null ) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("No user found").build();
+        }
+
+        if(newUser.getFirstName() != null) {
+            oldUser.setFirstName(newUser.getFirstName());
+        }
+
+        if(newUser.getLastName() != null) {
+            oldUser.setLastName(newUser.getLastName());
+        }
+
+        if(newUser.getPassword() != null) {
+            String hashedPassword = hashPassword(newUser.getPassword());
+            oldUser.setPassword(hashedPassword);
+        }
+
+        if(newUser.getPhonenumber() != null) {
+            oldUser.setPhonenumber(newUser.getPhonenumber());
+        }
+
+        return Response.ok(oldUser).build();
     }
 }
