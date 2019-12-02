@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -83,6 +84,30 @@ public class OrganizationRepository {
         };
         requestQueue.add(request);
         return res;
+    }
+
+    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember() {
+        val cached = cache.getMyMembershipsClubs();
+        if (cached.getValue() != null) {
+            return cached;
+        }
+        String url = ENDPOINT + "member";
+        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    val resultArr = Json.fromJson(response.toString(), Club[].class);
+                    val resultList = Arrays.asList(resultArr);
+                    cached.setValue(Resource.success(resultList));
+                },
+                error -> {
+                    cached.setValue(Resource.error(null, error));
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(context);
+            }
+        };
+        requestQueue.add(jar);
+        return cached;
     }
 
     public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner) {

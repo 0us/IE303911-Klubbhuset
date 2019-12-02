@@ -29,6 +29,7 @@ import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
+import no.ntnu.klubbhuset.viewmodels.MyMemberhipsViewModel;
 
 /**
  * A fragment representing a list of Items.
@@ -43,7 +44,7 @@ public class MyMembershipsListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private ClubsViewModel mViewModel;
+    private MyMemberhipsViewModel mViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -65,7 +66,7 @@ public class MyMembershipsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_club_list, container, false);
-        mViewModel = ViewModelProviders.of(this).get(ClubsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MyMemberhipsViewModel.class);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();

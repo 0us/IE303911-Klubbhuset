@@ -130,6 +130,16 @@ public class OrganizationService {
         return getMembership(organizationId); // todo return better feedback
     }
 
+    public Response getOrgsWhereUserIsMember() {
+        User user = getUserFromPrincipal();
+        List<Organization> organizations = entityManager.createQuery(
+                "select o from Organization o where o in (select m.organization from Member m where m.group =:ogroup and m.user = :user)", Organization.class)
+                .setParameter("user", user)
+                .setParameter("ogroup", getGroup(Group.USER))
+                .getResultList();
+        return Response.ok().entity(organizations).build();
+    }
+
     /**
      * Getting an organization based on id
      *
