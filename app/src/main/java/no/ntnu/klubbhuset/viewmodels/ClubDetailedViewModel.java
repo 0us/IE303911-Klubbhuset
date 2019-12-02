@@ -40,6 +40,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
 
     /**
      * get users membership status in given organization
+     *
      * @param club
      * @return
      */
@@ -58,6 +59,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
     public LiveData<Resource<User>> getUser() {
         return userRepository.get();
     }
+
     public LiveData<Resource<String>> getDeeplink(Resource<User> user) {
         return vippsRepository.getDeepLink(user, focusedClub.getValue().getData());
     }

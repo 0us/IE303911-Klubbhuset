@@ -4,7 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,8 +22,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
+import lombok.val;
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.cache.VippsCache;
@@ -32,6 +38,7 @@ import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
+import static no.ntnu.klubbhuset.data.Resource.loading;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.APPLICATION_JSON;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AUTHORIZATION;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
@@ -52,7 +59,7 @@ public class VippsRepository {
 
     private Cache cache = Cache.getInstance();
     private VippsCache vippsCache = VippsCache.getInstance();
-    private MutableLiveData<Resource<String>> deeplink;
+    private LiveData<Resource<String>> deeplink;
 
     public static VippsRepository getInstance(Context context) {
         if (ourInstance == null) {
@@ -73,7 +80,7 @@ public class VippsRepository {
         String url = CommunicationConfig.getVippsTokenURL();
         String prefToken = PreferenceUtils.getVippsToken(context.getApplicationContext());
         MutableLiveData<Resource<String>> cached = vippsCache.getVippsToken();
-        if (!prefToken.equals(PREF_NO_FILE_FOUND)) {
+        if (prefToken.equals(PREF_NO_FILE_FOUND)) {
             // no token is found in prefs
             loadVippsToken(cached, url);
         } else if (tokenIsExpired(prefToken)) {
@@ -127,15 +134,17 @@ public class VippsRepository {
 
     public LiveData<Resource<String>> getDeepLink(Resource<User> user, Club focusedClub) {
         if (deeplink == null) {
-            deeplink = new MutableLiveData<>();
-            loadDeepLink(user, focusedClub);
+            val token = getToken();
+            deeplink = Transformations.switchMap(token, stringResource -> {
+                return loadDeepLink(user, focusedClub, stringResource);
+            });
         }
         return deeplink;
     }
 
-    private void loadDeepLink(Resource<User> user, Club focusedClub) {
+    private LiveData<Resource<String>> loadDeepLink(Resource<User> user, Club focusedClub, Resource<String> bearer) {
         VippsPaymentDetails details = getVippsPaymentDetails(user.getData(), focusedClub);
-
+        MutableLiveData returnValue = new MutableLiveData(Resource.loading());
         JSONObject body = null;
         try {
             body = details.getBody();
@@ -146,7 +155,7 @@ public class VippsRepository {
                 response -> {
                     try {
                         String vippsDeepLink = (String) response.get("url");
-                        deeplink.setValue(Resource.success(vippsDeepLink));
+                        returnValue.setValue(Resource.success(vippsDeepLink));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -168,14 +177,14 @@ public class VippsRepository {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                String vippsToken = PreferenceUtils.getVippsAccessToken(context);
-                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + vippsToken);
+                headers.put(AUTHORIZATION, VippsJsonProperties.BEARER + bearer.getData());
                 headers.put(CONTENT_TYPE, APPLICATION_JSON);
                 headers.put(OCP_APIM_SUBSCRIPTION_KEY_STRING, CommunicationConfig.getInstance(context).retrieveOcpApimSubscriptionKey());
                 return headers;
             }
         };
         requestQueue.add(request);
+        return returnValue;
     }
 
     public VippsPaymentDetails getVippsPaymentDetails(User user, Club club) {
