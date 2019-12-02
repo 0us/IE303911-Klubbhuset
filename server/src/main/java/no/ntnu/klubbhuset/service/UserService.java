@@ -3,8 +3,8 @@ package no.ntnu.klubbhuset.service;
 import lombok.extern.java.Log;
 import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
-import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.Image;
+import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import no.ntnu.klubbhuset.resource.UserResource;
@@ -18,14 +18,15 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.File;
 import java.io.InputStream;
-import java.sql.SQLDataException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,7 +54,7 @@ public class UserService {
     public Response getCurrentUser(SecurityContext securityContext) {
         String email = principal.getClaim("sub");
 
-        if ( email == null ) {
+        if (email == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -109,8 +110,8 @@ public class UserService {
         entityManager.persist(user);
 
         FormDataBodyPart bodyPart = multiPart.getField(PROFILE_PICTURE);
-        if ( bodyPart != null ) {
-            if ( !saveImages.checkBodyPartIsImage(bodyPart) ) {
+        if (bodyPart != null) {
+            if (!saveImages.checkBodyPartIsImage(bodyPart)) {
                 entityManager.remove(user);  // the user is already persisted to the database. Since the file uploaded is not an image, removing the user is done
                 return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE)
                         .entity("File must be image, no image was uploaded")
@@ -136,10 +137,14 @@ public class UserService {
     public Response deleteUser() {
         User user = entityManager.find(User.class, principal.getName());
 
-        if ( user == null ) {
+        if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
         }
 
+        TypedQuery<Member> query = entityManager.createQuery("delete from Member m where m.user = :user", Member.class);
+        query.setParameter("user", user);
+        query.executeUpdate();
+        
         entityManager.remove(user);
         return Response.ok("User removed from system").build();
     }

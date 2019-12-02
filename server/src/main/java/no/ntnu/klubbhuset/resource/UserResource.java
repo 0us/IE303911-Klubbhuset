@@ -4,7 +4,6 @@ import no.ntnu.klubbhuset.domain.Group;
 import no.ntnu.klubbhuset.domain.User;
 import no.ntnu.klubbhuset.service.UserService;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -57,7 +56,6 @@ public class UserResource {
         return userService.createNewUser(firstname, lastname, email, password, phonenumber, multiPart);
     }
 
-    // todo the user id should be sent somehow
     @DELETE
     @RolesAllowed(value = {Group.USER})
     public Response deleteUser() {
