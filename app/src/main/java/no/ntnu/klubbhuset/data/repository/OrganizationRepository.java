@@ -1,6 +1,7 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -86,10 +87,10 @@ public class OrganizationRepository {
 
     public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner) {
         val cached = cache.getHomepageClubs();
-        val imageRepository = ImageRepository.getInstance(context);
         if (cached.getValue() != null) {
-            return cached;
-        }
+                return cached;
+            }
+        cached.setValue(Resource.loading());
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, ENDPOINT, null,
                 response -> {
                     val clubsArr = Json.fromJson(response.toString(), Club[].class);
@@ -152,7 +153,6 @@ public class OrganizationRepository {
     }
 
     public Resource<Club> get(long oid) {
-        String url = ENDPOINT + oid;
         val cached = cache.getHomepageClubs();
         if (cached.getValue() != null) {
             if (cached.getValue().getStatus() == Status.SUCCESS) {

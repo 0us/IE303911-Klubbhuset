@@ -57,12 +57,17 @@ public class ImageRepository {
             @Override
             protected Object doInBackground(Object[] objects) {
                 try {
+                    if (path.contains("159")) {
+                        // kill_lars_if_this_is_on_github
+                        System.out.println("123");
+                    }
                     val url2 = new URL(url);
                     val conn = url2.openConnection();
                     val in = conn.getInputStream();
                     val image = BitmapFactory.decodeStream(in);
-                    return image;
+                    res.postValue(Resource.success(image));
                 } catch (IOException e) {
+                    res.postValue(Resource.error(null, e));
                     e.printStackTrace();
                     Log.e(TAG, e.getMessage());
                 }
@@ -70,19 +75,11 @@ public class ImageRepository {
             }
         };
         task.execute();
-        try {
-            image = task.get();
-            res.setValue(Resource.success(image));
-        } catch (ExecutionException | InterruptedException e) {
-            res.setValue(Resource.error("failed to load image", null));
-            e.printStackTrace();
-        }
         return res;
     }
 
     public void pairImageAndClub(MutableLiveData<Resource<List<Club>>> data, LifecycleOwner owner) {
         val clubsList = data.getValue().getData();
-        MediatorLiveData<Bitmap> mediator = new MediatorLiveData<>();
         for (Club club : clubsList) {
             val images = club.getOrgImages();
             for (int i = 0; i < images.length; i++) {
@@ -92,7 +89,6 @@ public class ImageRepository {
                         if (data != null) {
                             image.setImage(response.getData());
                             data.setValue(Resource.success(clubsList));
-                            System.out.println(clubsList);
                         }
                     }
                 });
