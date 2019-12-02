@@ -30,6 +30,10 @@ import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.cache.VippsCache;
+import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.Status;
+import no.ntnu.klubbhuset.data.cache.Cache;
+import no.ntnu.klubbhuset.data.cache.VippsCache;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
@@ -57,7 +61,6 @@ public class ClubDetailedMemberFragment extends Fragment {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
 
-
     public static ClubDetailedMemberFragment newInstance(Member member) {
         Bundle args = new Bundle();
         args.putSerializable(MEMBER_STRING, member);
@@ -72,9 +75,7 @@ public class ClubDetailedMemberFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_club_detailed_member, container, false);
 
-        this.club = ClubDetailedViewModel.getCurrentClub();
         this.member = (Member) getArguments().getSerializable(MEMBER_STRING);
-
         vippsBtn = view.findViewById(R.id.club_detailed_pay_with_vipps);
         paymentStatusImg = view.findViewById(R.id.club_detailed_paid_status_img);
         paymentStatusText = view.findViewById(R.id.club_detailed_payment_status_description);
@@ -91,35 +92,43 @@ public class ClubDetailedMemberFragment extends Fragment {
         TextView memberSince = getView().findViewById(R.id.club_detailed_member_since);
         memberSince.setText(dateFormat.format(member.getCreated()));
 
-        mViewModel.getMembership(club).observe(this, response -> {
-            this.member = response.getData();
-            if (member.isHasPaid() || club.getPriceOfMembership() == null || club.getPriceOfMembership().equals(BigDecimal.ZERO)) {
-                vippsBtn.setVisibility(View.GONE);
-                paymentStatusText.setText(getString(R.string.payment_true));
-                paymentDueDate.setText("");
-                paymentStatusImg.setImageResource(R.drawable.ic_check_black_24dp);
-            } else {
-                vippsBtn.setVisibility(View.VISIBLE);
-                paymentStatusText.setText(getString(R.string.payment_false));
-                paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
-                paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
+        mViewModel.getCurrentClub().observe(this, response -> {
+            if (response.getStatus() == Status.SUCCESS) {
+                if (member.isHasPaid() || response.getData().getPriceOfMembership() == null) {
+                    hideVipps();
+                } else if (response.getData().getPriceOfMembership() != null && response.getData().getPriceOfMembership().equals(BigDecimal.ZERO)) {
+                    hideVipps();
+                } else {
+                    showVipps();
+                }
+                vippsBtn.setOnClickListener(v -> {
+                    mViewModel.getUser().observe(this, user -> {
+                        mViewModel.getDeeplink(user).observe(this, deeplink -> {
+                            if (deeplink.getStatus() == Status.SUCCESS) {
+                                openVipps(deeplink.getData());
+                            } else if (deeplink.getStatus() == Status.ERROR) {
+                                Log.e(TAG, "Couldn't get deeplink, please contact your personal sysadmin");
+                            }
+                        });
+                    });
+                });
             }
         });
-
-        vippsBtn.setOnClickListener(v -> {
-            mViewModel.getUser().observe(this, user -> {
-                mViewModel.getDeeplink(user).observe(this, deeplink -> {
-                    if (deeplink.getStatus() == Status.SUCCESS) {
-                        openVipps(deeplink.getData());
-                    } else if (deeplink.getStatus() == Status.ERROR) {
-                        Log.e(TAG, "Couldn't get deeplink, please contact your personal sysadmin");
-                    }
-                });
-            });
-        });
-
     }
 
+    private void hideVipps() {
+        vippsBtn.setVisibility(View.GONE);
+        paymentStatusText.setText(getString(R.string.payment_true));
+        paymentDueDate.setText("");
+        paymentStatusImg.setImageResource(R.drawable.ic_check_black_24dp);
+    }
+
+    private void showVipps() {
+        vippsBtn.setVisibility(View.VISIBLE);
+        paymentStatusText.setText(getString(R.string.payment_false));
+        paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
+        paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
+    }
 
     private void openVipps(String deepLink) {
         try {

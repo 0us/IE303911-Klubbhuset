@@ -175,7 +175,7 @@ public class OrganizationService {
         organization.setDescription(map.get("description"));
         entityManager.persist(organization);
 
-        if(imageAsString != null) {
+        if (imageAsString != null) {
             uploadImage(imageAsString, organization);
         }
 
@@ -195,6 +195,7 @@ public class OrganizationService {
 
     /**
      * Fetch all orgs where current user is admin
+     *
      * @return
      */
     public Response getOwnedOrganizationsForUser() {
@@ -212,6 +213,7 @@ public class OrganizationService {
     /**
      * get every membership for current user in given org, since users can
      * for example be both an admin and a user in an organization.
+     *
      * @param oid
      * @return
      */
@@ -282,6 +284,7 @@ public class OrganizationService {
 
     /**
      * Creates and persists new member object
+     *
      * @param org
      * @param user
      * @param group
@@ -297,5 +300,34 @@ public class OrganizationService {
         System.out.println(member);
         entityManager.persist(member);
         return member;
+    }
+
+    public Response updateOrganization(Long organizationId, Organization newOrganization) {
+        Organization oldOrganization = entityManager.find(Organization.class, organizationId);
+        if (oldOrganization == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Organization with id " + organizationId + "not found").build();
+        }
+
+        if (newOrganization.getName() != null && !newOrganization.getName().trim().isEmpty()) {
+            oldOrganization.setName(newOrganization.getName());
+        }
+
+        if (newOrganization.getUrl() != null) {
+            oldOrganization.setUrl(newOrganization.getUrl());
+        }
+
+        if (newOrganization.getEmailContact() != null) {
+            oldOrganization.setEmailContact(newOrganization.getEmailContact());
+        }
+
+        if (newOrganization.getPriceOfMembership() != null) {
+            oldOrganization.setPriceOfMembership(newOrganization.getPriceOfMembership());
+        }
+
+        if (newOrganization.getDescription() != null) {
+            oldOrganization.setDescription(newOrganization.getDescription());
+        }
+
+        return Response.ok(oldOrganization).build();
     }
 }

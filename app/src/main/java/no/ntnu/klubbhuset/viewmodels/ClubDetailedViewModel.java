@@ -57,12 +57,10 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         focusedClub.setValue(organizationRepository.get(currentClub));
     }
 
-
-    public LiveData<Resource<String>> getDeeplink(Resource<User> user) {
-        return vippsRepository.getDeepLink(user, focusedClub);
-    }
-
     public LiveData<Resource<User>> getUser() {
         return userRepository.get();
+    }
+    public LiveData<Resource<String>> getDeeplink(Resource<User> user) {
+        return vippsRepository.getDeepLink(user, focusedClub.getValue().getData());
     }
 }

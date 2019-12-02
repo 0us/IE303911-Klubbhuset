@@ -8,13 +8,20 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Map;
 
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.User;
@@ -47,20 +54,38 @@ public class UserRepository {
         this.requestQueue = Volley.newRequestQueue(context);
     }
 
-    public LiveData<Resource<User>> create(User user) {
+    public LiveData<Resource<NetworkResponse>> create(User user) {
         MutableLiveData created = new MutableLiveData();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, ENDPOINT, null,
+        JSONObject jsonUser = null;
+        try {
+            jsonUser = new JSONObject(Json.toJson(user));
+        } catch (JSONException e) {
+            created.setValue(Resource.error(e.getMessage(), null));
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ENDPOINT, jsonUser,
                 response -> {
-                    User newUser = Json.fromJson(response.toString(), User.class);
-                    created.setValue(Resource.success(newUser));
+                    try {
+                        NetworkResponse networkResponse = (NetworkResponse) response.get("response");
+                        created.setValue(Resource.success(networkResponse));
+                    } catch (JSONException e ) {
+                        created.setValue(Resource.error("Could not parse json", null));
+                    }
                 },
                 error -> {
-                    created.setValue(Resource.error(null, error));
-                    System.out.println(error.networkResponse);
+                    created.setValue(Resource.error(null, error.networkResponse));
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return AuthHelper.getAuthHeaders(context);
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                if (response.statusCode == 201) {
+                    try {
+                        return Response.success(
+                                new JSONObject().put("response", response),
+                                HttpHeaderParser.parseCacheHeaders(response));
+                    } catch (JSONException e) {
+                        return super.parseNetworkResponse(response);
+                    }
+                } else return super.parseNetworkResponse(response);
             }
         };
         requestQueue.add(request);
