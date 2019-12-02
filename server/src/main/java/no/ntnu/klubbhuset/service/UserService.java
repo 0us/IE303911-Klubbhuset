@@ -17,8 +17,6 @@ import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
@@ -90,11 +88,6 @@ public class UserService {
         return Response.status(Response.Status.CREATED).build();
     }
 
-    private boolean doesUserExist(User user) {
-        User exist = entityManager.find(User.class, user.getEmail());
-
-        return exist != null;
-    }
 
     private String hashPassword(String password) {
         return hasher.generate(password.toCharArray());
@@ -149,5 +142,11 @@ public class UserService {
         }
 
         return Response.ok(oldUser).build();
+    }
+
+    private boolean doesUserExist(User user) {
+        User exist = entityManager.find(User.class, user.getEmail());
+
+        return exist != null;
     }
 }
