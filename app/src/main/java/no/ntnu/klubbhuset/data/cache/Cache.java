@@ -17,7 +17,7 @@ public class Cache {
     @Getter(lazy = true) private final MutableLiveData<Resource<User>> user = new MutableLiveData<>();
     @Getter(lazy = true) private final LongSparseArray<MutableLiveData<Resource<Member>>> myMemberships = new LongSparseArray<>();
     @Getter(lazy = true) private final MutableLiveData<Resource<List<Club>>> homepageClubs = new MutableLiveData<>();
-    //private final LongSparseArray<Resource<Club>> myMembershipsClubs = new LongSparseArray<>();
+    @Getter(lazy = true) private final MutableLiveData<Resource<List<Club>>> myMembershipsClubs = new MutableLiveData<>();
     @Getter(lazy = true) private final MutableLiveData<Resource<List<Club>>> managedClubs = new MutableLiveData<>();
     //private final LongSparseArray<Resource<Member>> clubMembers = new LongSparseArray<>();
 

@@ -23,9 +23,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 import no.ntnu.klubbhuset.data.repository.VippsRepository;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
@@ -43,11 +46,17 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
     private RequestQueue requestQueue;
     private MutableLiveData<Bitmap> QRCode;
     private VippsRepository vippsRepository;
+    private OrganizationRepository organizationRepository;
 
     public MyMemberhipsViewModel(Application context) {
         super(context);
         this.requestQueue = Volley.newRequestQueue(context);
         this.vippsRepository = VippsRepository.getInstance(context);
+        this.organizationRepository = OrganizationRepository.getInstance(context);
+    }
+
+    public LiveData<Resource<List<Club>>> getClubs() {
+        return organizationRepository.getOrgsWhereUserIsMember();
     }
 
     public LiveData<Bitmap> getQRCode() {
