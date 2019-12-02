@@ -11,6 +11,8 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -38,6 +40,7 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.MEMBERSHIP;
 import static no.ntnu.klubbhuset.util.CommunicationConfig.ORGANIZATION;
 
 public class OrganizationRepository {
+    private static final String JSON_MSG = "msg";
     private static volatile OrganizationRepository ourInstance;
 
     public static OrganizationRepository getInstance(Application context) {
@@ -115,28 +118,16 @@ public class OrganizationRepository {
 
     public LiveData<Resource<Member>> join(Club club) {
         String url = ENDPOINT + club.getOid() + "/" + JOIN;
-        final int[] statusCode = new int[1]; // make variable effectively final to use it inside lambda
         MutableLiveData res = new MutableLiveData();
         cache.getMyMemberships().put(club.getOid(), res);
-        JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, null,
                 response -> {
-                    int result = statusCode[0];
-                    if (result != 0) {
-                        Member member = parseMembershipResponse(response);
+                        Member member = Json.fromJson(response.toString(), Member.class);
                         res.setValue(Resource.success(member));
-                    }
                 },
                 error -> {
                     res.setValue(Resource.error(null, error));
-
                 }) {
-            @Override
-            protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
-                // override parseNetorkResponse to get status code
-                statusCode[0] = response.statusCode;
-                return super.parseNetworkResponse(response);
-            }
-
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return AuthHelper.getAuthHeaders(context);
@@ -190,41 +181,32 @@ public class OrganizationRepository {
         }
         MutableLiveData res = new MutableLiveData<>();
         cache.getMyMemberships().put(club.getOid(), res);
-        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonObjectRequest jar = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    Member received = parseMembershipResponse(response);
-                    res.setValue(Resource.success(received));
+                    Member member = Json.fromJson(response.toString(), Member.class);
+                    res.setValue(Resource.success(member));
                 },
                 error -> {
                     res.setValue(Resource.error(null, error));
-
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return AuthHelper.getAuthHeaders(context);
             }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String jsonString = new String(response.data);
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    return Response.success(jsonObject, HttpHeaderParser.parseCacheHeaders(response));
+                } catch (JSONException e) {
+                    return Response.error(new VolleyError(response));
+                }
+            }
         };
 
         requestQueue.add(jar);
         return cache.getMyMemberships().get(club.getOid());
-    }
-
-
-    /**
-     * @param json
-     * @return the membership with the highest access level Group
-     */
-    private Member parseMembershipResponse(JSONArray json) {
-        Member[] memberships = Json.fromJson(json.toString(), Member[].class);
-        Member result = null;
-        if (memberships != null && memberships.length > 0) {
-            result = memberships[0];
-            for (Member member : memberships) {
-                if (member.getGroup().equals(Group.ADMIN)) {
-                    result = member;
-                }
-            }
-        }
-        return result;
     }
 }
