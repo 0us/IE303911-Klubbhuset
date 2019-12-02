@@ -14,8 +14,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ClubMembershipRecyclerViewAdapter;
+import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
+import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
@@ -67,7 +76,9 @@ public class MyMembershipsListFragment extends Fragment {
                 if(clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.ERROR) {
-                    Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.generic_error_response, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, R.string.userfeedback_cant_be_resolved, Toast.LENGTH_LONG).show();
                 }
             });
         }

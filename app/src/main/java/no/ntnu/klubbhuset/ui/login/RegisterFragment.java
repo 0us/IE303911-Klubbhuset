@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.adapter.AuthenticationPageAdapter;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.UserRepository;
@@ -55,9 +56,23 @@ public class RegisterFragment extends Fragment {
                     mPassword.getText().toString()))
                     .observe(this, response -> {
                         if (response.getStatus() == Status.SUCCESS) {
-                            // user created
+                            Toast.makeText(getContext(),
+                                    "Success!",
+                                    Toast.LENGTH_SHORT).show();
+
                         } else if (response.getStatus() == Status.ERROR){
-                            Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
+
+                            if (response.getData(). statusCode == 403) {
+                                Toast.makeText(
+                                        getContext(),
+                                        R.string.generic_error_response,
+                                        Toast.LENGTH_SHORT).show();
+                            } else if (response.getData().statusCode == 500) {
+                                Toast.makeText(
+                                        getContext(),
+                                        R.string.userfeedback_cant_be_resolved,
+                                        Toast.LENGTH_LONG).show();
+                            }
                         }
             });
         });

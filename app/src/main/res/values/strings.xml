@@ -83,6 +83,10 @@
     <string name="price_not_empty">The price can\'t be empty!</string>
     <string name="description_not_empty">Description can\'t be empty!</string>
 
+    <!--User feedback-->
+    <string name="userfeedback_cant_be_resolved">"I'm terribly sorry, this is not even your fault, the " +
+                                                "server is trying to make coffee in a teapot .."
+    </string>
     <string name="generic_error_response">Sorry, something went wrong. Please try again later</string>
 
 </resources>
