@@ -88,5 +88,6 @@
                                                 "server is trying to make coffee in a teapot .."
     </string>
     <string name="generic_error_response">Sorry, something went wrong. Please try again later</string>
+    <string name="userfeedback_deeplink_error">Sorry, something went wrong. Please try again later</string>
 
 </resources>
