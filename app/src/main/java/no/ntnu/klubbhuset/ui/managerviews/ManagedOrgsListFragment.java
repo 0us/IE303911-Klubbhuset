@@ -78,7 +78,7 @@ public class ManagedOrgsListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getManagedClubs().observe(this, clubs -> {
+            mViewModel.getManagedClubs(this).observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs.getData(), mListener));
                 } else {
@@ -131,7 +131,7 @@ public class ManagedOrgsListFragment extends Fragment {
     public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs, @Nullable Bundle savedInstanceState) {
         super.onInflate(context, attrs, savedInstanceState);
         if (adapter != null) {
-            mViewModel.getManagedClubs().observe(this, clubs -> {
+            mViewModel.getManagedClubs(this).observe(this, clubs -> {
                 adapter.notifyDataSetChanged();
             });
         }

@@ -41,6 +41,12 @@ public class ClubMembershipRecyclerViewAdapter extends RecyclerView.Adapter<Club
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mMembercountView.setText("0"); // TODO
+        if (holder.mItem.getOrgImages() == null || holder.mItem.getOrgImages().length == 0) {
+            // set placeholder
+            holder.mLogo.setImageResource(R.drawable.ic_broken_image_black_24dp);
+        } else {
+            holder.mLogo.setImageBitmap(holder.mItem.getOrgImages()[0].getImage());
+        }
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

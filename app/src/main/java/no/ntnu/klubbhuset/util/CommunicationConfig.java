@@ -19,6 +19,7 @@ public class CommunicationConfig {
     private String host;
     private String protocol;
     public static String API_URL;
+    public static String IMAGE = "image";
     public static String ORGANIZATION = "organization";
     public static final String LOGIN = "auth";
     public static final String JOIN = "join";
