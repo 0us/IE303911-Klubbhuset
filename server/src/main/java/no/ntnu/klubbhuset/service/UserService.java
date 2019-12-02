@@ -83,6 +83,9 @@ public class UserService {
         if (user == null) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+        if (entityManager.find(User.class, user.getEmail()) != null) {
+            return Response.status(Response.Status.FORBIDDEN).entity("User already exits").build();
+        }
         SecurityGroup securityGroup = entityManager.find(SecurityGroup.class, SecurityGroup.USER);
         user.addSecurityGroup(securityGroup);
         String hashedpw = hashPassword(user.getPassword());
