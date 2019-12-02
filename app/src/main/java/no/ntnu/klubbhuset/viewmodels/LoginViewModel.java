@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.Patterns;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -138,7 +139,7 @@ public class LoginViewModel extends AndroidViewModel {
         return password != null && password.trim().length() > 5;
     }
 
-    public LiveData<Resource<User>> createUser(User user) {
+    public LiveData<Resource<NetworkResponse>> createUser(User user) {
         return userRepository.create(user);
     }
 }
