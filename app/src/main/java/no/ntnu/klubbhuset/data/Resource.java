@@ -18,4 +18,8 @@ public class Resource<T> {
     public static <T> Resource error(String message, T data) {
         return new Resource(Status.ERROR, data, message);
     }
+
+    public static <T> Resource loading() {
+        return new Resource(Status.LOADING, null, null);
+    }
 }
