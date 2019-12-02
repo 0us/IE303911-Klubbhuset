@@ -151,7 +151,7 @@ public class CreateOrganizationFormFragment extends Fragment {
                 } else if (response.getStatus() == Status.ERROR) {
                     Toast.makeText(
                             getActivity().getApplication().getApplicationContext(),
-                            "Error creating organization!",
+                            R.string.generic_error_response,
                             Toast.LENGTH_SHORT)
                             .show();
                 }

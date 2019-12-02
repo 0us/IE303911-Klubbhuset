@@ -107,6 +107,7 @@ public class ClubDetailedMemberFragment extends Fragment {
                             if (deeplink.getStatus() == Status.SUCCESS) {
                                 openVipps(deeplink.getData());
                             } else if (deeplink.getStatus() == Status.ERROR) {
+                                Toast.makeText(getContext(), R.string.userfeedback_deeplink_error, Toast.LENGTH_SHORT).show();
                                 Log.e(TAG, "Couldn't get deeplink, please contact your personal sysadmin");
                             }
                         });
