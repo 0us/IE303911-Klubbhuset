@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(Club item) {
         Intent intent = new Intent(this, ClubDetailedActivity.class);
-        intent.putExtra("club", item);
+        intent.putExtra("club", item.getOid());
         startActivity(intent);
     }
 

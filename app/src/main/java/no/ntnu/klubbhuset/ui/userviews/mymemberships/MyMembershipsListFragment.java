@@ -26,8 +26,11 @@ import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.Status;
+
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
+import no.ntnu.klubbhuset.viewmodels.MyMemberhipsViewModel;
 
 /**
  * A fragment representing a list of Items.
@@ -40,7 +43,7 @@ public class MyMembershipsListFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private ClubsViewModel mViewModel;
+    private MyMemberhipsViewModel mViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -62,7 +65,7 @@ public class MyMembershipsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_club_list, container, false);
-        mViewModel = ViewModelProviders.of(this).get(ClubsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MyMemberhipsViewModel.class);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -73,10 +76,12 @@ public class MyMembershipsListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             mViewModel.getClubs().observe(this, clubs -> {
-                if(clubs.getStatus() == Status.SUCCESS) {
+                if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.ERROR) {
                     Toast.makeText(context, R.string.generic_error_response, Toast.LENGTH_SHORT).show();
+                } else if (clubs.getStatus() == Status.LOADING){
+                    // loading
                 } else {
                     Toast.makeText(context, R.string.userfeedback_cant_be_resolved, Toast.LENGTH_LONG).show();
                 }

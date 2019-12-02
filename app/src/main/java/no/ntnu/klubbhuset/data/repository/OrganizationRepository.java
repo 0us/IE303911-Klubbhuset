@@ -1,8 +1,9 @@
 package no.ntnu.klubbhuset.data.repository;
 
-import android.app.Application;
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -20,10 +21,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import lombok.val;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
@@ -40,7 +46,7 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.ORGANIZATION;
 public class OrganizationRepository {
     private static volatile OrganizationRepository ourInstance;
 
-    public static OrganizationRepository getInstance(Application context) {
+    public static OrganizationRepository getInstance(Context context) {
         if (ourInstance == null) {
             ourInstance = new OrganizationRepository(context);
         }
@@ -80,22 +86,17 @@ public class OrganizationRepository {
         return res;
     }
 
-    public LiveData<Resource<List<Club>>> getAll() {
-        val cached = cache.getHomepageClubs();
+    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember() {
+        val cached = cache.getMyMembershipsClubs();
         if (cached.getValue() != null) {
             return cached;
         }
-        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, ENDPOINT, null,
+        String url = ENDPOINT + "member";
+        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
-                    List<Club> clubs = new ArrayList<>();
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            clubs.add(new Club(response.getJSONObject(i)));
-                        }
-                    } catch (JSONException jex) {
-                        System.out.println(jex);
-                    }
-                    cached.setValue(Resource.success(clubs));
+                    val resultArr = Json.fromJson(response.toString(), Club[].class);
+                    val resultList = Arrays.asList(resultArr);
+                    cached.setValue(Resource.success(resultList));
                 },
                 error -> {
                     cached.setValue(Resource.error(null, error));
@@ -107,6 +108,36 @@ public class OrganizationRepository {
         };
         requestQueue.add(jar);
         return cached;
+    }
+
+    public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner) {
+        val cached = cache.getHomepageClubs();
+        if (cached.getValue() != null) {
+                return cached;
+            }
+        cached.setValue(Resource.loading());
+        JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, ENDPOINT, null,
+                response -> {
+                    val clubsArr = Json.fromJson(response.toString(), Club[].class);
+                    val clubs = Arrays.asList(clubsArr);
+                    cached.setValue(Resource.success(clubs));
+                    pairImagesAndClubs(owner, cached);
+                },
+                error -> {
+                    cached.setValue(Resource.error(null, error));
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return AuthHelper.getAuthHeaders(context);
+            }
+        };
+
+        requestQueue.add(jar);
+        return cached;
+    }
+
+    private void pairImagesAndClubs(LifecycleOwner owner, MutableLiveData<Resource<List<Club>>> data) {
+        ImageRepository.getInstance(context).pairImageAndClub(data, owner);
     }
 
     public LiveData<Resource<String>> delete(Club club) {
@@ -146,15 +177,27 @@ public class OrganizationRepository {
         return cache.getMyMemberships().get(club.getOid());
     }
 
-    public LiveData<Resource<Club>> get(Club club) {
-        throw new UnsupportedOperationException("TODO: Implement method");
+    public Resource<Club> get(long oid) {
+        val cached = cache.getHomepageClubs();
+        if (cached.getValue() != null) {
+            if (cached.getValue().getStatus() == Status.SUCCESS) {
+                    val list = cached.getValue().getData();
+                    Optional<Club> item = list.stream()
+                            .filter(p -> p.getOid() == oid)
+                            .findFirst();
+                    if (item.isPresent()) {
+                        return Resource.success(item.get());
+                    }
+                }
+        }
+        return Resource.error(null, null);
     }
 
     public LiveData<Resource<List<Member>>> getMembers(long oid) {
         throw new UnsupportedOperationException("TODO: Implement method");
     }
 
-    public LiveData<Resource<List<Club>>> getManaged() {
+    public LiveData<Resource<List<Club>>> getManaged(LifecycleOwner owner) {
         String url = ENDPOINT + "managed";
         MutableLiveData cached = cache.getManagedClubs();
         if (cached.getValue() != null) {
@@ -162,17 +205,14 @@ public class OrganizationRepository {
         }
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
-                    List<Club> clubs = new ArrayList<>();
-                    try {
-                        for (int i = 0; i < response.length(); i++) {
-                            clubs.add(new Club(response.getJSONObject(i)));
-                        }
-
-                    } catch (JSONException jex) {
-                        System.out.println(jex);
-                    }
+                    val clubsArr = Json.fromJson(response.toString(), Club[].class);
+                    val clubs = Arrays.asList(clubsArr);
                     cached.setValue(Resource.success(clubs));
-                }, System.out::println) {
+                    pairImagesAndClubs(owner, cached);
+                },
+                error -> {
+                    cached.setValue(Resource.error("Failed to load managed clubs", error));
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return AuthHelper.getAuthHeaders(context);

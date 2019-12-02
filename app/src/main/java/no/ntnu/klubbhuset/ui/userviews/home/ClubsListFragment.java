@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ClubsRecyclerViewAdapter;
@@ -74,7 +74,7 @@ public class ClubsListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getClubs().observe(this, clubs -> {
+            mViewModel.getClubs(this).observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.SUCCESS) {

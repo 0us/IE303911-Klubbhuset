@@ -1,16 +1,14 @@
 package no.ntnu.klubbhuset.ui.userviews.club.detailed;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,7 +47,6 @@ public class ClubDetailedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        //this.club = (Club) getArguments().getSerializable("club");
         return inflater.inflate(R.layout.content_club_detailed, container, false);
     }
 
@@ -67,33 +64,32 @@ public class ClubDetailedFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
-        club = ClubDetailedViewModel.getCurrentClub();
-
-        // decide what content to show based on membership status
-        mViewModel.getMembership(club).observe(this, response -> {
-            if (response.getStatus() == Status.SUCCESS) {
-                mListener.onMembershipStatusChanged(response.getData());
-            } else if (response.getStatus() == Status.ERROR){
-                Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        mViewModel = ViewModelProviders.of(getActivity()).get(ClubDetailedViewModel.class);
 
         name = getView().findViewById(R.id.club_detailed_name);
         description = getView().findViewById(R.id.club_detailed_description);
         url = getView().findViewById(R.id.club_detailed_homepage);
         email = getView().findViewById(R.id.club_detailed_email);
         image = getView().findViewById(R.id.club_detailed_banner);
-        if (club.getImage() == null || club.getImage().isEmpty()) {
-            // set placeholder
-            image.setImageResource(R.drawable.ic_landscape_black_24dp);
-        } else {
-            String encodedString = club.getImage();
 
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            image.setImageBitmap(bitmap);
+        mViewModel.getCurrentClub().observe(this, clubResource -> {
+            if (clubResource.getStatus() == Status.SUCCESS) {
+                this.club = clubResource.getData();
+                setData();
+            } else if (clubResource.getStatus() == Status.LOADING){
+                // loading
+            } else if (clubResource.getStatus() == Status.ERROR){
+                Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();;
+            }
+        });
+    }
+
+    private void setData() {
+        if (club.getOrgImages() == null || club.getOrgImages().length == 0) {
+            // set placeholder
+            image.setImageResource(R.drawable.ic_broken_image_black_24dp);
+        } else {
+            image.setImageBitmap(club.getOrgImages()[0].getImage());
         }
 
         name.setText(club.getName());
@@ -101,17 +97,14 @@ public class ClubDetailedFragment extends Fragment {
         url.setText(club.getUrl());
         email.setText(club.getEmailContact());
 
-        /*joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
-        joinClubBtn.setOnClickListener(click -> {
-            mViewModel.joinClub(club.getOid()).observe(this, response -> {
-                if (response != null) {
-                    System.out.println("what it do . . .");
-                    mListener.onMembershipStatusChanged(response);
-                } else {
-
-                }
-            });
-        });*/
+        // decide what content to show based on membership status
+        mViewModel.getMembership(club).observe(this, response -> {
+            if (response.getStatus() == Status.SUCCESS) {
+                mListener.onMembershipStatusChanged(response.getData());
+            } else {
+                //todo handle error
+            }
+        });
     }
 
     public interface onMembershipStatusChangedListener {

@@ -83,6 +83,19 @@ public class OrganizationResource {
         return organizationService.getMembership(id);
     }
 
+
+//    @PUT
+//    @Path("/{organizationId}")
+//    public Response updateOrganization(@PathParam("organizationId") int id, Organization organization) {
+//        return organizationService.updateOrganization(id, organization);
+//    }
+
+    @GET
+    @Path("/member")
+    public Response getOrgsWhereUserIsMember() {
+        return organizationService.getOrgsWhereUserIsMember();
+    }
+
     @DELETE
     @Path("/{organizationId}")
     public Response deleteOrganization(@PathParam("organizationId") int id) {
