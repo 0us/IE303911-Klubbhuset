@@ -36,8 +36,7 @@
         <activity
             android:name=".ui.userviews.club.detailed.ClubDetailedActivity"
             android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

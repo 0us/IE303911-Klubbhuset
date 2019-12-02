@@ -37,6 +37,7 @@ public class Organization implements Serializable {
     private String url;
     private String emailContact;
     private BigDecimal priceOfMembership;
+    @Column(length = 1024)
     private String description;
 
     @JsonbTransient
