@@ -113,7 +113,7 @@ public class OrganizationRepository {
 
     public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner, boolean forceRefresh) {
         val cached = cache.getHomepageClubs();
-        if (cached.getValue() != null || forceRefresh) {
+        if (cached.getValue() != null && !forceRefresh) {
                 return cached;
             }
         cached.setValue(Resource.loading());

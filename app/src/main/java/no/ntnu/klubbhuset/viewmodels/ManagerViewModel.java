@@ -71,7 +71,7 @@ public class ManagerViewModel extends AndroidViewModel {
         return createOrganizationFormState;
     }
 
-    public void refreshOrganizations() {
-        repository.getAll(getApplication(), true);
+    public void refreshOrganizations(LifecycleOwner owner) {
+        repository.getAll(owner, true);
     }
 }
