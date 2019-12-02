@@ -82,7 +82,7 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember() {
-        val cached = cache.getHomepageClubs();
+        val cached = cache.getMyMembershipsClubs();
         if (cached.getValue() != null) {
             return cached;
         }
