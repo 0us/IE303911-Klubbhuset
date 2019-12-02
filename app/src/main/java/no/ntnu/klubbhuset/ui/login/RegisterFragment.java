@@ -65,7 +65,7 @@ public class RegisterFragment extends Fragment {
                             if (response.getData(). statusCode == 403) {
                                 Toast.makeText(
                                         getContext(),
-                                        "Something went wrong, please contact system administrator",
+                                        R.string.generic_error_response,
                                         Toast.LENGTH_SHORT).show();
                             } else if (response.getData().statusCode == 500) {
                                 Toast.makeText(

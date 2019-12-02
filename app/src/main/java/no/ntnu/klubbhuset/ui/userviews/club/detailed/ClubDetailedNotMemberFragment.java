@@ -61,12 +61,11 @@ public class ClubDetailedNotMemberFragment extends Fragment {
                     if (response.getStatus() == Status.SUCCESS) {
                         mListener.onMembershipStatusChanged(joinResult.getData());
                     } else {
-                        Toast.makeText(getContext(), "Error joining", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
                     }
                 });
             });
         });
-
     }
 
 }

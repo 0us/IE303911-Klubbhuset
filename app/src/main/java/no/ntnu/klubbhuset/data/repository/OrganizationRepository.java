@@ -89,7 +89,7 @@ public class OrganizationRepository {
         return res;
     }
 
-    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember() {
+    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(LifecycleOwner owner) {
         val cached = cache.getMyMembershipsClubs();
         if (cached.getValue() != null) {
             return cached;
@@ -100,6 +100,7 @@ public class OrganizationRepository {
                     val resultArr = Json.fromJson(response.toString(), Club[].class);
                     val resultList = Arrays.asList(resultArr);
                     cached.setValue(Resource.success(resultList));
+                    pairImagesAndClubs(owner, cached);
                 },
                 error -> {
                     cached.setValue(Resource.error(null, error));
