@@ -13,11 +13,9 @@ import java.util.List;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Member;
-import no.ntnu.klubbhuset.data.model.User;
 
 public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHolder> {
-    List<User> members;
-
+    List<Member> members;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -47,13 +45,16 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User member = members.get(position);
+        Member member = members.get(position);
 
         TextView memberNameTextView = holder.memberName;
         ImageView hasPaid = holder.hasPaid;
 
-        memberNameTextView.setText(member.getFirstName() + " " + member.getLastName());
-        
+        memberNameTextView.setText("some member");
+        if (member.isHasPaid()) {
+            hasPaid.setImageResource(R.drawable.ic_check_black_24dp);
+        }
+
     }
 
     @Override
