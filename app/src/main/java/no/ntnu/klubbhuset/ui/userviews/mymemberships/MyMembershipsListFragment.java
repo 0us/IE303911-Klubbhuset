@@ -63,7 +63,7 @@ public class MyMembershipsListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getClubs().observe(this, clubs -> {
+            mViewModel.getClubs(this).observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubMembershipRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.ERROR) {
