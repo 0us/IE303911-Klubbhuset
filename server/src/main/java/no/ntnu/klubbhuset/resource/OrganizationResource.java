@@ -87,6 +87,12 @@ public class OrganizationResource {
 //        return organizationService.updateOrganization(id, organization);
 //    }
 
+    @GET
+    @Path("/member")
+    public Response getOrgsWhereUserIsMember() {
+        return organizationService.getOrgsWhereUserIsMember();
+    }
+
     @DELETE
     @Path("/{organizationId}")
     public Response deleteOrganization(@PathParam("organizationId") int id) {
