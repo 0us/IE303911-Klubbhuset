@@ -20,7 +20,6 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
 
 
 public class ClubDetailedViewModel extends AndroidViewModel {
-    // TODO: Implement the ViewModel
     private MutableLiveData<Resource<Club>> focusedClub;
     private OrganizationRepository organizationRepository;
     private VippsRepository vippsRepository;
@@ -41,7 +40,6 @@ public class ClubDetailedViewModel extends AndroidViewModel {
 
     /**
      * get users membership status in given organization
-     *
      * @param club
      * @return
      */

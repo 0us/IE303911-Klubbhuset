@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Status;
@@ -59,7 +60,7 @@ public class ProfileFragment extends Fragment {
             if (result.getStatus() == Status.SUCCESS) {
                 fillUserInfo(result.getData());
             } else if (result.getStatus() == Status.ERROR) {
-                //todo handle error
+                Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
             }
         });
 

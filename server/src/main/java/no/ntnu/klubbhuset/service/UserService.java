@@ -4,6 +4,7 @@ import lombok.extern.java.Log;
 import no.ntnu.klubbhuset.DatasourceProducer;
 import no.ntnu.klubbhuset.SaveImages;
 import no.ntnu.klubbhuset.domain.Image;
+import no.ntnu.klubbhuset.domain.Member;
 import no.ntnu.klubbhuset.domain.SecurityGroup;
 import no.ntnu.klubbhuset.domain.User;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -13,6 +14,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
@@ -102,6 +106,10 @@ public class UserService {
         if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("User not found").build();
         }
+
+        TypedQuery<Member> query = entityManager.createQuery("delete from Member m where m.user = :user", Member.class);
+        query.setParameter("user", user);
+        query.executeUpdate();
 
         entityManager.remove(user);
         return Response.ok("User removed from system").build();
