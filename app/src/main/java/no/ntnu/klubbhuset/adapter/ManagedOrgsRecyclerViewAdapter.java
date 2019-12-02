@@ -75,7 +75,7 @@ public class ManagedOrgsRecyclerViewAdapter extends RecyclerView.Adapter<Managed
             super(v);
             view = v;
             mNameView = v.findViewById(R.id.club_name);
-            mMembercountView = v.findViewById(R.id.club_member_count);
+//            mMembercountView = v.findViewById(R.id.club_member_count); TODO Count Dracula
             mLogo = v.findViewById(R.id.club_logo);
         }
 
