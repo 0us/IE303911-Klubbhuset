@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import no.ntnu.klubbhuset.R;
@@ -16,16 +19,19 @@ import no.ntnu.klubbhuset.data.model.Member;
 
 public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHolder> {
     List<Member> members;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView memberName;
         public ImageView hasPaid;
+        public TextView joined;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.memberName = itemView.findViewById(R.id.member_name);
             this.hasPaid = itemView.findViewById(R.id.has_paid);
+            this.joined = itemView.findViewById(R.id.joined);
         }
     }
 
@@ -49,7 +55,9 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
 
         TextView memberNameTextView = holder.memberName;
         ImageView hasPaid = holder.hasPaid;
+        TextView joined = holder.joined;
 
+        joined.setText(dateFormat.format(member.getCreated()));
         memberNameTextView.setText(member.getUser().getFirstName() + " " + member.getUser().getLastName());
         if (member.isHasPaid()) {
             hasPaid.setImageResource(R.drawable.ic_check_black_24dp);

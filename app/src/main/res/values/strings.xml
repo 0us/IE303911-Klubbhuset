@@ -91,5 +91,6 @@
     <string name="userfeedback_deeplink_error">Sorry, something went wrong. Please try again later</string>
     <string name="has_paid_symbol">Has paid symbol</string>
     <string name="member_name">Member name</string>
+    <string name="joined">joined</string>
 
 </resources>
