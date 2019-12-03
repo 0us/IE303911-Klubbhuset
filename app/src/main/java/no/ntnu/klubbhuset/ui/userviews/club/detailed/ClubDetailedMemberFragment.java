@@ -115,7 +115,6 @@ public class ClubDetailedMemberFragment extends Fragment {
 
     private void showVipps() {
         vippsBtn.setVisibility(View.VISIBLE);
-        paymentStatusText.setText(getString(R.string.payment_false));
 //        paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
         paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
         vippsBtn.setOnClickListener(v -> {
