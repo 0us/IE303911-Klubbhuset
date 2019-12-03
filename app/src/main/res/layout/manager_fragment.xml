@@ -33,25 +33,32 @@
             android:text="TextView"
             android:visibility="gone" />
 
-        <ScrollView
-            android:id="@+id/manager_scrollview"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/manage_create_new_org">
+            android:layout_height="wrap_content">
 
-            <fragment
-                android:id="@+id/manager_clubs_recycler_view"
-                android:name="no.ntnu.klubbhuset.ui.managerviews.ManagedOrgsListFragment"
+            <ScrollView
+                android:id="@+id/manager_scrollview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout="@layout/fragment_club_list" />
-        </ScrollView>
+                app:layout_constraintTop_toBottomOf="@+id/manage_create_new_org">
+
+                <fragment
+                    android:id="@+id/manager_clubs_recycler_view"
+                    android:name="no.ntnu.klubbhuset.ui.managerviews.ManagedOrgsListFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout="@layout/fragment_club_list" />
+            </ScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 
