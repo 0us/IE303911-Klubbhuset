@@ -82,7 +82,7 @@ public class ManagedOrgsListFragment extends Fragment {
             mViewModel.getManagedClubs(this).observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs.getData(), mListener));
-                } else if (clubs.getStatus() == Status.SUCCESS) {
+                } else if (clubs.getStatus() == Status.ERROR) {
                     Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
 
                 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.viewmodels.MyMemberhipsViewModel;
 
 
-public class MyMemberhipsFragment extends Fragment{
+public class MyMemberhipsFragment extends Fragment {
 
     private MyMemberhipsViewModel mViewModel;
     private ImageView qrView;
@@ -42,9 +44,20 @@ public class MyMemberhipsFragment extends Fragment{
             qrView.setImageBitmap(response);
         });
 
-        mViewModel.getVippsToken().observe(this, response -> {
-            // TODO: 23.11.2019 do stuff when token has been recieved
+        SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            mViewModel.refreshClubs(this).observe(this, resource -> {
+                if (resource.getStatus() == Status.SUCCESS) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else if (resource.getStatus() == Status.ERROR) {
+                    Toast.makeText(
+                            getContext(),
+                            R.string.generic_error_response,
+                            Toast.LENGTH_LONG).
+                            show();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
         });
     }
-
 }

@@ -142,6 +142,7 @@ public class OrganizationService {
                 "select o from Organization o where o in (select m.organization from Member m where m.user = :user)", Organization.class)
                 .setParameter("user", user)
                 .getResultList();
+        entityManager.flush();
         return Response.ok().entity(organizations).build();
     }
 
