@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/club_detailed_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.userviews.club.detailed.ClubDetailedMemberFragment">
 
     <LinearLayout
@@ -46,44 +46,58 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/has_paid"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/club_detailed_has_paid"
+                    <TextView
+                        android:id="@+id/club_detailed_payment_status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payment_status"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/club_detailed_paid_status_img"
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/ic_sentiment_very_dissatisfied_black_24dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="TextView" />
-            </LinearLayout>
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+<!--                    <TextView TODO Real due data-->
+<!--                        android:id="@+id/club_detailed_payment_status_description"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/payment_false" />-->
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/next_payment_due"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/club_detailed_payment_due"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
+                </LinearLayout>
+
+<!--                <TextView TODO Real due date-->
+<!--                    android:id="@+id/club_detailed_due_date"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="date"-->
+<!--                    android:textStyle="bold" />-->
             </LinearLayout>
 
         </LinearLayout>
+
 
         <Space
             android:layout_width="match_parent"
@@ -93,9 +107,9 @@
             android:id="@+id/club_detailed_pay_with_vipps"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:background="#00FFFFFF"
-            android:src="@drawable/ic_betal_med_vipps___250px"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_betal_med_vipps___250px" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

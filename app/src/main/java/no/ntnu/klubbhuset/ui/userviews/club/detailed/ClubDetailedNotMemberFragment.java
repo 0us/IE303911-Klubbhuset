@@ -13,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
 
 /**
  * Displays information relating to a user who is NOT member of an organization,
@@ -50,13 +53,17 @@ public class ClubDetailedNotMemberFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: Use the ViewModel
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
-        Club club = ClubDetailedViewModel.getCurrentClub();
+        mViewModel = ViewModelProviders.of(getActivity()).get(ClubDetailedViewModel.class);
         Button joinClubBtn = getView().findViewById(R.id.club_detailed_joinbtn);
-        joinClubBtn.setOnClickListener(click -> {
-            mViewModel.joinClub(club.getOid()).observe(this, response -> {
-                mListener.onMembershipStatusChanged(response);
+        mViewModel.getCurrentClub().observe(this, response -> {
+            joinClubBtn.setOnClickListener(click -> {
+                mViewModel.joinClub(response.getData()).observe(this, joinResult -> {
+                    if (response.getStatus() == Status.SUCCESS) {
+                        mListener.onMembershipStatusChanged(joinResult.getData());
+                    } else {
+                        Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
         });
     }

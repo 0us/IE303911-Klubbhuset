@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import lombok.NoArgsConstructor;
 import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.viewmodels.LoginViewModel;
 
 @NoArgsConstructor
 public class LoginFragment extends Fragment {
@@ -128,7 +129,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void showHome() {
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
+        ((LoginActivity) getActivity()).showHome();
     }
 }

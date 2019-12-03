@@ -8,14 +8,7 @@ import lombok.Setter;
 import org.codehaus.jackson.map.annotate.JsonFilter;
 
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 

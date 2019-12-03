@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonValue;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
@@ -21,10 +22,12 @@ import java.util.Set;
 
 public class Image {
 
+    @JsonbTransient
     @GeneratedValue
     @Id
     private Long iid;
 
+    @JsonbTransient
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date created;
 
@@ -35,10 +38,11 @@ public class Image {
 
     private String url;
 
-    @JsonIgnore
+    @JsonbTransient
     @OneToOne(mappedBy = "avatar")
     private User user;
 
+    @JsonbTransient
     @ManyToMany(mappedBy = "orgImages")
     Set<Organization> organizations;
 }

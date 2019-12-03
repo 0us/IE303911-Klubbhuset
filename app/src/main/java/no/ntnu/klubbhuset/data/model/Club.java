@@ -1,5 +1,6 @@
 package no.ntnu.klubbhuset.data.model;
 
+import android.graphics.Bitmap;
 import android.util.Base64;
 
 import org.json.JSONException;
@@ -20,7 +21,7 @@ public class Club implements Serializable {
     private String url;
     private long oid;
     private String name;
-    private String image;
+    private Image[] orgImages;
 
     public Club(String description, BigDecimal priceOfMembership, String emailContact, String url, String name) {
         this.description = description;
@@ -34,8 +35,12 @@ public class Club implements Serializable {
         try {
             this.oid = json.getLong("oid");
             this.name = json.getString("name");
-            this.url = json.getString("url");
-            this.emailContact = json.getString("emailContact");
+            if (json.has("url")) {
+                this.url = json.getString("url");
+            }
+            if (json.has("emailContact")) {
+                this.emailContact = json.getString("emailContact");
+            }
             if (json.getString("priceOfMembership").equals("null")) {
                 this.priceOfMembership = BigDecimal.valueOf(0);
             } else {
@@ -49,6 +54,7 @@ public class Club implements Serializable {
 
     public JSONObject toJson(byte[] imageInByte) {
         JSONObject json = new JSONObject();
+      
         String base64String = null;
         if (imageInByte != null) {
             base64String = Base64.encodeToString(imageInByte, Base64.DEFAULT);
@@ -81,4 +87,5 @@ public class Club implements Serializable {
         }
         return json;
     }
+
 }

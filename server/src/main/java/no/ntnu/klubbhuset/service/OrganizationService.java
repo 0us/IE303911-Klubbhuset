@@ -17,7 +17,10 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionRolledbackLocalException;
 import javax.inject.Inject;
+import javax.persistence.*;
+import javax.naming.OperationNotSupportedException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
@@ -61,6 +64,7 @@ public class OrganizationService {
 
         return Response.ok(organizations).build();
     }
+
 
 //    public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
 //        Organization organization = new Organization();
@@ -124,8 +128,22 @@ public class OrganizationService {
         if (isAlreadyMember(organizationId, user)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
-        Member member = doJoinOrganization(organization, user, getGroup(Group.USER));
+        try {
+            doJoinOrganization(organization, user, getGroup(Group.USER));
+        } catch (Exception e) {
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries").build();
+        }
         return getMembership(organizationId); // todo return better feedback
+    }
+
+    public Response getOrgsWhereUserIsMember() {
+        User user = getUserFromPrincipal();
+        List<Organization> organizations = entityManager.createQuery(
+                "select o from Organization o where o in (select m.organization from Member m where m.user = :user)", Organization.class)
+                .setParameter("user", user)
+                .getResultList();
+        entityManager.flush();
+        return Response.ok().entity(organizations).build();
     }
 
     /**
@@ -173,7 +191,7 @@ public class OrganizationService {
         organization.setDescription(map.get("description"));
         entityManager.persist(organization);
 
-        if(imageAsString != null) {
+        if (imageAsString != null) {
             uploadImage(imageAsString, organization);
         }
 
@@ -193,6 +211,7 @@ public class OrganizationService {
 
     /**
      * Fetch all orgs where current user is admin
+     *
      * @return
      */
     public Response getOwnedOrganizationsForUser() {
@@ -210,21 +229,31 @@ public class OrganizationService {
     /**
      * get every membership for current user in given org, since users can
      * for example be both an admin and a user in an organization.
+     *
      * @param oid
      * @return
      */
     public Response getMembership(long oid) {
         User user = getUserFromPrincipal();
         Organization organization = entityManager.find(Organization.class, oid);
-        List<Member> memberships = entityManager.createQuery(
-                "select m from Member m where m.user = :user and m.organization = :organization")
-                .setParameter("user", user)
-                .setParameter("organization", organization)
-                .getResultList();
-        if (memberships == null || memberships.isEmpty()) {
+        Member membership = null;
+        try {
+            membership = (Member) entityManager.createQuery(
+                    "select m from Member m where m.user = :user and m.organization = :organization")
+                    .setParameter("user", user)
+                    .setParameter("organization", organization)
+                    .getSingleResult();
+        } catch (NonUniqueResultException nure) {
+            System.out.println(user.getEmail() + " Should not have two memberships in the same org! Bad DBA!");
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries, please contact system administrator").build();
+        } catch (NoResultException nre) {
+            System.out.println("No membership found");
+        }
+
+        if (membership == null) {
             return Response.noContent().build();
         }
-        return Response.ok(memberships).build();
+        return Response.ok(membership).build();
     }
 
     // --- Private methods below --- //
@@ -280,12 +309,13 @@ public class OrganizationService {
 
     /**
      * Creates and persists new member object
+     *
      * @param org
      * @param user
      * @param group
      * @return
      */
-    private Member doJoinOrganization(Organization org, User user, Group group) {
+    private Member doJoinOrganization(Organization org, User user, Group group) throws EntityExistsException {
         Member member = new Member();
         System.out.println(member);
         member.setUser(user);
@@ -294,6 +324,36 @@ public class OrganizationService {
         member.setOrganization(org);
         System.out.println(member);
         entityManager.persist(member);
+        entityManager.flush();
         return member;
+    }
+
+    public Response updateOrganization(Long organizationId, Organization newOrganization) {
+        Organization oldOrganization = entityManager.find(Organization.class, organizationId);
+        if (oldOrganization == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Organization with id " + organizationId + "not found").build();
+        }
+
+        if (newOrganization.getName() != null && !newOrganization.getName().trim().isEmpty()) {
+            oldOrganization.setName(newOrganization.getName());
+        }
+
+        if (newOrganization.getUrl() != null) {
+            oldOrganization.setUrl(newOrganization.getUrl());
+        }
+
+        if (newOrganization.getEmailContact() != null) {
+            oldOrganization.setEmailContact(newOrganization.getEmailContact());
+        }
+
+        if (newOrganization.getPriceOfMembership() != null) {
+            oldOrganization.setPriceOfMembership(newOrganization.getPriceOfMembership());
+        }
+
+        if (newOrganization.getDescription() != null) {
+            oldOrganization.setDescription(newOrganization.getDescription());
+        }
+
+        return Response.ok(oldOrganization).build();
     }
 }
