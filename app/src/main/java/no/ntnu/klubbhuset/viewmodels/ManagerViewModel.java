@@ -34,8 +34,8 @@ public class ManagerViewModel extends AndroidViewModel {
         repository = OrganizationRepository.getInstance(getApplication());
     }
 
-    public LiveData<Resource<List<Club>>> getManagedClubs(LifecycleOwner owner) {
-        return repository.getManaged(owner);
+    public LiveData<Resource<List<Club>>> getManagedClubs() {
+        return repository.getManaged();
     }
 
     public LiveData<Resource<Club>> createNewClub(Club club, byte[] imageInByte) {
@@ -71,9 +71,9 @@ public class ManagerViewModel extends AndroidViewModel {
         return createOrganizationFormState;
     }
 
-    public void refreshOrganizations(LifecycleOwner owner) {
-        repository.getAll(owner, true);
-        repository.getManaged(owner, true);
-        repository.getOrgsWhereUserIsMember(owner, true);
+    public void refreshOrganizations() {
+        repository.getAll(true);
+        repository.getManaged(true);
+        repository.getOrgsWhereUserIsMember(true);
     }
 }

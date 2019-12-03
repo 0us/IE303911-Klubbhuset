@@ -56,8 +56,8 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
         this.organizationRepository = OrganizationRepository.getInstance(context);
     }
 
-    public LiveData<Resource<List<Club>>> getClubs(LifecycleOwner owner) {
-        return organizationRepository.getOrgsWhereUserIsMember(owner);
+    public LiveData<Resource<List<Club>>> getClubs() {
+        return organizationRepository.getOrgsWhereUserIsMember();
     }
 
     public LiveData<Bitmap> getQRCode() {
@@ -114,37 +114,5 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
             return bitmap;
         }
         return null;
-    }
-
-
-    /**
-     * returns a boolean describing whether the token has expired or not
-     *
-     * @param token vippsToken
-     * @return a boolean describing whether the token has expired or not
-     */
-    private boolean tokenIsExpired(JSONObject token) {
-        String expires_on = null;
-        try {
-            expires_on = token.get("expires_on").toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if(expires_on == null) {
-            return true;
-        }
-        return System.currentTimeMillis() > Long.valueOf(expires_on);
-    }
-
-    /**
-     * Tries to retrieve the VippsToken, this is either done by grabbing it from memory as existing
-     * object if not then from SharedPreference, but that will only work if the token has been previously
-     * placed there and is not expired.
-     *
-     * @return Returns the vippsToken or null if no vippsToken could be retrieved, check the log
-     * for figuring out exactly why.
-     */
-    public LiveData<Resource<String>> getVippsToken() {
-        return vippsRepository.getToken();
     }
 }

@@ -146,7 +146,7 @@ public class CreateOrganizationFormFragment extends Fragment {
                             "Organzation got created successfully!",
                             Toast.LENGTH_SHORT)
                             .show();
-                    viewModel.refreshOrganizations(getViewLifecycleOwner());
+                    viewModel.refreshOrganizations();
                     navigateBack();
                 } else if (response.getStatus() == Status.ERROR) {
                     Toast.makeText(
