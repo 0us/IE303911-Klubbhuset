@@ -41,7 +41,7 @@ public class ManagerFragment extends Fragment {
 
         SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            mViewModel.refreshManaged(this).observe(this, resource -> {
+            mViewModel.refreshManaged().observe(this, resource -> {
                 if (resource.getStatus() == Status.SUCCESS) {
                     swipeRefreshLayout.setRefreshing(false);
                 } else if (resource.getStatus() == Status.ERROR) {

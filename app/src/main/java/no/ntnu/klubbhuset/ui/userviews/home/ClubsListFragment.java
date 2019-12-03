@@ -74,7 +74,7 @@ public class ClubsListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mViewModel.getClubs(this).observe(this, clubs -> {
+            mViewModel.getClubs().observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ClubsRecyclerViewAdapter(clubs.getData(), mListener));
                 } else if (clubs.getStatus() == Status.SUCCESS) {

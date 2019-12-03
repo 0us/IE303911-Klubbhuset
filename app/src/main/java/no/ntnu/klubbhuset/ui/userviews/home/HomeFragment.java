@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(swipeRefreshLayout.getContext()));
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            mViewModel.refreshClubs(this).observe(this, resource -> {
+            mViewModel.refreshClubs().observe(this, resource -> {
                 if (resource.getStatus() == Status.SUCCESS) {
                     swipeRefreshLayout.setRefreshing(false);
                 } else if (resource.getStatus() == Status.ERROR) {
