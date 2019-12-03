@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +55,7 @@ public class ClubDetailedMemberFragment extends Fragment {
     private ClubDetailedViewModel mViewModel;
     private Member member;
     private RequestQueue queue;
-    private View vippsBtn;
+    private ImageButton vippsBtn;
     private ImageView paymentStatusImg;
     private TextView paymentStatusText;
     private TextView paymentDueDate;
@@ -87,7 +88,7 @@ public class ClubDetailedMemberFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ClubDetailedViewModel.class);
 
         TextView memberSince = getView().findViewById(R.id.club_detailed_member_since);
         memberSince.setText(dateFormat.format(member.getCreated()));
@@ -101,18 +102,6 @@ public class ClubDetailedMemberFragment extends Fragment {
                 } else {
                     showVipps();
                 }
-                vippsBtn.setOnClickListener(v -> {
-                    mViewModel.getUser().observe(this, user -> {
-                        mViewModel.getDeeplink(user).observe(this, deeplink -> {
-                            if (deeplink.getStatus() == Status.SUCCESS) {
-                                openVipps(deeplink.getData());
-                            } else if (deeplink.getStatus() == Status.ERROR) {
-                                Toast.makeText(getContext(), R.string.userfeedback_deeplink_error, Toast.LENGTH_SHORT).show();
-                                Log.e(TAG, "Couldn't get deeplink, please contact your personal sysadmin");
-                            }
-                        });
-                    });
-                });
             }
         });
     }
@@ -126,9 +115,20 @@ public class ClubDetailedMemberFragment extends Fragment {
 
     private void showVipps() {
         vippsBtn.setVisibility(View.VISIBLE);
-        paymentStatusText.setText(getString(R.string.payment_false));
 //        paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
         paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
+        vippsBtn.setOnClickListener(v -> {
+            mViewModel.getUser().observe(this, user -> {
+                mViewModel.getDeeplink(user).observe(this, deeplink -> {
+                    if (deeplink.getStatus() == Status.SUCCESS) {
+                        openVipps(deeplink.getData());
+                    } else if (deeplink.getStatus() == Status.ERROR) {
+                        Toast.makeText(getContext(), R.string.userfeedback_deeplink_error, Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Couldn't get deeplink, please contact your personal sysadmin");
+                    }
+                });
+            });
+        });
     }
 
     private void openVipps(String deepLink) {
