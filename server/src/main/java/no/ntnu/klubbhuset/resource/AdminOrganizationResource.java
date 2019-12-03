@@ -26,8 +26,6 @@ import javax.ws.rs.core.Response;
 @RolesAllowed({SecurityGroup.USER})
 @Path("organization/{organizationId}/admin")
 public class AdminOrganizationResource {
-    @PathParam("organizationId")
-    private Long organizationId;
 
     @Inject
     AdminOrganizationService adminOrganizationService;
@@ -36,7 +34,7 @@ public class AdminOrganizationResource {
     JsonWebToken principal;
 
     @GET
-    public Response getAllMembers() {
+    public Response getAllMembers(@PathParam("organizationId") long organizationId) {
         if(!adminOrganizationService.isAdminOfOrganization(organizationId)) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("You are not authorized to do this call").build();
         }
@@ -44,7 +42,7 @@ public class AdminOrganizationResource {
     }
 
     @POST
-    public Response hasMemberPaid(User user) {
+    public Response hasMemberPaid(@PathParam("organizationId") long organizationId, User user) {
         if(!adminOrganizationService.isAdminOfOrganization(organizationId)) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("You are not authorized to do this call").build();
         }
