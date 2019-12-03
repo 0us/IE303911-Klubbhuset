@@ -23,7 +23,7 @@ public class ClubAdminActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    ManagerViewModel viewModel;
+    private ManagerViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
