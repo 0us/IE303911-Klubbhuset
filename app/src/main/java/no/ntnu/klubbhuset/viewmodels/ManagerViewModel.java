@@ -6,17 +6,16 @@ import android.content.SharedPreferences;
 import android.util.Patterns;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-
 import no.ntnu.klubbhuset.R;
-
+import no.ntnu.klubbhuset.data.repository.MemberRepository;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 import no.ntnu.klubbhuset.ui.managerviews.CreateOrganizationFormState;
 
@@ -27,6 +26,7 @@ public class ManagerViewModel extends AndroidViewModel {
     private final SharedPreferences pref;
     private MutableLiveData<CreateOrganizationFormState> createOrganizationFormState = new MutableLiveData<>();
     private OrganizationRepository repository;
+    private MemberRepository memberRepository;
 
     public ManagerViewModel(Application context) {
         super(context);
@@ -40,6 +40,10 @@ public class ManagerViewModel extends AndroidViewModel {
 
     public LiveData<Resource<Club>> createNewClub(Club club, byte[] imageInByte) {
         return repository.create(club, imageInByte);
+    }
+
+    public LiveData<Resource<List<Member>>> getAllMembersOfClub(Club club) {
+        return memberRepository.getMembers(club, false);
     }
 
     public void organizationDataChanged(String email) {

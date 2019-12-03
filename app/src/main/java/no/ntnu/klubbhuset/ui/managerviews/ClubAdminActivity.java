@@ -6,13 +6,16 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.MembersAdapter;
+import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.ui.managerviews.barcode.BarcodeScannerActivity;
+import no.ntnu.klubbhuset.viewmodels.ManagerViewModel;
 
 public class ClubAdminActivity extends AppCompatActivity {
 
@@ -20,25 +23,30 @@ public class ClubAdminActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    ManagerViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_club_admin);
+        Club club = (Club) getIntent().getExtras().get("club");
+
         recyclerView = findViewById(R.id.membership_recycle_view);
         recyclerView.setHasFixedSize(true);
+        viewModel = ViewModelProviders.of(this).get(ManagerViewModel.class);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new MembersAdapter();
-        recyclerView.setAdapter(adapter);
+        viewModel.getAllMembersOfClub(club).observe(this, members -> {
+            if(members.getStatus() == Status.SUCCESS) {
+                adapter = new MembersAdapter(members.getData());
+                recyclerView.setAdapter(adapter);
+            }
+        });
 
-
-        Club club = (Club) getIntent().getExtras().get("club");
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(club.getName());
-
 
         QRBtn = findViewById(R.id.club_admin_Qr_button);
         QRBtn.setOnClickListener(l -> {
@@ -47,9 +55,6 @@ public class ClubAdminActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
-
-
 
     private void startBarcodeScanner(Club club) {
         Intent intent = new Intent(this, BarcodeScannerActivity.class);
