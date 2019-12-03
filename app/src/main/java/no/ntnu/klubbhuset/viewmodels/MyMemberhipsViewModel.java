@@ -31,6 +31,7 @@ import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 import no.ntnu.klubbhuset.data.repository.VippsRepository;
+import no.ntnu.klubbhuset.ui.userviews.mymemberships.MyMemberhipsFragment;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
@@ -146,5 +147,9 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
      */
     public LiveData<Resource<String>> getVippsToken() {
         return vippsRepository.getToken();
+    }
+
+    public LiveData<Resource<List<Club>>> refreshClubs(LifecycleOwner owner) {
+        return organizationRepository.getOrgsWhereUserIsMember(owner, true);
     }
 }
