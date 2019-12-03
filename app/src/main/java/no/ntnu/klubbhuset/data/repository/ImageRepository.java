@@ -6,9 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -16,13 +15,14 @@ import com.android.volley.toolbox.Volley;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import lombok.val;
+import lombok.var;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.model.Image;
 
 import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.util.CommunicationConfig.IMAGE;
@@ -74,21 +74,23 @@ public class ImageRepository {
         return res;
     }
 
-    public void pairImageAndClub(MutableLiveData<Resource<List<Club>>> data, LifecycleOwner owner) {
+    public void pairImageAndClub(MutableLiveData<Resource<List<Club>>> data) {
         val clubsList = data.getValue().getData();
-        for (Club club : clubsList) {
-            val images = club.getOrgImages();
-            if (images != null) {
-                for (int i = 0; i < images.length; i++) {
-                    val image = images[i];
-                    getImage(image.getUrl()).observe(owner, response -> {
-                        if (response.getStatus() == Status.SUCCESS) {
-                            if (data != null) {
-                                image.setImage(response.getData());
-                                data.setValue(Resource.success(clubsList));
+        if (clubsList != null) {
+            for (Club club : clubsList) {
+                val images = club.getOrgImages();
+                if (images != null) {
+                    for (int i = 0; i < images.length; i++) {
+                        val image = images[i];
+                        getImage(image.getUrl()).observeForever(response -> {
+                            if (response.getStatus() == no.ntnu.klubbhuset.data.Status.SUCCESS) {
+                                if (data != null) {
+                                    image.setImage(response.getData());
+                                    data.setValue(Resource.success(clubsList));
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         }

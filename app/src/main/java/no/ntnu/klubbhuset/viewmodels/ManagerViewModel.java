@@ -34,8 +34,8 @@ public class ManagerViewModel extends AndroidViewModel {
         repository = OrganizationRepository.getInstance(getApplication());
     }
 
-    public LiveData<Resource<List<Club>>> getManagedClubs(LifecycleOwner owner) {
-        return repository.getManaged(owner);
+    public LiveData<Resource<List<Club>>> getManagedClubs() {
+        return repository.getManaged();
     }
 
     public LiveData<Resource<Club>> createNewClub(Club club, byte[] imageInByte) {
@@ -74,18 +74,17 @@ public class ManagerViewModel extends AndroidViewModel {
     /**
      * Refreshes organizations in the entire app, this should not be used
      * frequently since it's a heavy operation to update everything at once.
-     * @param owner LifecycleOwner
      */
-    public void refreshOrganizations(LifecycleOwner owner) {
-        repository.getAll(owner, true);
-        repository.getManaged(owner, true);
-        repository.getOrgsWhereUserIsMember(owner, true);
+    public void refreshOrganizations() {
+        repository.getAll(true);
+        repository.getManaged(true);
+        repository.getOrgsWhereUserIsMember(true);
     }
 
     /**
      * Refreshes only the list containing the managed orgs for this user
      */
-    public LiveData<Resource<List<Club>>> refreshManaged(LifecycleOwner owner) {
-        return repository.getManaged(owner, true);
+    public LiveData<Resource<List<Club>>> refreshManaged() {
+        return repository.getManaged(true);
     }
 }

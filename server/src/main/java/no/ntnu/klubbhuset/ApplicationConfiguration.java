@@ -10,6 +10,7 @@ import javax.ws.rs.core.Application;
 import no.ntnu.klubbhuset.domain.Group;
 import org.eclipse.microprofile.auth.LoginConfig;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
