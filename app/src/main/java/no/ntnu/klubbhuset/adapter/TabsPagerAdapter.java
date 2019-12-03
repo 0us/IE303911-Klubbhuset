@@ -23,6 +23,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_home,
             R.string.tab_text_memberships,
             R.string.tab_text_profile};
+
+
     private final Context mContext;
 
     public TabsPagerAdapter(Context context, FragmentManager fm) {
@@ -50,7 +52,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+return "";
+        //return mContext.getResources().getString(TAB_TITLES[position]);
     }
 
     @Override
