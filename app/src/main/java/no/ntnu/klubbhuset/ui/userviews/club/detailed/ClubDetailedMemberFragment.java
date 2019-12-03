@@ -25,7 +25,9 @@ import com.g00fy2.versioncompare.Version;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Status;
@@ -91,8 +93,14 @@ public class ClubDetailedMemberFragment extends Fragment {
         mViewModel = ViewModelProviders.of(getActivity()).get(ClubDetailedViewModel.class);
 
         TextView memberSince = getView().findViewById(R.id.club_detailed_member_since);
-        memberSince.setText(dateFormat.format(member.getCreated()));
+        if (member.getCreated() != null) {
 
+        }
+        if (!Objects.isNull(member.getCreated())) {
+            memberSince.setText(dateFormat.format(member.getCreated()));
+        } else {
+            memberSince.setText(dateFormat.format(new Date(0,0,0)));
+        }
         mViewModel.getCurrentClub().observe(this, response -> {
             if (response.getStatus() == Status.SUCCESS) {
                 if (member.isHasPaid() || response.getData().getPriceOfMembership() == null) {
