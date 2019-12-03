@@ -50,7 +50,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
         TextView memberNameTextView = holder.memberName;
         ImageView hasPaid = holder.hasPaid;
 
-        memberNameTextView.setText(); // TODO !!! Needs user
+        memberNameTextView.setText(member.getUser().getFirstName() + " " + member.getUser().getLastName());
         if (member.isHasPaid()) {
             hasPaid.setImageResource(R.drawable.ic_check_black_24dp);
         }

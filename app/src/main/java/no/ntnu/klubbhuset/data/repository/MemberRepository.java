@@ -54,7 +54,7 @@ public class MemberRepository {
             return cached;
         }
 
-        String url = ENDPOINT + "/" + club.getOid() + "/members";
+        String url = ENDPOINT + "/" + club.getOid() + "/admin";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     val resultArray = Json.fromJson(response.toString(), Member[].class);

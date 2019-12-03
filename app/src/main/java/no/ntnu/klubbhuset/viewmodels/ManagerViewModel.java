@@ -32,6 +32,7 @@ public class ManagerViewModel extends AndroidViewModel {
         super(context);
         this.pref = getApplication().getSharedPreferences("login", Context.MODE_PRIVATE);
         repository = OrganizationRepository.getInstance(getApplication());
+        memberRepository = MemberRepository.getInstance(getApplication());
     }
 
     public LiveData<Resource<List<Club>>> getManagedClubs() {
