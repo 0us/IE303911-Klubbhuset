@@ -57,10 +57,6 @@ public class ImageRepository {
             @Override
             protected Object doInBackground(Object[] objects) {
                 try {
-                    if (path.contains("159")) {
-                        // kill_lars_if_this_is_on_github
-                        System.out.println("123");
-                    }
                     val url2 = new URL(url);
                     val conn = url2.openConnection();
                     val in = conn.getInputStream();
