@@ -70,4 +70,10 @@ public class ManagerViewModel extends AndroidViewModel {
     public MutableLiveData<CreateOrganizationFormState> getCreateOrganizationFormState() {
         return createOrganizationFormState;
     }
+
+    public void refreshOrganizations(LifecycleOwner owner) {
+        repository.getAll(owner, true);
+        repository.getManaged(owner, true);
+        repository.getOrgsWhereUserIsMember(owner, true);
+    }
 }

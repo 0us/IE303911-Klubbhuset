@@ -1,7 +1,6 @@
 package no.ntnu.klubbhuset.data.repository;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -22,18 +21,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import lombok.val;
+import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
-import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Group;
 import no.ntnu.klubbhuset.data.model.Member;
@@ -90,8 +86,12 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(LifecycleOwner owner) {
+        return getOrgsWhereUserIsMember(owner, false);
+    }
+
+    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(LifecycleOwner owner, boolean forceRefresh) {
         val cached = cache.getMyMembershipsClubs();
-        if (cached.getValue() != null) {
+        if (cached.getValue() != null &&!forceRefresh) {
             return cached;
         }
         String url = ENDPOINT + "member";
@@ -115,8 +115,13 @@ public class OrganizationRepository {
     }
 
     public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner) {
+        return getAll(owner, false);
+    }
+
+
+    public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner, boolean forceRefresh) {
         val cached = cache.getHomepageClubs();
-        if (cached.getValue() != null) {
+        if (cached.getValue() != null && !forceRefresh) {
                 return cached;
             }
         cached.setValue(Resource.loading());
@@ -190,9 +195,13 @@ public class OrganizationRepository {
     }
 
     public LiveData<Resource<List<Club>>> getManaged(LifecycleOwner owner) {
+        return getManaged(owner, false);
+    }
+
+    public LiveData<Resource<List<Club>>> getManaged(LifecycleOwner owner, boolean forceRefresh) {
         String url = ENDPOINT + "managed";
         MutableLiveData cached = cache.getManagedClubs();
-        if (cached.getValue() != null) {
+        if (cached.getValue() != null && !forceRefresh) {
             return cached;
         }
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, url, null,

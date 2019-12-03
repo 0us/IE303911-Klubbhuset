@@ -40,6 +40,7 @@ public class ManagedOrgsRecyclerViewAdapter extends RecyclerView.Adapter<Managed
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
+//        holder.mMembercountView.setText("0"); TODO Count Dracula
         if (holder.mItem.getOrgImages() == null || holder.mItem.getOrgImages().length == 0) {
             // set placeholder
             holder.mLogo.setImageResource(R.drawable.ic_broken_image_black_24dp);
