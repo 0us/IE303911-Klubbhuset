@@ -77,7 +77,7 @@ services:
     volumes:
       - type: bind
         source: ~/klubbhusetPic
-        target: /opt/payara/
+        target: /opt/payara
 
         # For mounting the $DEPLOY_DIR to local folder
 #    volumes:
