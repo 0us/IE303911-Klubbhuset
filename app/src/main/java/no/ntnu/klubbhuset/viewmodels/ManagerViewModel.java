@@ -71,9 +71,20 @@ public class ManagerViewModel extends AndroidViewModel {
         return createOrganizationFormState;
     }
 
+    /**
+     * Refreshes organizations in the entire app, this should not be used
+     * frequently since it's a heavy operation to update everything at once.
+     */
     public void refreshOrganizations() {
         repository.getAll(true);
         repository.getManaged(true);
         repository.getOrgsWhereUserIsMember(true);
+    }
+
+    /**
+     * Refreshes only the list containing the managed orgs for this user
+     */
+    public LiveData<Resource<List<Club>>> refreshManaged() {
+        return repository.getManaged(true);
     }
 }

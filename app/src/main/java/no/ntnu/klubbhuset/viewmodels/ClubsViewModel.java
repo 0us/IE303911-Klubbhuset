@@ -25,4 +25,8 @@ public class ClubsViewModel extends AndroidViewModel {
         return repository.getAll();
     }
 
+    public LiveData<Resource<List<Club>>> refreshClubs(LifecycleOwner owner) {
+        return repository.getAll(owner, true);
+    }
+
 }

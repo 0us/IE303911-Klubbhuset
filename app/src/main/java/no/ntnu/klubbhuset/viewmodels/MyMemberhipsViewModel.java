@@ -4,55 +4,33 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
-import no.ntnu.klubbhuset.data.repository.VippsRepository;
-import no.ntnu.klubbhuset.util.CommunicationConfig;
-import no.ntnu.klubbhuset.util.PreferenceUtils;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET_STRING;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
-import static no.ntnu.klubbhuset.util.PreferenceUtils.PREF_NO_FILE_FOUND;
 
 
 public class MyMemberhipsViewModel extends AndroidViewModel {
     private static final String TAG = "MyMemberhipsViewModel";
-    private RequestQueue requestQueue;
     private MutableLiveData<Bitmap> QRCode;
-    private VippsRepository vippsRepository;
     private OrganizationRepository organizationRepository;
 
     public MyMemberhipsViewModel(Application context) {
         super(context);
-        this.requestQueue = Volley.newRequestQueue(context);
-        this.vippsRepository = VippsRepository.getInstance(context);
         this.organizationRepository = OrganizationRepository.getInstance(context);
     }
 
@@ -114,5 +92,9 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
             return bitmap;
         }
         return null;
+    }
+
+    public LiveData<Resource<List<Club>>> refreshClubs() {
+        return organizationRepository.getOrgsWhereUserIsMember(true);
     }
 }
