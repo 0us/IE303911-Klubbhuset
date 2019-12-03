@@ -41,9 +41,5 @@ public class MyMemberhipsFragment extends Fragment{
             qrView = getView().findViewById(R.id.qrView);
             qrView.setImageBitmap(response);
         });
-
-        mViewModel.getVippsToken().observe(this, response -> {
-            // TODO: 23.11.2019 do stuff when token has been recieved
-        });
     }
 }

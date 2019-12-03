@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
 
 import lombok.val;
 import no.ntnu.klubbhuset.R;
@@ -47,6 +48,7 @@ import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET_STRING;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CONTENT_TYPE;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ECOMM_V_2_PAYMENTS;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.EXT_EXPIRES_ON;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.UTF_8;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.VIPPS_URL;
@@ -129,18 +131,21 @@ public class VippsRepository {
      * @return a boolean describing whether the token has expired or not
      */
     private boolean tokenIsExpired(String token) {
-        // TODO: 23.11.2019 Implement
-        return false;
+        try {
+            JSONObject json = new JSONObject(token);
+            long expiryTime = json.getLong(EXT_EXPIRES_ON);
+            long currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+            return currentTime > expiryTime;
+        } catch (JSONException e) {
+            throw new RuntimeException(TAG + " failed to parse received Vipps token");
+        }
     }
 
 
     public LiveData<Resource<String>> getDeepLink(Resource<User> user, Club focusedClub) {
-        if (deeplink == null) {
-            val token = getToken();
-            deeplink = Transformations.switchMap(token, stringResource -> {
-                return loadDeepLink(user, focusedClub, stringResource);
-            });
-        }
+        deeplink = Transformations.switchMap(getToken(), stringResource -> {
+            return loadDeepLink(user, focusedClub, stringResource);
+        });
         return deeplink;
     }
 
@@ -180,6 +185,7 @@ public class VippsRepository {
             //get status code here
             if (error.networkResponse != null) {
                 String statusCode = String.valueOf(error.networkResponse.statusCode);
+                returnValue.setValue(Resource.error(statusCode, error));
                 //get response body and parse with appropriate encoding
                 if (error.networkResponse.data != null) {
                     try {
