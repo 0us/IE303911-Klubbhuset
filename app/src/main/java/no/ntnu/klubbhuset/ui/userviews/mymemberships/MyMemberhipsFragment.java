@@ -20,7 +20,7 @@ import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.viewmodels.MyMemberhipsViewModel;
 
 
-public class MyMemberhipsFragment extends Fragment{
+public class MyMemberhipsFragment extends Fragment {
 
     private MyMemberhipsViewModel mViewModel;
     private ImageView qrView;
@@ -58,10 +58,6 @@ public class MyMemberhipsFragment extends Fragment{
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
-        });
-
-        mViewModel.getVippsToken().observe(this, response -> {
-            // TODO: 23.11.2019 do stuff when token has been recieved
         });
     }
 }
