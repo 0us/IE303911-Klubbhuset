@@ -15,7 +15,7 @@ import java.io.*;
  * Creates paths for the destination if they don't exist
  */
 
-//Todo check that all files is valide file types
+
 public class SaveImages {
 
     @PersistenceContext
@@ -44,9 +44,9 @@ public class SaveImages {
 
         try {
             createFolderIfNotExists(END_PATH);
-            saveImageToDisk(inputStream, FULL_PATH); // todo should this be END_PATH or path?
+            saveImageToDisk(inputStream, FULL_PATH);
             image = new Image();
-            image.setUrl(RELATIVE_URL); // todo should this be END_PATH or path?
+            image.setUrl(RELATIVE_URL);
             persistImage(image);
             System.out.println("image id = " + image.getIid());
         } catch (IOException e) {

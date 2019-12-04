@@ -16,12 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusedByDefault="true"
-            android:hint="@string/firstname" />
+            android:inputType="text|textCapSentences"
+        android:hint="@string/firstname" />
 
         <EditText
             android:id="@+id/lastname_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text|textCapSentences"
             android:layout_below="@id/firstname_input"
             android:hint="@string/lastname" />
 
