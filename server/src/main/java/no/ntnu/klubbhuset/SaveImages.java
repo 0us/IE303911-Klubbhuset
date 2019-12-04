@@ -39,7 +39,7 @@ public class SaveImages {
     public Image saveImage(InputStream inputStream, String path, String filename) {
         final String END_PATH = LOCAL_STORAGE_DIR + File.separator + path;
         final String FULL_PATH = END_PATH + File.separator + filename;
-        final String RELATIVE_URL = path + File.separator + filename;
+        final String RELATIVE_URL = path + "\\" + filename;
         Image image = null;
 
         try {
