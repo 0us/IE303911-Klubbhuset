@@ -24,6 +24,7 @@ import javax.naming.OperationNotSupportedException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -97,15 +98,16 @@ public class OrganizationService {
 //        return Response.status(Response.Status.CREATED).entity(organization).build();
 //    }
 
-    @RolesAllowed(value = {Group.USER})
-    public Response deleteOrganization(int organizationId) {
+    @Transactional
+    public Response deleteOrganization(long organizationId) {
         Organization organization = entityManager.find(Organization.class, organizationId);
-
-
+        TypedQuery<Member> query = entityManager.createQuery("delete from Member m where m.organization = :org", Member.class);
+        query.setParameter("org", organization);
         if (organization == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("No organization with id: " + organizationId).build();
         }
 
+        query.executeUpdate();
         entityManager.remove(organization);
         return Response.ok("Organization removed from system").build();
     }
@@ -317,12 +319,9 @@ public class OrganizationService {
      */
     private Member doJoinOrganization(Organization org, User user, Group group) throws EntityExistsException {
         Member member = new Member();
-        System.out.println(member);
         member.setUser(user);
-        member.setOrganization(org);
         member.setGroup(group);
         member.setOrganization(org);
-        System.out.println(member);
         entityManager.persist(member);
         entityManager.flush();
         return member;

@@ -98,7 +98,10 @@ public class OrganizationResource {
 
     @DELETE
     @Path("/{organizationId}")
-    public Response deleteOrganization(@PathParam("organizationId") int id) {
+    public Response deleteOrganization(@PathParam("organizationId") long id) {
+        if(!adminOrganizationService.isAdminOfOrganization(id)) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("You are not authorized to do this call").build();
+        }
         return organizationService.deleteOrganization(id);
     }
 
