@@ -19,6 +19,7 @@
 .idea/
 */target/
 
+env.zip
 
 *.properties
 connection.zip
@@ -26,3 +27,4 @@ connection.zip
 server/.env
 
 server/certbot/
+nginx.conf
