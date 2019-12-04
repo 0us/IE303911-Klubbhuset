@@ -2,9 +2,9 @@ package no.ntnu.klubbhuset.viewmodels;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 import no.ntnu.klubbhuset.data.LoginDataSource;
 import no.ntnu.klubbhuset.data.repository.LoginRepository;

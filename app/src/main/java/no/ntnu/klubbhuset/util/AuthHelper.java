@@ -1,6 +1,5 @@
 package no.ntnu.klubbhuset.util;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 

@@ -1,13 +1,5 @@
 package no.ntnu.klubbhuset.data.model;
 
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InvalidObjectException;
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

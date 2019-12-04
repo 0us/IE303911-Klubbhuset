@@ -1,33 +1,14 @@
 package no.ntnu.klubbhuset.viewmodels;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Map;
-import java.util.Objects;
 
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.repository.AdminOrganizationRepository;
-import no.ntnu.klubbhuset.util.AuthHelper;
-
-import static no.ntnu.klubbhuset.util.CommunicationConfig.checkHasPaid;
 
 public class BarcodeViewModel extends AndroidViewModel {
 

@@ -20,8 +20,8 @@ import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.ManagedOrgsRecyclerViewAdapter;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.viewmodels.ManagerViewModel;
 import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
+import no.ntnu.klubbhuset.viewmodels.ManagerViewModel;
 
 /**
  * A fragment representing a list of Items.

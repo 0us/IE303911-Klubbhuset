@@ -1,9 +1,10 @@
 package no.ntnu.klubbhuset;
 
-import javax.enterprise.context.ApplicationScoped;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+
+import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class JAXRSConfiguration extends ResourceConfig {

@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.*;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MERCHANT_SERIAL_NUMBER_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
 
 
 public class CommunicationConfig {

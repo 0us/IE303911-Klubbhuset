@@ -274,9 +274,8 @@ public class OrganizationService {
             if (member.getUser().getEmail().equals(user.getEmail())) {
                 found = true;
             }
-            return found;
         }
-        return false;
+        return found;
     }
 
     /**
