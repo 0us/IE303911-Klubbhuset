@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -17,12 +16,9 @@ import java.net.URL;
 import java.util.List;
 
 import lombok.val;
-import lombok.var;
 import no.ntnu.klubbhuset.data.Resource;
-import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.data.model.Image;
 
 import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.util.CommunicationConfig.IMAGE;

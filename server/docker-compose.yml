@@ -31,7 +31,6 @@ services:
   db:
     container_name: klubbhuset-db
     image: mysql:5.7.28
-    # todo add all necessary inputs
     restart: always
     environment:
       # Name of database
@@ -76,7 +75,7 @@ services:
 
     volumes:
       - type: bind
-        source: ~/klubbhusetPic/files
+        source: /home/stefhola/klubbhusetPic/files
         target: /opt/payara/files
 
         # For mounting the $DEPLOY_DIR to local folder

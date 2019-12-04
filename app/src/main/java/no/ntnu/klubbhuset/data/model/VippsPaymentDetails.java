@@ -11,7 +11,25 @@ import org.json.JSONObject;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.*;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ADDRESS;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AMOUNT_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CALLBACK_PREFIX_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLUB_DETAILED_ACTIVITY_PACKAGE;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CUSTOMER_INFO_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.DIGITAL;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.FALL_BACK_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.IS_APP;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.IS_DEFAULT;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MERCHANT_INFO_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MERCHANT_SERIAL_NUMBER_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.MOBILE_NUMBER_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ORDER_ID_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.SHIPPING_COST;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.SHIPPING_METHOD;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.SHIPPING_METHOD_ID;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.SKIP_LANDING_PAGE_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.TRANSACTION_STRING;
+import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.TRANSACTION_TEXT_STRING;
 
 public class VippsPaymentDetails {
     String mobileNummer;

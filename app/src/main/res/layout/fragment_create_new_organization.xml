@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,7 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/organization_profile_picture"
@@ -35,14 +34,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/organization_name"
-                    android:inputType="text" />
+                    android:inputType="text|textCapSentences"
+                    android:maxLength="100" />
 
                 <EditText
                     android:id="@+id/membership_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/membership_price"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="6" />
 
                 <EditText
                     android:id="@+id/contact_email"
@@ -56,7 +57,12 @@
                     android:id="@+id/organization_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/organization_description" />
+                    android:gravity="top|start"
+                    android:hint="@string/organization_description"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:lines="3"
+                    android:maxLength="1024"
+                    android:maxLines="15" />
 
                 <LinearLayout
                     android:id="@+id/buttons_container"

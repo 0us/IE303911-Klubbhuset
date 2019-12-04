@@ -2,7 +2,6 @@ package no.ntnu.klubbhuset.service;
 
 import net.coobird.thumbnailator.Thumbnails;
 
-import javax.naming.OperationNotSupportedException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;

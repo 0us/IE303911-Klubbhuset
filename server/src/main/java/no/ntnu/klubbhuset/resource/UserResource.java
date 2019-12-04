@@ -50,7 +50,6 @@ public class UserResource {
         return userService.updateUser(user);
     }
 
-    // todo the user id should be sent somehow
     @DELETE
     @RolesAllowed(value = {Group.USER})
     public Response deleteUser() {

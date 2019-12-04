@@ -7,7 +7,11 @@ import org.glassfish.jersey.media.multipart.BodyPart;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**
@@ -15,7 +19,7 @@ import java.io.*;
  * Creates paths for the destination if they don't exist
  */
 
-//Todo check that all files is valide file types
+
 public class SaveImages {
 
     @PersistenceContext
@@ -44,9 +48,9 @@ public class SaveImages {
 
         try {
             createFolderIfNotExists(END_PATH);
-            saveImageToDisk(inputStream, FULL_PATH); // todo should this be END_PATH or path?
+            saveImageToDisk(inputStream, FULL_PATH);
             image = new Image();
-            image.setUrl(RELATIVE_URL); // todo should this be END_PATH or path?
+            image.setUrl(RELATIVE_URL);
             persistImage(image);
             System.out.println("image id = " + image.getIid());
         } catch (IOException e) {

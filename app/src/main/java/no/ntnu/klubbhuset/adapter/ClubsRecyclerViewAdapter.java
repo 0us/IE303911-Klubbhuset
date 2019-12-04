@@ -1,21 +1,21 @@
 package no.ntnu.klubbhuset.adapter;
 
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
-import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import no.ntnu.klubbhuset.R;
+import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
+import no.ntnu.klubbhuset.viewmodels.ClubsViewModel;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Club} and makes a call to the

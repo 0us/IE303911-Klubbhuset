@@ -1,15 +1,15 @@
 package no.ntnu.klubbhuset.viewmodels;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.Patterns;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -22,11 +22,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.model.LoggedInUser;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.LoginRepository;
-import no.ntnu.klubbhuset.data.model.LoggedInUser;
-import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.repository.UserRepository;
 import no.ntnu.klubbhuset.ui.login.LoggedInUserView;
 import no.ntnu.klubbhuset.ui.login.LoginFormState;

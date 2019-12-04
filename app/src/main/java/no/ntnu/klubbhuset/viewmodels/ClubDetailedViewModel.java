@@ -15,9 +15,6 @@ import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 import no.ntnu.klubbhuset.data.repository.UserRepository;
 import no.ntnu.klubbhuset.data.repository.VippsRepository;
 
-import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
-import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
-
 
 public class ClubDetailedViewModel extends AndroidViewModel {
     private MutableLiveData<Resource<Club>> focusedClub;

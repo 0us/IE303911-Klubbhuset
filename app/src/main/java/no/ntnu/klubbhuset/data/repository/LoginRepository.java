@@ -1,8 +1,5 @@
 package no.ntnu.klubbhuset.data.repository;
 
-import android.widget.Toast;
-
-import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.LoginDataSource;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Status;

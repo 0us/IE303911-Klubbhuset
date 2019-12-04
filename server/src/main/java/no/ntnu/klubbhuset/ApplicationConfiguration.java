@@ -1,16 +1,14 @@
 package no.ntnu.klubbhuset;
 
+import no.ntnu.klubbhuset.domain.Group;
+import org.eclipse.microprofile.auth.LoginConfig;
+
 import javax.annotation.security.DeclareRoles;
 import javax.enterprise.context.ApplicationScoped;
 import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-
-import no.ntnu.klubbhuset.domain.Group;
-import org.eclipse.microprofile.auth.LoginConfig;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
