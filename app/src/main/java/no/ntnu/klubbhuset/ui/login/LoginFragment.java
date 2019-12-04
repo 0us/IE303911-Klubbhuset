@@ -54,7 +54,7 @@ public class LoginFragment extends Fragment {
 //            if (loginFormState == null) {
 //                return;
 //            }
-//            loginButton.setEnabled(loginFormState.isDataValid());
+//            loginButton.setEnabled(loginFormState.isEmailValid());
 //            if (loginFormState.getUsernameError() != null) {
 //                username.setError(getString(loginFormState.getUsernameError()));
 //            }

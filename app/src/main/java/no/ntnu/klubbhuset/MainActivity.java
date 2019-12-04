@@ -16,6 +16,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,7 +48,15 @@ public class MainActivity extends AppCompatActivity
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(tabsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
+        int[] tabIcons = {
+                R.drawable.ic_home_black_24dp,
+                R.drawable.ic_card_membership_black_24dp,
+                R.drawable.ic_person_black_24dp
+        };
         tabs.setupWithViewPager(viewPager);
+        for (int i = 0; i < tabs.getTabCount(); i++) {
+            tabs.getTabAt(i).setIcon(tabIcons[i]);
+        }
 
         this.requestQueue = Volley.newRequestQueue(getApplicationContext());
 
