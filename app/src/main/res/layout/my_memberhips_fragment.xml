@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/detail_backdrop_height"
+        android:layout_height="wrap_content"
         android:background="#00AAAAAA"
         android:theme="@style/Widget.AppCompat.Light.ActionBar">
 
@@ -30,11 +30,23 @@
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax">
 
+                <TextView
+                    android:id="@+id/my_memberships_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/my_memberships"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:textColor="@color/common_google_signin_btn_text_light"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
                 <ImageView
                     android:id="@+id/qrView"
                     android:layout_width="100pt"
                     android:layout_height="100pt"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     tools:layout_editor_absoluteX="24dp"
                     tools:layout_editor_absoluteY="24dp"
                     tools:src="@tools:sample/avatars[3]" />
@@ -49,10 +61,12 @@
                     android:text="@string/qr_description" />
 
                 <View
-                    android:id="@+id/divider2"
+                    android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
                     android:background="?android:attr/listDivider" />
 
             </LinearLayout>
@@ -71,8 +85,7 @@
             android:id="@+id/my_memberships_list_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp" >
+            android:paddingTop="16dp">
 
             <fragment
                 android:id="@+id/my_memberships_list"
