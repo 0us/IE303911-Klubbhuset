@@ -17,11 +17,11 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionRolledbackLocalException;
 import javax.inject.Inject;
-import javax.persistence.*;
-import javax.naming.OperationNotSupportedException;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
@@ -302,9 +302,8 @@ public class OrganizationService {
             if (member.getUser().getEmail().equals(user.getEmail())) {
                 found = true;
             }
-            return found;
         }
-        return false;
+        return found;
     }
 
     /**

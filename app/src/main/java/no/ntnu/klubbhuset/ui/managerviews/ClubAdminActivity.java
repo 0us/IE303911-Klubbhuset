@@ -2,11 +2,10 @@ package no.ntnu.klubbhuset.ui.managerviews;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.widget.Button;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.model.Club;
@@ -34,5 +33,4 @@ public class ClubAdminActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 }

@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,7 +78,7 @@ public class ClubDetailedFragment extends Fragment {
             } else if (clubResource.getStatus() == Status.LOADING){
                 // loading
             } else if (clubResource.getStatus() == Status.ERROR){
-                Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();;
+                Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
             }
         });
     }
