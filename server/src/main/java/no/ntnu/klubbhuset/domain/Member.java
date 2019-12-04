@@ -35,7 +35,7 @@ public class Member implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("email")
     @JoinColumn(name = "email")
-    @JsonbTransient
+//    @JsonbTransient
     private User user;
 
     @JsonbTransient

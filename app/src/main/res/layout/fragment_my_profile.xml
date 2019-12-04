@@ -6,6 +6,21 @@
     android:gravity="center"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/profile_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/profile"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:textColor="@color/common_google_signin_btn_text_light"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/details_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <RelativeLayout
         android:id="@+id/details_container"
         android:layout_width="0dp"
@@ -13,12 +28,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/profile_title">
 
         <ImageView
             android:id="@+id/profile_picture"
@@ -67,33 +82,32 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/profile_options"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_container">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <View
                 android:id="@+id/divider6"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"
-                android:background="?android:attr/listDivider"/>
+                android:background="?android:attr/listDivider" />
 
             <Button
                 android:id="@+id/profile_manage_orgs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 android:background="?attr/selectableItemBackground"
                 android:drawableStart="@drawable/ic_work_black_24dp"
                 android:drawablePadding="32dp"
@@ -105,21 +119,18 @@
                 android:id="@+id/divider5"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"
                 android:background="?android:attr/listDivider" />
 
             <Button
                 android:id="@+id/btn_sign_out"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="72dp"
                 android:background="?attr/selectableItemBackground"
                 android:drawableStart="@drawable/ic_exit_to_app_black_24dp"
                 android:drawablePadding="32dp"
                 android:gravity="start|center_vertical"
                 android:paddingStart="16dp"
-                android:text="@string/sign_out"
-                />
+                android:text="@string/sign_out" />
 
         </LinearLayout>
     </ScrollView>

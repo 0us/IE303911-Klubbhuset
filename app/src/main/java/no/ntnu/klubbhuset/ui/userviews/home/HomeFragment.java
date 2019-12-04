@@ -32,9 +32,10 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(
+        View view = inflater.inflate(
                 R.layout.home_fragment, container, false);
 
+        swipeRefreshLayout = view.findViewById(R.id.home_swipe_layout);
 //        ScrollView scrollView = (ScrollView) root.getViewById(R.id.home_club_scrollview);
 
         // ID is "1" because SwipeRefreshLayout has built in child at ID "0"
@@ -57,7 +58,7 @@ public class HomeFragment extends Fragment {
             });
         });
 
-        return swipeRefreshLayout;
+        return view;
     }
 
 

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class User {
+public class User implements Serializable {
     public transient static final String PHONENUMBER = "phonenumber";
     public transient static final String EMAIL = "email";
     public transient static final String LASTNAME = "lastName";

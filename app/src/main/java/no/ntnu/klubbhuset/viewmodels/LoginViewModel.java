@@ -19,6 +19,8 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Resource;
@@ -29,6 +31,7 @@ import no.ntnu.klubbhuset.data.repository.UserRepository;
 import no.ntnu.klubbhuset.ui.login.LoggedInUserView;
 import no.ntnu.klubbhuset.ui.login.LoginFormState;
 import no.ntnu.klubbhuset.ui.login.LoginResult;
+import no.ntnu.klubbhuset.ui.login.RegFormState;
 
 import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.util.CommunicationConfig.LOGIN;
@@ -38,6 +41,7 @@ public class LoginViewModel extends AndroidViewModel {
     private final RequestQueue requestQueue;
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private MutableLiveData<RegFormState> regFormState = new MutableLiveData<>();
     private LoginRepository loginRepository;
     private SharedPreferences pref;
     private UserRepository userRepository;
@@ -134,12 +138,83 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
-    // A placeholder password validation check
-    private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
-    }
 
     public LiveData<Resource<NetworkResponse>> createUser(User user) {
         return userRepository.create(user);
     }
+
+    public MutableLiveData<RegFormState> getRegFormState() {
+        return regFormState;
+    }
+
+
+
+    public void organizationDataChanged(String firstName, String lastName, String email,
+                                        String password, String phoneNumber) {
+        boolean firstNameValid = isFirstNameValid(firstName);
+        boolean lastNameValid = isLastNameValid(lastName);
+        boolean emailValid = isEmailValid(email);
+        boolean passwordValid = isPasswordValid(password);
+        boolean phoneNumberValid = isPhoneNumberValid(phoneNumber);
+
+        RegFormState regFormState = new RegFormState();
+
+        if (!firstNameValid) {
+            regFormState.setFirstNameError(R.string.invalid_first_name);
+        }
+        else if (!lastNameValid){
+            regFormState.setLastNameError(R.string.invalid_last_name);
+        }
+        else if (!emailValid) {
+            regFormState.setEmailError(R.string.invalid_email);
+        }
+        else if (!passwordValid) {
+            regFormState.setPasswordError(R.string.invalid_password);
+        }
+        else if (!phoneNumberValid) {
+            regFormState.setPhoneNumberError(R.string.invalid_phonenumber);
+        }
+        this.regFormState.setValue(regFormState);
+    }
+
+    private boolean isFirstNameValid(String string) {
+        Pattern pattern = Pattern.compile("^(?=.*?[A-Za-z])[A-Za-z+]+$");
+        Matcher matcher = pattern.matcher(string);
+        return !string.isEmpty() && matcher.matches();
+    }
+
+    private boolean isLastNameValid(String string) {
+        Pattern pattern = Pattern.compile("^(?=.*?[A-Za-z])[A-Za-z+]+$");
+        Matcher matcher = pattern.matcher(string);
+        return !string.isEmpty() && matcher.matches();
+    }
+
+    private boolean isEmailValid(String email) {
+        if (email == null) {
+            return false;
+        }
+        boolean contains = email.contains("@");
+        if(!contains) {
+            return false;
+        }
+
+        if(email.contains("@")) {
+            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        } else {
+            return !email.trim().isEmpty();
+        }
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password != null && password.trim().length() > 5 && password.trim().length() < 100;
+    }
+
+    private boolean isPhoneNumberValid(String string) {
+        Pattern pattern = Pattern.compile("\\d{8}");
+        Matcher matcher = pattern.matcher(string);
+        return matcher.matches();
+    }
+
+
+
 }
