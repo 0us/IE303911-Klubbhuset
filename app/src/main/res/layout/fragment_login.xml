@@ -4,11 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
-    android:padding="16dp">
-
-<!--    <RelativeLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content">-->
+    android:padding="@dimen/view_padding">
 
         <TextView
             android:id="@+id/username_label"
@@ -46,7 +42,6 @@
             android:layout_below="@id/password_input"
             android:layout_centerHorizontal="true"
             android:text="@string/login" />
-<!--    </RelativeLayout>-->
 
     <TextView
         android:layout_width="wrap_content"
