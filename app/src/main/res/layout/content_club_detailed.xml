@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/club_detailed_banner"
             android:layout_width="fill_parent"
-            android:layout_height="170dp"
+            android:layout_height="256dp"
             android:background="@drawable/banner_gradient"
             android:scaleType="centerCrop"
             tools:src="@tools:sample/backgrounds/scenic" />
@@ -24,7 +24,7 @@
         <ImageView
             android:id="@+id/banner_gradient"
             android:layout_width="fill_parent"
-            android:layout_height="170dp"
+            android:layout_height="256dp"
             android:src="@drawable/banner_gradient" />
 
         <LinearLayout
@@ -78,6 +78,8 @@
         android:id="@+id/divider4"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="?android:attr/listDivider" />
 
     <ScrollView
@@ -124,17 +126,20 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/club_detailed_homepage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="www.ungspiller.no" />
-
-            <TextView
                 android:id="@+id/club_detailed_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:autoLink="email"
                 android:text="klubb@ungspiller.no" />
+
+            <TextView
+                android:id="@+id/club_detailed_homepage"
+                android:layout_width="match_parent"
+                android:layout_marginTop="2dp"
+                android:autoLink="web"
+                android:layout_height="wrap_content"
+                android:text="www.ungspiller.no" />
 
         </LinearLayout>
     </ScrollView>

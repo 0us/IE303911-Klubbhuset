@@ -74,6 +74,11 @@ services:
     environment:
       - DEPLOY_PROPS= --contextroot / / # setting contextroot to /
 
+    volumes:
+      - type: bind
+        source: ~/klubbhusetPic/files
+        target: /opt/payara/files
+
         # For mounting the $DEPLOY_DIR to local folder
 #    volumes:
 #      - ~/Klubbhuset/deployments:/opt/payara/deployments
