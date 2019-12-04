@@ -12,16 +12,35 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <View
+            android:id="@+id/divider7"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="?android:attr/listDivider" />
+
         <Button
             android:id="@+id/manage_create_new_org"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:drawableStart="@drawable/ic_add_black_24dp"
+            android:background="?attr/selectableItemBackground"
+            android:drawableStart="@drawable/ic_add_box_black_24dp"
+            android:drawablePadding="32dp"
+            android:gravity="start|center_vertical"
+            android:paddingStart="16dp"
             android:text="@string/create_new_organization" />
+
+        <View
+            android:id="@+id/divider8"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:id="@+id/manager_info_message"
@@ -42,6 +61,7 @@
                 android:id="@+id/manager_scrollview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

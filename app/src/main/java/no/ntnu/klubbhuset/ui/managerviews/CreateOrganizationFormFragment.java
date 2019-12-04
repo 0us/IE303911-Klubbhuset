@@ -146,7 +146,7 @@ public class CreateOrganizationFormFragment extends Fragment {
                             "Organzation got created successfully!",
                             Toast.LENGTH_SHORT)
                             .show();
-                    viewModel.refreshOrganizations(getViewLifecycleOwner());
+                    viewModel.refreshOrganizations();
                     navigateBack();
                 } else if (response.getStatus() == Status.ERROR) {
                     Toast.makeText(
@@ -205,9 +205,14 @@ public class CreateOrganizationFormFragment extends Fragment {
                     Objects.requireNonNull(Objects.requireNonNull(data).getData()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (RuntimeException e) {
+            // thrown when emil doesn't select an image
+            e.printStackTrace();
         }
-        Bitmap bitmap = BitmapFactory.decodeStream(stream);
-        imageView.setImageBitmap(bitmap);
+        if (stream != null) {
+            Bitmap bitmap = BitmapFactory.decodeStream(stream);
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     /**

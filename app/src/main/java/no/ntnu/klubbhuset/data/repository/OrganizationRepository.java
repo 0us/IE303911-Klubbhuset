@@ -2,7 +2,6 @@ package no.ntnu.klubbhuset.data.repository;
 
 import android.content.Context;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -17,7 +16,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,11 +25,11 @@ import java.util.Map;
 import java.util.Optional;
 
 import lombok.val;
+import lombok.var;
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.data.model.Group;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.util.AuthHelper;
 import no.ntnu.klubbhuset.util.Json;
@@ -85,13 +83,13 @@ public class OrganizationRepository {
         return res;
     }
 
-    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(LifecycleOwner owner) {
-        return getOrgsWhereUserIsMember(owner, false);
+    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember() {
+        return getOrgsWhereUserIsMember(false);
     }
 
-    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(LifecycleOwner owner, boolean forceRefresh) {
+    public LiveData<Resource<List<Club>>> getOrgsWhereUserIsMember(boolean forceRefresh) {
         val cached = cache.getMyMembershipsClubs();
-        if (cached.getValue() != null &&!forceRefresh) {
+        if (cached.getValue() != null && !forceRefresh) {
             return cached;
         }
         String url = ENDPOINT + "member";
@@ -100,7 +98,7 @@ public class OrganizationRepository {
                     val resultArr = Json.fromJson(response.toString(), Club[].class);
                     val resultList = Arrays.asList(resultArr);
                     cached.setValue(Resource.success(resultList));
-                    pairImagesAndClubs(owner, cached);
+                    pairImagesAndClubs(cached);
                 },
                 error -> {
                     cached.setValue(Resource.error(null, error));
@@ -114,23 +112,23 @@ public class OrganizationRepository {
         return cached;
     }
 
-    public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner) {
-        return getAll(owner, false);
+    public LiveData<Resource<List<Club>>> getAll() {
+        return getAll(false);
     }
 
 
-    public MutableLiveData<Resource<List<Club>>> getAll(LifecycleOwner owner, boolean forceRefresh) {
-        val cached = cache.getHomepageClubs();
+    public LiveData<Resource<List<Club>>> getAll(boolean forceRefresh) {
+        var cached = cache.getHomepageClubs();
         if (cached.getValue() != null && !forceRefresh) {
-                return cached;
-            }
+            return cached;
+        }
         cached.setValue(Resource.loading());
         JsonArrayRequest jar = new JsonArrayRequest(Request.Method.GET, ENDPOINT, null,
                 response -> {
                     val clubsArr = Json.fromJson(response.toString(), Club[].class);
                     val clubs = Arrays.asList(clubsArr);
                     cached.setValue(Resource.success(clubs));
-                    pairImagesAndClubs(owner, cached);
+                    pairImagesAndClubs(cached);
                 },
                 error -> {
                     cached.setValue(Resource.error(null, error));
@@ -145,8 +143,8 @@ public class OrganizationRepository {
         return cached;
     }
 
-    private void pairImagesAndClubs(LifecycleOwner owner, MutableLiveData<Resource<List<Club>>> data) {
-        ImageRepository.getInstance(context).pairImageAndClub(data, owner);
+    private void pairImagesAndClubs(MutableLiveData<Resource<List<Club>>> data) {
+        ImageRepository.getInstance(context).pairImageAndClub(data);
     }
 
     public LiveData<Resource<String>> delete(Club club) {
@@ -159,8 +157,8 @@ public class OrganizationRepository {
         cache.getMyMemberships().put(club.getOid(), res);
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, null,
                 response -> {
-                        Member member = Json.fromJson(response.toString(), Member.class);
-                        res.setValue(Resource.success(member));
+                    Member member = Json.fromJson(response.toString(), Member.class);
+                    res.setValue(Resource.success(member));
                 },
                 error -> {
                     res.setValue(Resource.error(null, error));
@@ -178,14 +176,14 @@ public class OrganizationRepository {
         val cached = cache.getHomepageClubs();
         if (cached.getValue() != null) {
             if (cached.getValue().getStatus() == Status.SUCCESS) {
-                    val list = cached.getValue().getData();
-                    Optional<Club> item = list.stream()
-                            .filter(p -> p.getOid() == oid)
-                            .findFirst();
-                    if (item.isPresent()) {
-                        return Resource.success(item.get());
-                    }
+                val list = cached.getValue().getData();
+                Optional<Club> item = list.stream()
+                        .filter(p -> p.getOid() == oid)
+                        .findFirst();
+                if (item.isPresent()) {
+                    return Resource.success(item.get());
                 }
+            }
         }
         return Resource.error(null, null);
     }
@@ -194,11 +192,11 @@ public class OrganizationRepository {
         throw new UnsupportedOperationException("TODO: Implement method");
     }
 
-    public LiveData<Resource<List<Club>>> getManaged(LifecycleOwner owner) {
-        return getManaged(owner, false);
+    public LiveData<Resource<List<Club>>> getManaged() {
+        return getManaged(false);
     }
 
-    public LiveData<Resource<List<Club>>> getManaged(LifecycleOwner owner, boolean forceRefresh) {
+    public LiveData<Resource<List<Club>>> getManaged(boolean forceRefresh) {
         String url = ENDPOINT + "managed";
         MutableLiveData cached = cache.getManagedClubs();
         if (cached.getValue() != null && !forceRefresh) {
@@ -209,7 +207,7 @@ public class OrganizationRepository {
                     val clubsArr = Json.fromJson(response.toString(), Club[].class);
                     val clubs = Arrays.asList(clubsArr);
                     cached.setValue(Resource.success(clubs));
-                    pairImagesAndClubs(owner, cached);
+                    pairImagesAndClubs(cached);
                 },
                 error -> {
                     cached.setValue(Resource.error("Failed to load managed clubs", error));

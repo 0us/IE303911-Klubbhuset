@@ -21,12 +21,11 @@ public class ClubsViewModel extends AndroidViewModel {
         repository = OrganizationRepository.getInstance(context);
     }
 
-    public LiveData<Resource<List<Club>>> getClubs(LifecycleOwner owner) {
-        return repository.getAll(owner);
+    public LiveData<Resource<List<Club>>> getClubs() {
+        return repository.getAll();
     }
 
-    public LiveData<Resource<List<Club>>> refreshClubs(LifecycleOwner owner) {
-        return repository.getAll(owner, true);
+    public LiveData<Resource<List<Club>>> refreshClubs() {
+        return repository.getAll(true);
     }
-
 }
