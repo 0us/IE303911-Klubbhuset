@@ -25,6 +25,8 @@ import com.g00fy2.versioncompare.Version;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Status;
