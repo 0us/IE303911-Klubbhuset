@@ -12,10 +12,10 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import no.ntnu.klubbhuset.R;
-
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
+import no.ntnu.klubbhuset.data.repository.MemberRepository;
 import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 import no.ntnu.klubbhuset.ui.managerviews.CreateOrganizationFormState;
 
