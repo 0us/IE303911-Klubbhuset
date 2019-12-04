@@ -31,7 +31,6 @@ services:
   db:
     container_name: klubbhuset-db
     image: mysql:5.7.28
-    # todo add all necessary inputs
     restart: always
     environment:
       # Name of database
