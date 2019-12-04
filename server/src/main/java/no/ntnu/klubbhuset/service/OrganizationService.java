@@ -322,7 +322,6 @@ public class OrganizationService {
         member.setUser(user);
         member.setGroup(group);
         member.setOrganization(org);
-        System.out.println("@@@@@@@@@" + member);
         entityManager.persist(member);
         entityManager.flush();
         return member;
