@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 //            if (loginFormState == null) {
 //                return;
 //            }
-//            loginButton.setEnabled(loginFormState.isDataValid());
+//            loginButton.setEnabled(loginFormState.isEmailValid());
 //            if (loginFormState.getUsernameError() != null) {
 //                usernameEditText.setError(getString(loginFormState.getUsernameError()));
 //            }
