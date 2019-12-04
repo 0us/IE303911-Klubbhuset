@@ -49,13 +49,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-return "";
-        //return mContext.getResources().getString(TAB_TITLES[position]);
-    }
-
     @Override
     public int getCount() {
         // Show 3 total pages.
