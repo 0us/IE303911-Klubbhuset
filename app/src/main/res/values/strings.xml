@@ -89,5 +89,9 @@
     </string>
     <string name="generic_error_response">Sorry, something went wrong. Please try again later</string>
     <string name="userfeedback_deeplink_error">Sorry, something went wrong. Please try again later</string>
+    <string name="field_cant_be_empty">Field can\'t be empty!</string>
+    <string name="invalid_first_name">Invalid first name!</string>
+    <string name="invalid_last_name">Invalid last name!</string>
+    <string name="invalid_phonenumber">Invalid phonenumber!</string>
 
 </resources>
