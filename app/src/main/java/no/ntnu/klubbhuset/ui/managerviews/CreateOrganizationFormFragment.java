@@ -205,9 +205,14 @@ public class CreateOrganizationFormFragment extends Fragment {
                     Objects.requireNonNull(Objects.requireNonNull(data).getData()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (RuntimeException e) {
+            // thrown when emil doesn't select an image
+            e.printStackTrace();
         }
-        Bitmap bitmap = BitmapFactory.decodeStream(stream);
-        imageView.setImageBitmap(bitmap);
+        if (stream != null) {
+            Bitmap bitmap = BitmapFactory.decodeStream(stream);
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     /**
