@@ -1,6 +1,5 @@
 package no.ntnu.klubbhuset.data.model;
 
-import android.graphics.Bitmap;
 import android.util.Base64;
 
 import org.json.JSONException;

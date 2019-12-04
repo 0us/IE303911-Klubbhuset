@@ -25,17 +25,9 @@ import com.g00fy2.versioncompare.Version;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Status;
-import no.ntnu.klubbhuset.data.cache.Cache;
-import no.ntnu.klubbhuset.data.cache.VippsCache;
-import no.ntnu.klubbhuset.data.Resource;
-import no.ntnu.klubbhuset.data.Status;
-import no.ntnu.klubbhuset.data.cache.Cache;
-import no.ntnu.klubbhuset.data.cache.VippsCache;
-import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
 

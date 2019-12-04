@@ -1,6 +1,5 @@
 package no.ntnu.klubbhuset.data.repository;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
@@ -25,8 +24,8 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Objects;
 
-import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.util.AuthHelper;

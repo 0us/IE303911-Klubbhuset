@@ -3,14 +3,13 @@ package no.ntnu.klubbhuset.viewmodels;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+
+import java.util.List;
 
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
-
-import java.util.List;
 
 public class ClubsViewModel extends AndroidViewModel {
 

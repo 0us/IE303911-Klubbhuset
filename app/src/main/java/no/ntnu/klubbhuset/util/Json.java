@@ -1,7 +1,5 @@
 package no.ntnu.klubbhuset.util;
 
-import org.json.JSONObject;
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

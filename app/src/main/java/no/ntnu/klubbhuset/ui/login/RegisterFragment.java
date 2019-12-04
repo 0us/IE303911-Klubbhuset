@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.adapter.AuthenticationPageAdapter;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.repository.UserRepository;

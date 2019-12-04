@@ -12,11 +12,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 
+import java.nio.ByteBuffer;
+
 import no.ntnu.klubbhuset.util.mlkit.BitmapUtils;
 import no.ntnu.klubbhuset.util.mlkit.FrameMetadata;
 import no.ntnu.klubbhuset.util.mlkit.GraphicOverlay;
-
-import java.nio.ByteBuffer;
 
 
 /**

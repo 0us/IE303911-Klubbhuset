@@ -4,9 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 import com.android.volley.Request;
@@ -22,14 +20,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
-import lombok.val;
 import no.ntnu.klubbhuset.R;
-import no.ntnu.klubbhuset.data.Status;
-import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.cache.VippsCache;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.OrderId;
@@ -37,10 +32,8 @@ import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.data.model.VippsJsonProperties;
 import no.ntnu.klubbhuset.data.model.VippsPaymentDetails;
 import no.ntnu.klubbhuset.util.CommunicationConfig;
-import no.ntnu.klubbhuset.util.Json;
 import no.ntnu.klubbhuset.util.PreferenceUtils;
 
-import static no.ntnu.klubbhuset.data.Resource.loading;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.ACCESS_TOKEN;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.APPLICATION_JSON;
 import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.AUTHORIZATION;

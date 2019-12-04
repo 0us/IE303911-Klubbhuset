@@ -2,7 +2,6 @@ package no.ntnu.klubbhuset.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.val;
 
 @Data
 @AllArgsConstructor

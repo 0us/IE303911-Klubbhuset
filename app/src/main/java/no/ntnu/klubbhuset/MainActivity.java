@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import no.ntnu.klubbhuset.adapter.TabsPagerAdapter;
-import no.ntnu.klubbhuset.data.model.Club;
-import no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedActivity;
-import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
-import no.ntnu.klubbhuset.ui.userviews.mymemberships.MyMembershipsListFragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,10 +13,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Objects;
+
+import no.ntnu.klubbhuset.adapter.TabsPagerAdapter;
+import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.ui.userviews.club.detailed.ClubDetailedActivity;
+import no.ntnu.klubbhuset.ui.userviews.home.ClubsListFragment;
+import no.ntnu.klubbhuset.ui.userviews.mymemberships.MyMembershipsListFragment;
 
 import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
 import static no.ntnu.klubbhuset.util.CommunicationConfig.PUBLIC_KEY;
