@@ -1,8 +1,5 @@
 package no.ntnu.klubbhuset.adapter;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,16 +40,12 @@ public class ManagedOrgsRecyclerViewAdapter extends RecyclerView.Adapter<Managed
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).getName());
-        holder.mMembercountView.setText("0"); // TODO
-        if (holder.mItem.getImage() == null || holder.mItem.getImage().isEmpty()) {
+//        holder.mMembercountView.setText("0"); TODO Count Dracula
+        if (holder.mItem.getOrgImages() == null || holder.mItem.getOrgImages().length == 0) {
             // set placeholder
             holder.mLogo.setImageResource(R.drawable.ic_broken_image_black_24dp);
         } else {
-            String encodedString = holder.mItem.getImage();
-
-            byte [] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            holder.mLogo.setImageBitmap(bitmap);
+            holder.mLogo.setImageBitmap(holder.mItem.getOrgImages()[0].getImage());
         }
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,11 +70,12 @@ public class ManagedOrgsRecyclerViewAdapter extends RecyclerView.Adapter<Managed
         public TextView mMembercountView;
         public ImageView mLogo;
         public Club mItem;
+
         public ViewHolder(View v) {
             super(v);
             view = v;
             mNameView = v.findViewById(R.id.club_name);
-            mMembercountView = v.findViewById(R.id.club_member_count);
+//            mMembercountView = v.findViewById(R.id.club_member_count); TODO Count Dracula
             mLogo = v.findViewById(R.id.club_logo);
         }
 

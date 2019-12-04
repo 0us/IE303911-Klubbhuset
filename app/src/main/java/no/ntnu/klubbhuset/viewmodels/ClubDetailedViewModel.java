@@ -7,10 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-
 import no.ntnu.klubbhuset.data.Resource;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
@@ -24,14 +20,14 @@ import static no.ntnu.klubbhuset.util.CommunicationConfig.USER;
 
 
 public class ClubDetailedViewModel extends AndroidViewModel {
-    // TODO: Implement the ViewModel
-    private static Club focusedClub;
+    private MutableLiveData<Resource<Club>> focusedClub;
     private OrganizationRepository organizationRepository;
     private VippsRepository vippsRepository;
     private UserRepository userRepository;
 
     public ClubDetailedViewModel(@NonNull Application application) {
         super(application);
+        focusedClub = new MutableLiveData<>(Resource.loading());
         organizationRepository = OrganizationRepository.getInstance(application);
         vippsRepository = VippsRepository.getInstance(application);
         userRepository = UserRepository.getInstance(application);
@@ -44,6 +40,7 @@ public class ClubDetailedViewModel extends AndroidViewModel {
 
     /**
      * get users membership status in given organization
+     *
      * @param club
      * @return
      */
@@ -51,24 +48,19 @@ public class ClubDetailedViewModel extends AndroidViewModel {
         return organizationRepository.getMembership(club);
     }
 
-    public static Club getCurrentClub() {
+    public LiveData<Resource<Club>> getCurrentClub() {
         return focusedClub;
     }
 
-    /**
-     * set the currently focused organization, for use with
-     * clubDetailedView
-     * @param currentClub
-     */
-    public static void setCurrentClub(Club currentClub) {
-        focusedClub = currentClub;
-    }
-
-    public LiveData<Resource<String>> getDeeplink(Resource<User> user) {
-        return vippsRepository.getDeepLink(user, focusedClub);
+    public void setCurrentClub(long currentClub) {
+        focusedClub.setValue(organizationRepository.get(currentClub));
     }
 
     public LiveData<Resource<User>> getUser() {
         return userRepository.get();
+    }
+
+    public LiveData<Resource<String>> getDeeplink(Resource<User> user) {
+        return vippsRepository.getDeepLink(user, focusedClub.getValue().getData());
     }
 }

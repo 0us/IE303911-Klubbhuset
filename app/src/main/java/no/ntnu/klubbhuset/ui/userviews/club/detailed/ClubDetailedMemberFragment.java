@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,10 @@ import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.data.Status;
 import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.cache.VippsCache;
+import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.Status;
+import no.ntnu.klubbhuset.data.cache.Cache;
+import no.ntnu.klubbhuset.data.cache.VippsCache;
 import no.ntnu.klubbhuset.data.model.Club;
 import no.ntnu.klubbhuset.data.model.Member;
 import no.ntnu.klubbhuset.viewmodels.ClubDetailedViewModel;
@@ -48,15 +53,13 @@ public class ClubDetailedMemberFragment extends Fragment {
     public static final String MEMBER_STRING = "member";
     private static final int REQUEST_CODE = 100; // Success code https://github.com/vippsas/vipps-ecom-api/blob/master/vipps-ecom-api.md#error-codes-for-deeplinking
     private ClubDetailedViewModel mViewModel;
-    private Club club;
     private Member member;
     private RequestQueue queue;
-    private View vippsBtn;
+    private ImageButton vippsBtn;
     private ImageView paymentStatusImg;
     private TextView paymentStatusText;
     private TextView paymentDueDate;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-
 
 
     public static ClubDetailedMemberFragment newInstance(Member member) {
@@ -72,13 +75,12 @@ public class ClubDetailedMemberFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_club_detailed_member, container, false);
-        this.club = ClubDetailedViewModel.getCurrentClub();
-        this.member = (Member) getArguments().getSerializable(MEMBER_STRING);
 
+        this.member = (Member) getArguments().getSerializable(MEMBER_STRING);
         vippsBtn = view.findViewById(R.id.club_detailed_pay_with_vipps);
         paymentStatusImg = view.findViewById(R.id.club_detailed_paid_status_img);
-        paymentStatusText = view.findViewById(R.id.club_detailed_payment_status_description);
-        paymentDueDate = view.findViewById(R.id.club_detailed_due_date);
+//        paymentStatusText = view.findViewById(R.id.club_detailed_payment_status_description); TODO Real due date
+//        paymentDueDate = view.findViewById(R.id.club_detailed_due_date); TODO Real due date
         queue = Volley.newRequestQueue(getActivity());
         return view;
     }
@@ -86,40 +88,48 @@ public class ClubDetailedMemberFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ClubDetailedViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ClubDetailedViewModel.class);
 
         TextView memberSince = getView().findViewById(R.id.club_detailed_member_since);
         memberSince.setText(dateFormat.format(member.getCreated()));
 
-        mViewModel.getMembership(club).observe(this, response -> {
-            this.member = response.getData();
-            if (member.isHasPaid() || club.getPriceOfMembership() == null || club.getPriceOfMembership().equals(BigDecimal.ZERO)) {
-                vippsBtn.setVisibility(View.GONE);
-                paymentStatusText.setText(getString(R.string.payment_true));
-                paymentDueDate.setText("");
-                paymentStatusImg.setImageResource(R.drawable.ic_check_black_24dp);
-            } else {
-                vippsBtn.setVisibility(View.VISIBLE);
-                paymentStatusText.setText(getString(R.string.payment_false));
-                paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
-                paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
+        mViewModel.getCurrentClub().observe(this, response -> {
+            if (response.getStatus() == Status.SUCCESS) {
+                if (member.isHasPaid() || response.getData().getPriceOfMembership() == null) {
+                    hideVipps();
+                } else if (response.getData().getPriceOfMembership() != null && response.getData().getPriceOfMembership().equals(BigDecimal.ZERO)) {
+                    hideVipps();
+                } else {
+                    showVipps();
+                }
             }
         });
+    }
 
+    private void hideVipps() {
+        vippsBtn.setVisibility(View.GONE);
+        paymentStatusText.setText(getString(R.string.payment_true));
+        paymentDueDate.setText("");
+        paymentStatusImg.setImageResource(R.drawable.ic_check_black_24dp);
+    }
+
+    private void showVipps() {
+        vippsBtn.setVisibility(View.VISIBLE);
+//        paymentDueDate.setText(dateFormat.format(new Date(1995, 1, 1))); // todo real get a date
+        paymentStatusImg.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp);
         vippsBtn.setOnClickListener(v -> {
             mViewModel.getUser().observe(this, user -> {
                 mViewModel.getDeeplink(user).observe(this, deeplink -> {
                     if (deeplink.getStatus() == Status.SUCCESS) {
                         openVipps(deeplink.getData());
                     } else if (deeplink.getStatus() == Status.ERROR) {
+                        Toast.makeText(getContext(), R.string.userfeedback_deeplink_error, Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "Couldn't get deeplink, please contact your personal sysadmin");
                     }
                 });
             });
         });
-
     }
-
 
     private void openVipps(String deepLink) {
         try {

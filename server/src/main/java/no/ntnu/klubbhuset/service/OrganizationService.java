@@ -17,7 +17,10 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionRolledbackLocalException;
 import javax.inject.Inject;
+import javax.persistence.*;
+import javax.naming.OperationNotSupportedException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
@@ -61,6 +64,7 @@ public class OrganizationService {
 
         return Response.ok(organizations).build();
     }
+
 
 //    public Response createNewOrganization(String name, String price, String description, FormDataMultiPart multiPart) {
 //        Organization organization = new Organization();
@@ -124,8 +128,22 @@ public class OrganizationService {
         if (isAlreadyMember(organizationId, user)) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("User is already member of organization").build();
         }
-        Member member = doJoinOrganization(organization, user, getGroup(Group.USER));
+        try {
+            doJoinOrganization(organization, user, getGroup(Group.USER));
+        } catch (Exception e) {
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries").build();
+        }
         return getMembership(organizationId); // todo return better feedback
+    }
+
+    public Response getOrgsWhereUserIsMember() {
+        User user = getUserFromPrincipal();
+        List<Organization> organizations = entityManager.createQuery(
+                "select o from Organization o where o in (select m.organization from Member m where m.user = :user)", Organization.class)
+                .setParameter("user", user)
+                .getResultList();
+        entityManager.flush();
+        return Response.ok().entity(organizations).build();
     }
 
     /**
@@ -218,15 +236,24 @@ public class OrganizationService {
     public Response getMembership(long oid) {
         User user = getUserFromPrincipal();
         Organization organization = entityManager.find(Organization.class, oid);
-        List<Member> memberships = entityManager.createQuery(
-                "select m from Member m where m.user = :user and m.organization = :organization")
-                .setParameter("user", user)
-                .setParameter("organization", organization)
-                .getResultList();
-        if (memberships == null || memberships.isEmpty()) {
+        Member membership = null;
+        try {
+            membership = (Member) entityManager.createQuery(
+                    "select m from Member m where m.user = :user and m.organization = :organization")
+                    .setParameter("user", user)
+                    .setParameter("organization", organization)
+                    .getSingleResult();
+        } catch (NonUniqueResultException nure) {
+            System.out.println(user.getEmail() + " Should not have two memberships in the same org! Bad DBA!");
+            return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Duplicate entries, please contact system administrator").build();
+        } catch (NoResultException nre) {
+            System.out.println("No membership found");
+        }
+
+        if (membership == null) {
             return Response.noContent().build();
         }
-        return Response.ok(memberships).build();
+        return Response.ok(membership).build();
     }
 
     // --- Private methods below --- //
@@ -288,7 +315,7 @@ public class OrganizationService {
      * @param group
      * @return
      */
-    private Member doJoinOrganization(Organization org, User user, Group group) {
+    private Member doJoinOrganization(Organization org, User user, Group group) throws EntityExistsException {
         Member member = new Member();
         System.out.println(member);
         member.setUser(user);
@@ -297,6 +324,7 @@ public class OrganizationService {
         member.setOrganization(org);
         System.out.println(member);
         entityManager.persist(member);
+        entityManager.flush();
         return member;
     }
 

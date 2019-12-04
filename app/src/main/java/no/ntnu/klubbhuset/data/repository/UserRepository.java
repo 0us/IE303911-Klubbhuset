@@ -21,12 +21,10 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-import no.ntnu.klubbhuset.data.Status;
-import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.Resource;
+import no.ntnu.klubbhuset.data.cache.Cache;
 import no.ntnu.klubbhuset.data.model.User;
 import no.ntnu.klubbhuset.util.AuthHelper;
-import no.ntnu.klubbhuset.util.CommunicationConfig;
 import no.ntnu.klubbhuset.util.Json;
 
 import static no.ntnu.klubbhuset.util.CommunicationConfig.API_URL;
@@ -105,7 +103,7 @@ public class UserRepository {
                 },
                 error -> {
                     // error
-                    Log.e(TAG, error.networkResponse.toString());
+                    if(error.networkResponse != null) Log.e(TAG, error.networkResponse.toString());
                     cached.setValue(Resource.error("Error fetching user", error));
                 }) {
             @Override

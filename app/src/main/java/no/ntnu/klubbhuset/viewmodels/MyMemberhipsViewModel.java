@@ -4,50 +4,38 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import no.ntnu.klubbhuset.data.Resource;
-import no.ntnu.klubbhuset.data.repository.VippsRepository;
-import no.ntnu.klubbhuset.util.CommunicationConfig;
-import no.ntnu.klubbhuset.util.PreferenceUtils;
+import no.ntnu.klubbhuset.data.model.Club;
+import no.ntnu.klubbhuset.data.repository.OrganizationRepository;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_ID_STRING;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.CLIENT_SECRET_STRING;
-import static no.ntnu.klubbhuset.data.model.VippsJsonProperties.OCP_APIM_SUBSCRIPTION_KEY_STRING;
-import static no.ntnu.klubbhuset.util.PreferenceUtils.PREF_NO_FILE_FOUND;
 
 
 public class MyMemberhipsViewModel extends AndroidViewModel {
     private static final String TAG = "MyMemberhipsViewModel";
-    private RequestQueue requestQueue;
     private MutableLiveData<Bitmap> QRCode;
-    private VippsRepository vippsRepository;
+    private OrganizationRepository organizationRepository;
 
     public MyMemberhipsViewModel(Application context) {
         super(context);
-        this.requestQueue = Volley.newRequestQueue(context);
-        this.vippsRepository = VippsRepository.getInstance(context);
+        this.organizationRepository = OrganizationRepository.getInstance(context);
+    }
+
+    public LiveData<Resource<List<Club>>> getClubs() {
+        return organizationRepository.getOrgsWhereUserIsMember();
     }
 
     public LiveData<Bitmap> getQRCode() {
@@ -106,35 +94,7 @@ public class MyMemberhipsViewModel extends AndroidViewModel {
         return null;
     }
 
-
-    /**
-     * returns a boolean describing whether the token has expired or not
-     *
-     * @param token vippsToken
-     * @return a boolean describing whether the token has expired or not
-     */
-    private boolean tokenIsExpired(JSONObject token) {
-        String expires_on = null;
-        try {
-            expires_on = token.get("expires_on").toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if(expires_on == null) {
-            return true;
-        }
-        return System.currentTimeMillis() > Long.valueOf(expires_on);
-    }
-
-    /**
-     * Tries to retrieve the VippsToken, this is either done by grabbing it from memory as existing
-     * object if not then from SharedPreference, but that will only work if the token has been previously
-     * placed there and is not expired.
-     *
-     * @return Returns the vippsToken or null if no vippsToken could be retrieved, check the log
-     * for figuring out exactly why.
-     */
-    public LiveData<Resource<String>> getVippsToken() {
-        return vippsRepository.getToken();
+    public LiveData<Resource<List<Club>>> refreshClubs() {
+        return organizationRepository.getOrgsWhereUserIsMember(true);
     }
 }

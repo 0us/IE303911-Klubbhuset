@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -81,8 +82,9 @@ public class ManagedOrgsListFragment extends Fragment {
             mViewModel.getManagedClubs().observe(this, clubs -> {
                 if (clubs.getStatus() == Status.SUCCESS) {
                     recyclerView.setAdapter(new ManagedOrgsRecyclerViewAdapter(clubs.getData(), mListener));
-                } else {
-                    // todo handle error
+                } else if (clubs.getStatus() == Status.ERROR) {
+                    Toast.makeText(getContext(), R.string.generic_error_response, Toast.LENGTH_SHORT).show();
+
                 }
             });
         }
