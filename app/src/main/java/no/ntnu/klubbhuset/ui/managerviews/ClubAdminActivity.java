@@ -3,12 +3,14 @@ package no.ntnu.klubbhuset.ui.managerviews;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import no.ntnu.klubbhuset.R;
 import no.ntnu.klubbhuset.adapter.MembersAdapter;
@@ -43,6 +45,22 @@ public class ClubAdminActivity extends AppCompatActivity {
                 adapter = new MembersAdapter(members.getData());
                 recyclerView.setAdapter(adapter);
             }
+        });
+
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            viewModel.refreshMembers(club).observe(this, resource -> {
+                if (resource.getStatus() == Status.SUCCESS) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else if (resource.getStatus() == Status.ERROR) {
+                    Toast.makeText(
+                            this,
+                            R.string.generic_error_response,
+                            Toast.LENGTH_LONG).
+                            show();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
         });
 
         Toolbar toolbar = findViewById(R.id.toolbar);

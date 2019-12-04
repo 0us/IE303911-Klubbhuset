@@ -23,9 +23,10 @@
             android:hint="@string/joined"
             android:textColor="#000000"
             android:textSize="12sp"
+            android:layout_marginEnd="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/member_name"/>
+            app:layout_constraintEnd_toStartOf="@+id/has_paid"/>
 
         <ImageView
             android:id="@+id/has_paid"

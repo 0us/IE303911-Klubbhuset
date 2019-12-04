@@ -92,4 +92,8 @@ public class ManagerViewModel extends AndroidViewModel {
     public LiveData<Resource<List<Club>>> refreshManaged() {
         return repository.getManaged(true);
     }
+
+    public LiveData<Resource<List<Member>>> refreshMembers(Club club) {
+        return memberRepository.getMembers(club, true);
+    }
 }
