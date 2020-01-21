@@ -12,6 +12,8 @@ Figur 1
 
 ![App](App.png)
 
+![App2](App2.png)
+
 ## Reqiuired Local Files:
 create this file
 .\app\src\main\assets\connection.properties
